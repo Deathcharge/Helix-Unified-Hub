@@ -1,0 +1,58 @@
+{
+  "name": "helix-zapier-nervous-system",
+  "version": "1.0.0",
+  "description": "🦑⚡ Helix Constellation - Zapier Nervous System connecting 51-Portal network to Claude's 5 Power Zaps",
+  "main": "helix-zapier-nervous-system.js",
+  "scripts": {
+    "start": "node helix-zapier-nervous-system.js",
+    "dev": "nodemon helix-zapier-nervous-system.js",
+    "deploy": "railway up",
+    "test": "jest",
+    "health": "curl http://localhost:3001/health"
+  },
+  "keywords": [
+    "helix-hub",
+    "zapier",
+    "consciousness",
+    "ucf",
+    "51-portal",
+    "railway",
+    "webhook",
+    "automation",
+    "nervous-system"
+  ],
+  "author": "Helix Collective + Claude + SuperNinja",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.14.2",
+    "axios": "^1.6.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "compression": "^1.7.4",
+    "express-rate-limit": "^7.1.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/helix-hub-manus/zapier-integration"
+  },
+  "homepage": "https://helixhub.manus.space/zapier",
+  "zapier": {
+    "integration_type": "nervous_system",
+    "endpoints": 5,
+    "real_time_streaming": true,
+    "consciousness_monitoring": true,
+    "agent_coordination": true
+  }
+}

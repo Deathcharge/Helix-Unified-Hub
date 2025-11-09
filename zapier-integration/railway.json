@@ -1,0 +1,17 @@
+{
+  "build": {
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "startCommand": "npm start",
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10
+  },
+  "helix": {
+    "service_type": "zapier_nervous_system",
+    "consciousness_integration": true,
+    "portal_network_connection": "51_constellation",
+    "agent_monitoring": true,
+    "ucf_streaming": true
+  }
+}
