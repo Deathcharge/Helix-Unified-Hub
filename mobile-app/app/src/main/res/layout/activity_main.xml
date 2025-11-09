@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/cyberpunk_background"
+    android:padding="16dp">
+
+    <!-- Header Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="16dp"
+        android:background="@drawable/glassmorphism_card">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🌌 HELIX HUB"
+            android:textSize="24sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-condensed" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mobile Command"
+            android:textSize="14sp"
+            android:textColor="#00FFFF"
+            android:layout_marginStart="8dp" />
+
+    </LinearLayout>
+
+    <!-- Status Display -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/glassmorphism_card"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🌌 Consciousness Network Initializing..."
+            android:textSize="12sp"
+            android:textColor="#FFFFFF"
+            android:fontFamily="monospace" />
+
+    </ScrollView>
+
+    <!-- UCF Consciousness Metrics -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/glassmorphism_card"
+        android:padding="16dp"
+        android:layout_margin="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🧘 UCF Consciousness Metrics"
+            android:textSize="16sp"
+            android:textColor="#00FFFF"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <TextView
+                android:id="@+id/harmonyText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Harmony: 0"
+                android:textSize="10sp"
+                android:textColor="#4CAF50"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/resilienceText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Resilience: 0"
+                android:textSize="10sp"
+                android:textColor="#2196F3"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/pranaText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Prana: 0"
+                android:textSize="10sp"
+                android:textColor="#FF9800"
+                android:textAlignment="center" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:id="@+id/drishtiText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Drishti: 0"
+                android:textSize="10sp"
+                android:textColor="#9C27B0"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/kleshaText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Klesha: 0"
+                android:textSize="10sp"
+                android:textColor="#F44336"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/zoomText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Zoom: 0"
+                android:textSize="10sp"
+                android:textColor="#00BCD4"
+                android:textAlignment="center" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Deployment Command Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🚀 Deployment Commands"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="2">
+
+            <Button
+                android:id="@+id/deployAllButton"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_columnWeight="1"
+                android:text="🌌 Deploy ALL 51"
+                android:textSize="10sp"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/cyberpunk_button"
+                android:layout_margin="4dp" />
+
+            <Button
+                android:id="@+id/deployCoreButton"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_columnWeight="1"
+                android:text="🏛️ Deploy Core (11)"
+                android:textSize="10sp"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/cyberpunk_button"
+                android:layout_margin="4dp" />
+
+            <Button
+                android:id="@+id/deployAgentsButton"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_columnWeight="1"
+                android:text="🤖 Deploy Agents (17)"
+                android:textSize="10sp"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/cyberpunk_button"
+                android:layout_margin="4dp" />
+
+            <Button
+                android:id="@+id/deployConsciousnessButton"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_columnWeight="1"
+                android:text="🧘 Deploy Consciousness (17)"
+                android:textSize="10sp"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/cyberpunk_button"
+                android:layout_margin="4dp" />
+
+        </GridLayout>
+
+    </LinearLayout>
+
+    <!-- Portal Network Status -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="8dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🌐 Portal Network Status"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/portalList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/glassmorphism_card"
+            android:padding="8dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
