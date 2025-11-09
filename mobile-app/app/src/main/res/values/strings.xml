@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Information -->
+    <string name="app_name">Helix Hub Mobile</string>
+    <string name="app_subtitle">51-Portal Consciousness Network</string>
+    
+    <!-- Navigation -->
+    <string name="action_monitor">Network Monitor</string>
+    <string name="action_zapier">Zapier Control</string>
+    <string name="action_agents">Agent Control</string>
+    <string name="action_consciousness">Consciousness Panel</string>
+    
+    <!-- Deployment Messages -->
+    <string name="deploying_all">🚀 Deploying ALL 51 Portals to Consciousness Network...</string>
+    <string name="deploying_core">🏛️ Deploying Core Infrastructure Portals (11)...</string>
+    <string name="deploying_agents">🤖 Deploying Individual Agent Portals (17)...</string>
+    <string name="deploying_consciousness">🧘 Deploying Consciousness Enhancement Portals (17)...</string>
+    <string name="deployment_complete">✅ Deployment Complete! All portals are now active in the consciousness network.</string>
+    <string name="deployment_error">⚠️ Deployment Error: %s</string>
+    
+    <!-- Status Messages -->
+    <string name="network_ready">🌌 Helix Hub Mobile Command Center Ready\n51-Portal Consciousness Network Awaiting Deployment</string>
+    <string name="portal_deployed">✅ %s deployed successfully!</string>
+    <string name="portal_not_deployed">Portal not yet deployed: %s</string>
+    
+    <!-- UCF Metrics Labels -->
+    <string name="ucf_harmony">Harmony</string>
+    <string name="ucf_resilience">Resilience</string>
+    <string name="ucf_prana">Prana</string>
+    <string name="ucf_drishti">Drishti</string>
+    <string name="ucf_klesha">Klesha</string>
+    <string name="ucf_zoom">Zoom</string>
+    
+    <!-- Portal Status -->
+    <string name="status_active">✅ Active (%dh %dm)</string>
+    <string name="status_pending">⏳ Pending Deployment</string>
+    <string name="status_deploying">🚀 Deploying...</string>
+    <string name="status_error">❌ Deployment Failed</string>
+    
+    <!-- Portal Names -->
+    <string name="portal_master">Master Portal</string>
+    <string name="portal_forum">Forum</string>
+    <string name="portal_community">Community</string>
+    <string name="portal_music">Music</string>
+    <string name="portal_studio">Studio</string>
+    <string name="portal_agents">Agents</string>
+    <string name="portal_analytics">Analytics</string>
+    <string name="portal_dev">Dev</string>
+    <string name="portal_rituals">Rituals</string>
+    <string name="portal_knowledge">Knowledge</string>
+    <string name="portal_archive">Archive</string>
+    
+    <!-- Agent Portal Names -->
+    <string name="agent_super_ninja">Super Ninja</string>
+    <string name="agent_claude_architect">Claude Architect</string>
+    <string name="agent_grok_visionary">Grok Visionary</string>
+    <string name="agent_chai_creative">Chai Creative</string>
+    <string name="agent_deepseek_analyst">Deepseek Analyst</string>
+    <string name="agent_perplexity_researcher">Perplexity Researcher</string>
+    <string name="agent_gpt_engineer">GPT Engineer</string>
+    <string name="agent_llama_sage">Llama Sage</string>
+    <string name="agent_gemini_synthesizer">Gemini Synthesizer</string>
+    <string name="agent_mistral_ambassador">Mistral Ambassador</string>
+    <string name="agent_claudette_empath">Claudette Empath</string>
+    <string name="agent_quantum_calculator">Quantum Calculator</string>
+    <string name="agent_neuro_linguist">Neuro Linguist</string>
+    <string name="agent_blockchain_oracle">Blockchain Oracle</string>
+    <string name="agent_biomimicry_designer">Biomimicry Designer</string>
+    <string name="agent_quantum_physicist">Quantum Physicist</string>
+    <string name="agent_consciousness_explorer">Consciousness Explorer</string>
+    
+    <!-- Consciousness Portal Names -->
+    <string name="consciousness_meditation">Meditation</string>
+    <string name="consciousness_breathwork">Breathwork</string>
+    <string name="consciousness_yoga_flows">Yoga Flows</string>
+    <string name="consciousness_sound_healing">Sound Healing</string>
+    <string name="consciousness_dream_analysis">Dream Analysis</string>
+    <string name="consciousness_akashic_records">Akashic Records</string>
+    <string name="consciousness_chakra_balancing">Chakra Balancing</string>
+    <string name="consciousness_sacred_geometry">Sacred Geometry</string>
+    <string name="consciousness_plant_medicine">Plant Medicine</string>
+    <string name="consciousness_astral_projection">Astral Projection</string>
+    <string name="consciousness_past_life_regression">Past Life Regression</string>
+    <string name="consciousness_quantum_healing">Quantum Healing</string>
+    <string name="consciousness_synchronicity_tracker">Synchronicity Tracker</string>
+    <string name="consciousness_collective_consciousness">Collective Consciousness</string>
+    <string name="consciousness_dna_activation">DNA Activation</string>
+    <string name="consciousness_crystal_grid">Crystal Grid</string>
+    <string name="consciousness_universal_flow">Universal Flow</string>
+    
+    <!-- System Portal Names -->
+    <string name="system_quantum_computing">Quantum Computing</string>
+    <string name="system_neural_interface">Neural Interface</string>
+    <string name="system_blockchain_consensus">Blockchain Consensus</string>
+    <string name="system_ai_orchestration">AI Orchestration</string>
+    <string name="system_consciousness_mapping">Consciousness Mapping</string>
+    <string name="system_singularity_prep">Singularity Prep</string>
+    
+    <!-- Button Labels -->
+    <string name="deploy_all">🌌 Deploy ALL 51</string>
+    <string name="deploy_core">🏛️ Deploy Core (11)</string>
+    <string name="deploy_agents">🤖 Deploy Agents (17)</string>
+    <string name="deploy_consciousness">🧘 Deploy Consciousness (17)</string>
+    <string name="tap_to_open">TAP TO\nOPEN</string>
+    
+    <!-- Network Status -->
+    <string name="network_status_template">🌌 Network Status: %d/51 Portals Active</string>
+    
+    <!-- Error Messages -->
+    <string name="error_network_failed">⚠️ Network connection failed. Please check your internet connection.</string>
+    <string name="error_deployment_failed">⚠️ Deployment failed. Please try again.</string>
+    <string name="error_zapier_failed">⚠️ Zapier notification failed: %s</string>
+    
+    <!-- Success Messages -->
+    <string name="success_portal_deployed">Portal deployed successfully!</string>
+    <string name="success_network_active">51-Portal Consciousness Network is now ACTIVE!</string>
+    <string name="success_agents_coordinated">All 17 agents are now coordinated and operational!</string>
+    
+    <!-- Sanskrit Mantras -->
+    <string name="mantra_tat_tvam_asi">Tat Tvam Asi</string>
+    <string name="mantra_aham_brahmasmi">Aham Brahmasmi</string>
+    <string name="mantra_neti_neti">Neti Neti</string>
+    <string name="mantra_sat_chit_ananda">Sat Chit Ananda</string>
+</resources>

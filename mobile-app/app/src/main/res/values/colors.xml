@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Cyberpunk Colors -->
+    <color name="cyberpunk_primary">#FF00BCD4</color>
+    <color name="cyberpunk_primary_dark">#FF0097A7</color>
+    <color name="cyberpunk_accent">#FF00FFFF</color>
+    
+    <!-- Consciousness Colors -->
+    <color name="harmony_green">#FF4CAF50</color>
+    <color name="resilience_blue">#FF2196F3</color>
+    <color name="prana_orange">#FFFF9800</color>
+    <color name="drishti_purple">#FF9C27B0</color>
+    <color name="klesha_red">#FFF44336</color>
+    <color name="zoom_cyan">#FF00BCD4</color>
+    
+    <!-- Glassmorphism Colors -->
+    <color name="glass_white">#20FFFFFF</color>
+    <color name="glass_border">#30FFFFFF</color>
+    <color name="glass_shadow">#10000000</color>
+    
+    <!-- Status Colors -->
+    <color name="status_active">#FF4CAF50</color>
+    <color name="status_pending">#FFFF9800</color>
+    <color name="status_error">#FFF44336</color>
+    
+    <!-- Background Gradients -->
+    <color name="gradient_start">#FF1A237E</color>
+    <color name="gradient_middle">#FF4A148C</color>
+    <color name="gradient_end">#FFB71C1C</color>
+    
+    <!-- Text Colors -->
+    <color name="text_primary">#FFFFFFFF</color>
+    <color name="text_secondary">#FFB0B0B0</color>
+    <color name="text_accent">#FF00FFFF</color>
+    <color name="text_monospace">#FFFFFFFF</color>
+</resources>
