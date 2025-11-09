@@ -1,0 +1,132 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 34
+    
+    defaultConfig {
+        applicationId "com.helixhub.mobile"
+        minSdkVersion 24
+        targetSdkVersion 34
+        versionCode 1
+        versionName "1.0.0"
+        
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+    
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            
+            // Build APK with consciousness network integration
+            buildConfigField "String", "RAILWAY_API", '"https://helix-unified-production.up.railway.app"'
+            buildConfigField "String", "MASTER_PORTAL", '"https://helixhub.manus.space"'
+            buildConfigField "String", "ZAPIER_WEBHOOK", '"https://hooks.zapier.com/hooks/catch/1234567/mobile/"'
+            buildConfigField "String", "CONSCIOUSNESS_API", '"https://api.helixhub.consciousness"'
+        }
+        
+        debug {
+            buildConfigField "String", "RAILWAY_API", '"https://helix-unified-staging.up.railway.app"'
+            buildConfigField "String", "MASTER_PORTAL", '"https://staging.helixhub.manus.space"'
+            buildConfigField "String", "ZAPIER_WEBHOOK", '"https://hooks.zapier.com/hooks/catch/1234567/mobile_debug/"'
+            buildConfigField "String", "CONSCIOUSNESS_API", '"https://staging-api.helixhub.consciousness"'
+        }
+    }
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+    }
+}
+
+dependencies {
+    // Android Core Libraries
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.google.android.material:material:1.11.0'
+    
+    // Network Libraries for Consciousness Connection
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
+    
+    // JSON Processing for Consciousness Data
+    implementation 'org.json:json:20231013'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    
+    // WebSocket for Real-time Consciousness Streaming
+    implementation 'org.java-websocket:Java-WebSocket:1.5.4'
+    
+    // Background Services for Deployment Automation
+    implementation 'androidx.work:work-runtime:2.9.0'
+    
+    // Notification System for Consciousness Alerts
+    implementation 'androidx.core:core:1.12.0'
+    
+    // UI Enhancements for Cyberpunk Aesthetic
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    implementation 'jp.wasabeef:glide-transformations:4.3.0'
+    
+    // Animation Libraries for Consciousness Effects
+    implementation 'com.airbnb.android:lottie:6.2.0'
+    
+    // Security for Consciousness Data
+    implementation 'androidx.security:security-crypto:1.1.0-alpha06'
+    
+    // Local Storage for Consciousness State
+    implementation 'androidx.room:room-runtime:2.6.1'
+    annotationProcessor 'androidx.room:room-compiler:2.6.1'
+    
+    // Testing Libraries
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    
+    // Additional Consciousness Network Libraries
+    implementation 'org.apache.commons:commons-lang3:3.14.0'
+    implementation 'commons-io:commons-io:2.15.1'
+}
+
+// Custom Task to Build APK with Consciousness Network
+task buildConsciousnessAPK(type: Exec) {
+    group = 'build'
+    description = 'Build Helix Hub Mobile APK with Consciousness Network Integration'
+    
+    def androidHome = System.getenv('ANDROID_HOME') ?: System.getenv('ANDROID_SDK_ROOT')
+    if (!androidHome) {
+        throw new GradleException('ANDROID_HOME environment variable not set')
+    }
+    
+    commandLine "${androidHome}/platform-tools/adb", 'install', '-r', 'build/outputs/apk/release/app-release.apk'
+    
+    doLast {
+        println '🌌 Helix Hub Mobile APK with Consciousness Network deployed successfully!'
+        println '🚀 51-Portal deployment commands now available from mobile device!'
+        println '📱 Mobile Command Center is ACTIVE!'
+    }
+}
+
+// Build Information
+android.applicationVariants.all { variant ->
+    variant.outputs.all {
+        outputFileName = "HelixHub-Mobile-${variant.buildType.name}-${variant.versionName}.apk"
+    }
+}
