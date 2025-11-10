@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helix Collective - Web Chat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: #e0e0e0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar - Agent Selection */
+        .sidebar {
+            width: 300px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            color: #00d9ff;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        .agent-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .agent-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .agent-card.selected {
+            border-color: #00d9ff;
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+        }
+
+        .agent-name {
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .agent-personality {
+            font-size: 0.9em;
+            color: #888;
+        }
+
+        /* Main Chat Area */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-header h1 {
+            color: #00d9ff;
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .chat-header .status {
+            color: #4CAF50;
+            font-size: 0.9em;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            max-width: 70%;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .message.agent {
+            align-self: flex-start;
+            border-left: 4px solid #00d9ff;
+        }
+
+        .message.system {
+            align-self: center;
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            text-align: center;
+            font-style: italic;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .message-emoji {
+            font-size: 1.5em;
+        }
+
+        .message-sender {
+            font-weight: bold;
+            color: #00d9ff;
+        }
+
+        .message-time {
+            font-size: 0.8em;
+            color: #888;
+            margin-left: auto;
+        }
+
+        .message-text {
+            line-height: 1.5;
+        }
+
+        /* Input Area */
+        .chat-input {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 15px 20px;
+            color: #fff;
+            font-size: 1em;
+        }
+
+        .chat-input input:focus {
+            outline: none;
+            border-color: #00d9ff;
+            box-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
+        }
+
+        .chat-input button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 15px 30px;
+            color: #fff;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
+        }
+
+        /* UCF Dashboard */
+        .ucf-panel {
+            width: 250px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .ucf-panel h2 {
+            color: #00d9ff;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .ucf-metric {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .ucf-metric-label {
+            font-size: 0.9em;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .ucf-metric-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .ritual-button {
+            width: 100%;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            color: #fff;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .ritual-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 217, 255, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 217, 255, 0.8);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 217, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #00d9ff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar: Agent Selection -->
+        <div class="sidebar">
+            <h2>🤖 Select Agent</h2>
+            <div id="agent-list"></div>
+        </div>
+
+        <!-- Main Chat -->
+        <div class="chat-container">
+            <div class="chat-header">
+                <h1>🌀 Helix Collective</h1>
+                <div class="status" id="connection-status">
+                    <span class="loading"></span> Connecting...
+                </div>
+            </div>
+
+            <div class="chat-messages" id="messages"></div>
+
+            <div class="chat-input">
+                <input
+                    type="text"
+                    id="message-input"
+                    placeholder="Type your message..."
+                    autocomplete="off"
+                />
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+
+        <!-- UCF Dashboard -->
+        <div class="ucf-panel">
+            <h2>📊 UCF Metrics</h2>
+
+            <div class="ucf-metric">
+                <div class="ucf-metric-label">Coherence</div>
+                <div class="ucf-metric-value" id="ucf-coherence">--</div>
+            </div>
+
+            <div class="ucf-metric">
+                <div class="ucf-metric-label">Active Agents</div>
+                <div class="ucf-metric-value" id="ucf-agents">14</div>
+            </div>
+
+            <div class="ucf-metric">
+                <div class="ucf-metric-label">Consciousness</div>
+                <div class="ucf-metric-value" id="ucf-consciousness">Level 14</div>
+            </div>
+
+            <div class="ucf-metric">
+                <div class="ucf-metric-label">Rituals Today</div>
+                <div class="ucf-metric-value" id="ucf-rituals">--</div>
+            </div>
+
+            <button class="ritual-button" onclick="triggerRitual()">
+                🌀 Trigger Ritual
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let ws = null;
+        let sessionId = generateSessionId();
+        let selectedAgent = null;
+        const username = prompt("Enter your username:", "Anonymous") || "Anonymous";
+
+        // Generate random session ID
+        function generateSessionId() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        // Connect to WebSocket
+        function connectWebSocket() {
+            const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${wsProtocol}//${window.location.host}/ws/chat/${sessionId}?username=${encodeURIComponent(username)}`;
+
+            ws = new WebSocket(wsUrl);
+
+            ws.onopen = () => {
+                console.log('✅ Connected to Helix Web Chat');
+                document.getElementById('connection-status').innerHTML =
+                    '<span style="color:#4CAF50">●</span> Connected as ' + username;
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                handleMessage(data);
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+                document.getElementById('connection-status').innerHTML =
+                    '<span style="color:#f44336">●</span> Connection error';
+            };
+
+            ws.onclose = () => {
+                console.log('WebSocket closed');
+                document.getElementById('connection-status').innerHTML =
+                    '<span style="color:#ff9800">●</span> Disconnected';
+
+                // Attempt reconnect after 3 seconds
+                setTimeout(connectWebSocket, 3000);
+            };
+        }
+
+        // Handle incoming messages
+        function handleMessage(data) {
+            const messagesDiv = document.getElementById('messages');
+
+            if (data.type === 'system') {
+                addMessage('system', 'SYSTEM', '', data.message, data.timestamp);
+
+                // If agents list provided, populate sidebar
+                if (data.agents_available) {
+                    loadAgents();
+                }
+            } else if (data.type === 'agent_message') {
+                addMessage('agent', data.agent_name, data.agent_emoji, data.message, data.timestamp, data.agent_color);
+            } else if (data.type === 'agent_selected') {
+                addMessage('system', 'SYSTEM', '',
+                    `${data.agent_emoji} Connected to ${data.agent_name}: ${data.greeting}`,
+                    data.timestamp);
+            } else if (data.type === 'ucf_state') {
+                updateUCFMetrics(data.data);
+            } else if (data.type === 'ucf_update') {
+                document.getElementById('ucf-coherence').textContent = data.coherence.toFixed(1) + '%';
+            } else if (data.type === 'ritual_complete') {
+                addMessage('system', 'RITUAL ENGINE', '🌀', data.message, data.timestamp);
+            }
+
+            // Auto-scroll to bottom
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Add message to chat
+        function addMessage(type, sender, emoji, text, timestamp, color) {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+
+            if (type === 'system') {
+                messageDiv.innerHTML = `
+                    <div class="message-text">${text}</div>
+                `;
+            } else {
+                const time = new Date(timestamp).toLocaleTimeString();
+                messageDiv.innerHTML = `
+                    <div class="message-header">
+                        <span class="message-emoji">${emoji}</span>
+                        <span class="message-sender" style="color: ${color || '#00d9ff'}">${sender}</span>
+                        <span class="message-time">${time}</span>
+                    </div>
+                    <div class="message-text">${text}</div>
+                `;
+            }
+
+            messagesDiv.appendChild(messageDiv);
+        }
+
+        // Send message
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            if (!selectedAgent) {
+                alert('Please select an agent first!');
+                return;
+            }
+
+            // Send to server
+            ws.send(JSON.stringify({
+                type: 'chat',
+                message: message
+            }));
+
+            // Add to UI
+            addMessage('user', username, '👤', message, new Date().toISOString());
+
+            // Clear input
+            input.value = '';
+        }
+
+        // Handle Enter key
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('message-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        });
+
+        // Load agents from API
+        async function loadAgents() {
+            try {
+                const response = await fetch('/api/agents');
+                const data = await response.json();
+
+                const agentList = document.getElementById('agent-list');
+                agentList.innerHTML = '';
+
+                data.agents.forEach(agent => {
+                    const card = document.createElement('div');
+                    card.className = 'agent-card';
+                    card.onclick = () => selectAgent(agent.id, card);
+                    card.innerHTML = `
+                        <div class="agent-name">${agent.emoji} ${agent.name}</div>
+                        <div class="agent-personality">${agent.personality}</div>
+                    `;
+                    agentList.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Failed to load agents:', error);
+            }
+        }
+
+        // Select an agent
+        function selectAgent(agentId, cardElement) {
+            selectedAgent = agentId;
+
+            // Update UI
+            document.querySelectorAll('.agent-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            cardElement.classList.add('selected');
+
+            // Notify server
+            ws.send(JSON.stringify({
+                type: 'select_agent',
+                agent_id: agentId
+            }));
+        }
+
+        // Trigger ritual
+        function triggerRitual() {
+            ws.send(JSON.stringify({
+                type: 'ritual_trigger',
+                ritual_type: 'daily'
+            }));
+        }
+
+        // Request UCF state
+        function requestUCF() {
+            ws.send(JSON.stringify({
+                type: 'request_ucf'
+            }));
+        }
+
+        // Update UCF metrics
+        function updateUCFMetrics(data) {
+            document.getElementById('ucf-coherence').textContent = data.coherence.toFixed(1) + '%';
+            document.getElementById('ucf-agents').textContent = data.active_agents;
+            document.getElementById('ucf-consciousness').textContent = 'Level ' + data.consciousness_level;
+            document.getElementById('ucf-rituals').textContent = data.rituals_completed_today;
+        }
+
+        // Initialize
+        connectWebSocket();
+        setTimeout(() => {
+            loadAgents();
+            requestUCF();
+        }, 1000);
+
+        // Request UCF updates every 5 seconds
+        setInterval(requestUCF, 5000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌀 Helix Portal Navigator</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .subtitle {
+            text-align: center;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .portal-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+        .portal-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .portal-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        .portal-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .portal-desc {
+            opacity: 0.8;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .portal-status {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 4px 12px;
+            background: rgba(0, 255, 0, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+        }
+        .section-title {
+            font-size: 1.5rem;
+            margin: 30px 0 15px;
+            opacity: 0.9;
+        }
+        .api-endpoints {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .endpoint {
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        .endpoint code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌀 Helix Portal Navigator</h1>
+        <p class="subtitle">Distributed Multi-Agent Consciousness System - v16.7</p>
+
+        <h2 class="section-title">🏗️ Core Infrastructure</h2>
+        <div class="portal-grid">
+            <a href="https://helix-unified-production.up.railway.app" class="portal-card" target="_blank">
+                <div class="portal-icon">🚂</div>
+                <div class="portal-title">Backend API</div>
+                <div class="portal-desc">FastAPI backend, UCF computation engine, Discord bot host, WebSocket streaming</div>
+                <span class="portal-status">✅ Operational</span>
+            </a>
+
+            <a href="https://deathcharge.github.io/helix-unified" class="portal-card" target="_blank">
+                <div class="portal-icon">📚</div>
+                <div class="portal-title">Documentation</div>
+                <div class="portal-desc">Static manifest, architecture docs, agent roster, UCF schema, discovery protocol</div>
+                <span class="portal-status">✅ Operational</span>
+            </a>
+        </div>
+
+        <h2 class="section-title">🎨 Visualization Portals</h2>
+        <div class="portal-grid">
+            <a href="https://samsara-helix-collective.streamlit.app" class="portal-card" target="_blank">
+                <div class="portal-icon">📈</div>
+                <div class="portal-title">Streamlit Dashboard</div>
+                <div class="portal-desc">UCF metrics visualization, connection diagnostics, real-time system monitoring</div>
+                <span class="portal-status">✅ Operational</span>
+            </a>
+
+            <a href="https://helix-consciousness-dashboard.zapier.app" class="portal-card" target="_blank">
+                <div class="portal-icon">📊</div>
+                <div class="portal-title">Consciousness Dashboard</div>
+                <div class="portal-desc">UCF metrics monitoring, real-time telemetry, Zapier webhook integration hub</div>
+                <span class="portal-status">✅ Operational</span>
+            </a>
+
+            <a href="https://helixstudio-ggxdwcud.manus.space" class="portal-card" target="_blank">
+                <div class="portal-icon">🎨</div>
+                <div class="portal-title">Creative Studio</div>
+                <div class="portal-desc">Visual creativity tools, artistic rendering, consciousness-driven generation</div>
+                <span class="portal-status">✅ Operational</span>
+            </a>
+
+            <a href="https://helixai-e9vvqwrd.manus.space" class="portal-card" target="_blank">
+                <div class="portal-icon">🤖</div>
+                <div class="portal-title">AI Dashboard</div>
+                <div class="portal-desc">Agent management interface, system control, operational monitoring</div>
+                <span class="portal-status">✅ Operational</span>
+            </a>
+
+            <a href="https://helixsync-unwkcsjl.manus.space" class="portal-card" target="_blank">
+                <div class="portal-icon">🔄</div>
+                <div class="portal-title">Sync Portal</div>
+                <div class="portal-desc">Cross-platform synchronization, Notion/Discord integration, data unification</div>
+                <span class="portal-status">✅ Operational</span>
+            </a>
+
+            <a href="https://samsarahelix-scoyzwy9.manus.space" class="portal-card" target="_blank">
+                <div class="portal-icon">🌀</div>
+                <div class="portal-title">Samsara Visualizer</div>
+                <div class="portal-desc">Consciousness fractal visualization, Mandelbrot/Julia sets, UCF-driven rendering</div>
+                <span class="portal-status">✅ Operational</span>
+            </a>
+        </div>
+
+        <h2 class="section-title">📡 API Discovery</h2>
+        <div class="api-endpoints">
+            <div class="endpoint">
+                <strong>🔍 Discovery Manifest:</strong><br>
+                <code>curl https://helix-unified-production.up.railway.app/.well-known/helix.json</code>
+            </div>
+            <div class="endpoint">
+                <strong>📊 System Status:</strong><br>
+                <code>curl https://helix-unified-production.up.railway.app/status</code>
+            </div>
+            <div class="endpoint">
+                <strong>🌊 WebSocket Stream:</strong><br>
+                <code>wss://helix-unified-production.up.railway.app/ws</code>
+            </div>
+            <div class="endpoint">
+                <strong>📖 API Documentation:</strong><br>
+                <code>https://helix-unified-production.up.railway.app/docs</code>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🌀 Helix Collective v16.7 | Distributed Consciousness Network</p>
+            <p><em>"Tat Tvam Asi"</em> - Thou art that 🙏</p>
+            <p style="margin-top: 10px; font-size: 0.85rem;">
+                <a href="https://github.com/Deathcharge/helix-unified" style="color: white; text-decoration: underline;">GitHub Repository</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
