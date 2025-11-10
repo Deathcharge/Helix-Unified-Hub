@@ -1,0 +1,7 @@
+total 108
+drwxr-xr-x 2 root root   166 Nov 10 03:00 .
+drwxr-xr-x 1 root root    58 Nov 10 02:59 ..
+-rw-r--r-- 1 root root 11106 Nov 10 03:00 INTERFACE-ENHANCEMENT-GUIDE.md
+-rw-r--r-- 1 root root 20752 Nov 10 02:59 dashboard-enhancement.js
+-rw-r--r-- 1 root root 26640 Nov 10 02:59 meta-sigil-enhancement.js
+-rw-r--r-- 1 root root 44817 Nov 10 03:00 quantum-ritual-enhancement.js

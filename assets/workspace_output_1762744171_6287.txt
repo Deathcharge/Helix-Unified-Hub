@@ -1,0 +1,32 @@
+🔍 Deep code analysis - Let's examine the structure...
+Python files:
+./github-repo/examples/webhook_integration.py
+./github-repo/examples/zapier_tables_access.py
+./mega_sync2.py
+./sync.py
+./mega_sync.py
+./fix_crypto_imports.py
+
+JavaScript/TypeScript files:
+./helix-hub-unified/shared-components/helix-nav.js
+./individual-repos/helix-hub-agents/helix-nav.js
+./individual-repos/helix-hub-analytics/helix-nav.js
+./individual-repos/helix-hub-archive/helix-nav.js
+./individual-repos/helix-hub-community/helix-nav.js
+./individual-repos/helix-hub-dev/helix-nav.js
+./individual-repos/helix-hub-forum/helix-nav.js
+./individual-repos/helix-hub-knowledge/helix-nav.js
+./individual-repos/helix-hub-master/helix-nav.js
+./individual-repos/helix-hub-music/helix-nav.js
+./individual-repos/helix-hub-rituals/helix-nav.js
+./individual-repos/helix-hub-shared/helix-nav.js
+./individual-repos/helix-hub-studio/helix-nav.js
+./shared-components/helix-nav.js
+./zapier-integration/helix-zapier-nervous-system.js
+
+Key configuration files:
+-rw-r--r-- 1 root root  472 Nov 10 03:09 config.toml
+-rw-r--r-- 1 root root 2265 Nov 10 03:08 docker-compose.yml
+-rw-r--r-- 1 root root 1341 Nov 10 03:08 railway.json
+-rw-r--r-- 1 root root  716 Nov 10 03:08 railway.toml
+-rw-r--r-- 1 root root  207 Nov 10 03:08 vercel.json

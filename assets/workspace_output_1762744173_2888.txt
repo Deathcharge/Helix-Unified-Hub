@@ -1,0 +1,44 @@
+📊 Codebase architecture analysis...
+Directory structure:
+.
+├── deployment-scripts
+├── github-repo
+│   ├── examples
+│   └── schemas
+├── helix-hub-unified
+│   ├── master-portal
+│   └── shared-components
+├── individual-repos
+│   ├── helix-hub-agents
+│   ├── helix-hub-analytics
+│   ├── helix-hub-archive
+│   ├── helix-hub-community
+│   ├── helix-hub-dev
+│   ├── helix-hub-forum
+│   ├── helix-hub-knowledge
+│   ├── helix-hub-master
+│   ├── helix-hub-music
+│   ├── helix-hub-rituals
+│   ├── helix-hub-shared
+
+Individual repositories:
+REPOSITORY-MANIFEST.md
+helix-hub-agents
+helix-hub-analytics
+helix-hub-archive
+helix-hub-community
+helix-hub-dev
+helix-hub-forum
+helix-hub-knowledge
+helix-hub-master
+helix-hub-music
+helix-hub-rituals
+helix-hub-shared
+helix-hub-studio
+
+Recent documentation versions:
+-rw-r--r-- 1 root root 16268 Nov 10 03:08 CONSCIOUSNESS_INTEGRATION_v15.3.md
+-rw-r--r-- 1 root root 10589 Nov 10 03:09 DASHBOARD_IMPLEMENTATION_v15.3.md
+-rw-r--r-- 1 root root  8301 Nov 10 03:08 DEPLOYMENT_READINESS_v15.3.md
+-rw-r--r-- 1 root root  6592 Nov 10 03:08 DEPLOYMENT_READINESS_v15.3_FINAL.md
+-rw-r--r-- 1 root root  7530 Nov 10 03:08 README_v15.2.md

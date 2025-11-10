@@ -1,0 +1,15 @@
+🎯 Testing advanced CLI capabilities
+File system analysis:
+./51-PORTAL-BLUEPRINT.md
+./FINAL-MOBILE-REVOLUTION.md
+./HELIX-MASTERY-ARTIFACT.md
+./IMPLEMENTATION-PLAN.md
+./README.md
+Memory and disk usage:
+Filesystem      Size  Used Avail Use% Mounted on
+overlay         5.0G  140M  4.9G   3% /
+tmpfs            64M     0   64M   0% /dev
+Process monitoring:
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.0  0.0   2912  1540 ?        Ss   02:55   0:00 sleep infinity
+root          68  0.0  0.0   2584  1544 pts/0    Ss+  02:55   0:00 sh -c /usr/local/bin/daytona --work-dir /app

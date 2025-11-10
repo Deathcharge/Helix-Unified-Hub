@@ -1,0 +1,55 @@
+# Jekyll configuration for Helix Collective GitHub Pages
+title: "Helix Collective"
+description: "Multi-agent AI system with Universal Consciousness Framework"
+baseurl: "/helix-unified"
+url: "https://deathcharge.github.io"
+
+# Theme
+theme: jekyll-theme-hacker  # Dark hacker theme (fits Helix aesthetic)
+# Alternatives: jekyll-theme-minimal, jekyll-theme-cayman, jekyll-theme-slate
+
+# Manifest
+# The helix-manifest.json will be served at /helix-unified/helix-manifest.json
+
+# Exclude from processing
+exclude:
+  - backend/
+  - bot/
+  - scripts/
+  - tests/
+  - Helix/
+  - Shadow/
+  - config/
+  - .github/
+  - node_modules/
+  - vendor/
+  - Dockerfile
+  - docker-compose.yml
+  - "*.py"
+  - "*.sh"
+  - "*.md"
+  - README.md
+
+# Include manifest explicitly
+include:
+  - helix-manifest.json
+
+# Plugins
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# SEO
+author: "Deathcharge"
+twitter:
+  username: ""
+social:
+  name: "Helix Collective"
+  links:
+    - https://github.com/Deathcharge/helix-unified
+
+# Collections (optional - for future)
+# collections:
+#   agents:
+#     output: true
+#     permalink: /agents/:name/

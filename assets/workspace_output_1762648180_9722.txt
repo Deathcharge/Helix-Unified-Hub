@@ -1,0 +1,7 @@
+total 28
+drwxr-xr-x  3 root root  116 Nov  9 00:29 .
+drwxr-xr-x 10 root root 4096 Nov  9 00:28 ..
+-rw-r--r--  1 root root 8916 Nov  9 00:29 MOBILE-DEPLOYMENT-GUIDE.md
+drwxr-xr-x  3 root root   25 Nov  9 00:28 app
+-rw-r--r--  1 root root 5097 Nov  9 00:29 build.gradle
+-rw-r--r--  1 root root  787 Nov  9 00:29 gradle.properties

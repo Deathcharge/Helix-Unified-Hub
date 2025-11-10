@@ -1,0 +1,57 @@
+{
+  "version": "1.0",
+  "sync_schedule": {
+    "interval_seconds": 3600,
+    "on_ritual": true,
+    "on_deploy": true
+  },
+  "sources": {
+    "github": {
+      "enabled": true,
+      "repos": ["helix-unified", "Helix", "Helix-Collective-Web"],
+      "include": ["commits", "issues", "prs", "releases"]
+    },
+    "ucf_state": {
+      "enabled": true,
+      "metrics": ["harmony", "resilience", "prana", "drishti", "klesha", "zoom"]
+    },
+    "agent_metrics": {
+      "enabled": true,
+      "agents": ["all"]
+    }
+  },
+  "exporters": {
+    "notion": {
+      "enabled": true,
+      "format": "database_entries"
+    },
+    "markdown": {
+      "enabled": true,
+      "template": "github_style"
+    },
+    "json": {
+      "enabled": true,
+      "pretty": true,
+      "compressed": false
+    },
+    "html": {
+      "enabled": false
+    }
+  },
+  "publishers": {
+    "discord": {
+      "enabled": true,
+      "channel": "sync-updates",
+      "mention_roles": []
+    },
+    "notion": {
+      "enabled": false,
+      "auto_create_pages": true
+    },
+    "portal": {
+      "enabled": false,
+      "json_feed_path": "/api/sync/latest.json"
+    }
+  }
+}
+

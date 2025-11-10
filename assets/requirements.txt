@@ -1,0 +1,17 @@
+# Helix Collective Community Hub - Requirements
+# Second Streamlit app for social features (forums, chat, dating)
+
+# Core Framework
+streamlit==1.40.0
+
+# API Communication
+requests==2.31.0
+
+# Data Handling
+pandas>=2.0.0
+
+# Visualization (optional, for future enhancements)
+plotly==5.18.0
+
+# Utilities
+python-dotenv==1.0.1

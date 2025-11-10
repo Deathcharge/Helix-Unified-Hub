@@ -1,0 +1,26 @@
+# Zapier Master Webhook Configuration for Railway
+# ================================================
+# Add this environment variable to your Railway project
+
+ZAPIER_MASTER_HOOK_URL=https://hooks.zapier.com/hooks/catch/25075191/us8hea5/
+
+# Optional: Discord Channel IDs for better routing
+# (These help the Zapier client determine which Slack/Discord channels to notify)
+DISCORD_MANUS_BRIDGE_CHANNEL_ID=your_manus_bridge_channel_id
+DISCORD_RITUAL_ENGINE_CHANNEL_ID=your_ritual_engine_channel_id
+DISCORD_BACKUP_CHANNEL_ID=your_backup_channel_id
+DISCORD_DEPLOYMENTS_CHANNEL_ID=your_deployments_channel_id
+
+# Helix Phase & Version (for telemetry metadata)
+HELIX_PHASE=production
+HELIX_VERSION=16.5
+
+# UCF State tracking
+UCF_STATE_PATH=Helix/state/ucf_state.json
+
+# To add to Railway:
+# 1. Go to your Railway project dashboard
+# 2. Select your service (discord bot)
+# 3. Click "Variables" tab
+# 4. Add the variable above
+# 5. Redeploy the service

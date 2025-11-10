@@ -1,0 +1,38 @@
+{
+  "validations": [
+    {
+      "timestamp": "2025-11-01T15:02:39.865245",
+      "export_file": "Shadow/notion_exports/notion_context_complete_20251101_150237.json",
+      "is_valid": true,
+      "error_count": 0,
+      "warning_count": 0,
+      "errors": [],
+      "warnings": [],
+      "metadata": {
+        "file_size": 18469,
+        "databases": {
+          "repositories": {
+            "entry_count": 0
+          },
+          "agents": {
+            "entry_count": 15
+          },
+          "rituals": {
+            "entry_count": 1
+          },
+          "ucf_metrics": {
+            "entry_count": 6
+          },
+          "architecture": {
+            "entry_count": 5
+          },
+          "deployments": {
+            "entry_count": 2
+          }
+        }
+      }
+    }
+  ],
+  "last_validation": "2025-11-01T15:02:39.865245",
+  "total_validations": 1
+}

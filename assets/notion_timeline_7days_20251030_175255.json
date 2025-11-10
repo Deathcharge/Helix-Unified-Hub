@@ -1,0 +1,44 @@
+{
+  "export_metadata": {
+    "exported_at": "2025-10-30T17:52:55.935654",
+    "export_type": "event_log_timeline",
+    "notion_database": "Event Log",
+    "notion_database_id": "acb01d4a955d4775aaeb2310d1da1102",
+    "entry_count": 3,
+    "time_range_days": 7,
+    "source": "helix-unified local archives"
+  },
+  "notion_events": [
+    {
+      "event": "Z-88 Ritual",
+      "timestamp": "2025-10-30T17:52:55.935612",
+      "event_type": "Ritual",
+      "agent": "Manus",
+      "description": "Executed 0-step ritual. Harmony delta: +0.000",
+      "ucf_snapshot": "{}"
+    },
+    {
+      "event": "Z-88 Ritual",
+      "timestamp": "2025-10-30T17:52:55.935602",
+      "event_type": "Ritual",
+      "agent": "Manus",
+      "description": "Executed 0-step ritual. Harmony delta: +0.000",
+      "ucf_snapshot": "{}"
+    },
+    {
+      "event": "Z-88 Ritual",
+      "timestamp": "2025-10-30T17:52:55.935543",
+      "event_type": "Ritual",
+      "agent": "Manus",
+      "description": "Executed 0-step ritual. Harmony delta: +0.000",
+      "ucf_snapshot": "{}"
+    }
+  ],
+  "import_instructions": {
+    "step_1": "Copy this entire JSON file",
+    "step_2": "Paste into Main Claude (with Notion MCP access)",
+    "step_3": "Ask Claude: 'Please import these events into the Notion Event Log'",
+    "step_4": "Claude will use MCP to create entries with proper timestamps and UCF snapshots",
+    "note": "Events are sorted newest first. Duplicates will be skipped."
+  }
+}

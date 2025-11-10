@@ -1,0 +1,61 @@
+[
+  {
+    "timestamp": "2025-11-08T10:08:40.991376Z",
+    "results": {
+      "railway_core": {
+        "status": 200,
+        "ok": true,
+        "response_time_ms": 467.41,
+        "timestamp": "2025-11-08T10:08:37.504864Z",
+        "error": null
+      },
+      "manifest_mirror": {
+        "status": 200,
+        "ok": true,
+        "response_time_ms": 267.44,
+        "timestamp": "2025-11-08T10:08:37.773388Z",
+        "error": null
+      },
+      "zapier_dashboard": {
+        "status": 404,
+        "ok": false,
+        "response_time_ms": 576.47,
+        "timestamp": "2025-11-08T10:08:38.350778Z",
+        "error": null
+      },
+      "creative_studio": {
+        "status": 200,
+        "ok": true,
+        "response_time_ms": 647.54,
+        "timestamp": "2025-11-08T10:08:38.999444Z",
+        "error": null
+      },
+      "ai_dashboard": {
+        "status": 200,
+        "ok": true,
+        "response_time_ms": 716.35,
+        "timestamp": "2025-11-08T10:08:39.717278Z",
+        "error": null
+      },
+      "sync_portal": {
+        "status": 200,
+        "ok": true,
+        "response_time_ms": 582.47,
+        "timestamp": "2025-11-08T10:08:40.301124Z",
+        "error": null
+      },
+      "visualizer_samsara": {
+        "status": 200,
+        "ok": true,
+        "response_time_ms": 687.42,
+        "timestamp": "2025-11-08T10:08:40.990022Z",
+        "error": null
+      }
+    },
+    "summary": {
+      "total": 7,
+      "ok": 6,
+      "failed": 1
+    }
+  }
+]
