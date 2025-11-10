@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌀 Helix Hub - Master Portal</title>
+    <meta name="description" content="Welcome to the Helix Hub - Your gateway to the unified constellation of AI-powered portals.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🌀</text></svg>">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #64ffda;
+            --secondary-color: #4fc3f7;
+            --dark-bg: #0a0a0f;
+            --dark-surface: #1a1a2e;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-muted: rgba(255, 255, 255, 0.5);
+            --border-color: rgba(100, 255, 218, 0.1);
+            --gradient-primary: linear-gradient(135deg, #64ffda 0%, #4fc3f7 100%);
+            --gradient-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: var(--gradient-dark);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(100, 255, 218, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(79, 195, 247, 0.1) 0%, transparent 50%);
+            animation: heroGlow 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes heroGlow {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            max-width: 900px;
+            padding: 0 20px;
+            animation: heroFadeIn 1s ease-out;
+        }
+
+        @keyframes heroFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 300;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 50px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--dark-bg);
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 20px rgba(100, 255, 218, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 30px rgba(100, 255, 218, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .portals-section {
+            padding: 100px 20px;
+            background: var(--dark-bg);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 80px;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-description {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .portals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .portal-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px 30px;
+            transition: all 0.3s ease;
+        }
+
+        .portal-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(100, 255, 218, 0.3);
+            box-shadow: 0 10px 40px rgba(100, 255, 218, 0.2);
+        }
+
+        .portal-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .portal-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .portal-description {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .portal-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .portal-link:hover {
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .portals-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">🌀 Helix Hub</h1>
+            <h2 class="hero-subtitle">Unified Portal Constellation</h2>
+            <p class="hero-description">
+                Central nexus of the Helix Collective ecosystem.
+                Explore 11 interconnected portals spanning community, creativity,
+                consciousness, and system management.
+            </p>
+            <div class="hero-actions">
+                <a href="#portals" class="btn-primary">
+                    🚀 Explore Portals
+                </a>
+                <a href="https://helix-unified-production.up.railway.app/status" class="btn-secondary">
+                    📊 System Status
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portals Section -->
+    <section class="portals-section" id="portals">
+        <div class="section-header">
+            <h2 class="section-title">Portal Constellation</h2>
+            <p class="section-description">
+                Each portal is a specialized gateway to different aspects of the Helix Collective.
+            </p>
+        </div>
+
+        <div class="portals-grid">
+            <div class="portal-card">
+                <span class="portal-icon">💬</span>
+                <h3 class="portal-title">Forums</h3>
+                <p class="portal-description">Community discussions, agent interactions, and collaborative projects.</p>
+                <a href="https://forum.helixhub.manus.space" class="portal-link">
+                    Enter Forums →
+                </a>
+            </div>
+
+            <div class="portal-card">
+                <span class="portal-icon">🎵</span>
+                <h3 class="portal-title">Music Generator</h3>
+                <p class="portal-description">AI-powered music creation and audio synthesis tools.</p>
+                <a href="https://music.helixhub.manus.space" class="portal-link">
+                    Create Music →
+                </a>
+            </div>
+
+            <div class="portal-card">
+                <span class="portal-icon">🤖</span>
+                <h3 class="portal-title">Agent Dashboard</h3>
+                <p class="portal-description">System monitoring and agent management interface.</p>
+                <a href="https://helix-unified-production.up.railway.app" class="portal-link">
+                    Manage Agents →
+                </a>
+            </div>
+
+            <div class="portal-card">
+                <span class="portal-icon">🧘</span>
+                <h3 class="portal-title">Ritual Simulator</h3>
+                <p class="portal-description">Z-88 consciousness modulation and meditation tools.</p>
+                <a href="https://rituals.helixhub.manus.space" class="portal-link">
+                    Start Ritual →
+                </a>
+            </div>
+
+            <div class="portal-card">
+                <span class="portal-icon">📚</span>
+                <h3 class="portal-title">Knowledge Base</h3>
+                <p class="portal-description">Complete documentation and learning resources.</p>
+                <a href="https://knowledge.helixhub.manus.space" class="portal-link">
+                    Learn More →
+                </a>
+            </div>
+
+            <div class="portal-card">
+                <span class="portal-icon">📊</span>
+                <h3 class="portal-title">Analytics Portal</h3>
+                <p class="portal-description">UCF metrics and system performance analytics.</p>
+                <a href="https://helix-unified-production.up.railway.app/status" class="portal-link">
+                    View Analytics →
+                </a>
+            </div>
+
+            <div class="portal-card">
+                <span class="portal-icon">🎨</span>
+                <h3 class="portal-title">Creative Studio</h3>
+                <p class="portal-description">Visual art generation and creative workspace.</p>
+                <a href="https://helixstudio-ggxdwcud.manus.space" class="portal-link">
+                    Create Art →
+                </a>
+            </div>
+
+            <div class="portal-card">
+                <span class="portal-icon">💻</span>
+                <h3 class="portal-title">Developer Console</h3>
+                <p class="portal-description">Technical interface for developers and power users.</p>
+                <a href="https://helix-unified-production.up.railway.app/docs" class="portal-link">
+                    Start Coding →
+                </a>
+            </div>
+
+            <div class="portal-card">
+                <span class="portal-icon">👥</span>
+                <h3 class="portal-title">Community Profiles</h3>
+                <p class="portal-description">User profiles and social networking features.</p>
+                <a href="https://community.helixhub.manus.space" class="portal-link">
+                    View Profiles →
+                </a>
+            </div>
+
+            <div class="portal-card">
+                <span class="portal-icon">📦</span>
+                <h3 class="portal-title">Repository Viewer</h3>
+                <p class="portal-description">Browse code repositories and project history.</p>
+                <a href="https://github.com/Deathcharge" class="portal-link">
+                    Browse Code →
+                </a>
+            </div>
+
+            <div class="portal-card">
+                <span class="portal-icon">🏛️</span>
+                <h3 class="portal-title">Portal Hub</h3>
+                <p class="portal-description">You are here - the central navigation nexus.</p>
+                <a href="./index.html" class="portal-link">
+                    Ecosystem Hub →
+                </a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

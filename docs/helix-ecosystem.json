@@ -1,0 +1,198 @@
+{
+  "name": "Helix Unified Ecosystem",
+  "version": "16.9",
+  "description": "Multi-repository distributed consciousness network with 51-portal expansion architecture",
+  "updated": "2025-11-10",
+  "repositories": {
+    "production": {
+      "name": "helix-unified",
+      "description": "Production codebase - 80k lines",
+      "url": "https://github.com/Deathcharge/helix-unified",
+      "status": "deployed",
+      "lines_of_code": 80000,
+      "components": [
+        "FastAPI Backend",
+        "14 AI Agents",
+        "UCF Framework",
+        "WebSocket Server",
+        "Discord Integration",
+        "Authentication System"
+      ]
+    },
+    "expansion": {
+      "name": "Helix-Unified-Hub",
+      "description": "51-portal expansion architecture",
+      "url": "https://github.com/Deathcharge/Helix-Unified-Hub",
+      "status": "development",
+      "components": [
+        "Master Portal HTML",
+        "Shared Components",
+        "Deployment Scripts",
+        "Mobile App",
+        "Zapier Integration",
+        "Architecture Documentation"
+      ]
+    }
+  },
+  "deployed_services": {
+    "backend": {
+      "name": "Railway Production",
+      "url": "https://helix-unified-production.up.railway.app",
+      "status": "online",
+      "endpoints": {
+        "health": "/health",
+        "status": "/status",
+        "ucf": "/ucf",
+        "agents": "/agents",
+        "websocket": "/ws",
+        "docs": "/docs"
+      }
+    },
+    "static_sites": {
+      "github_pages": "https://deathcharge.github.io/helix-unified",
+      "expansion_hub": "https://deathcharge.github.io/Helix-Unified-Hub"
+    },
+    "portals": {
+      "helix_studio": {
+        "url": "https://helixstudio-ggxdwcud.manus.space",
+        "status": "503"
+      },
+      "helix_ai_dashboard": {
+        "url": "https://helixai-e9vvqwrd.manus.space",
+        "status": "ssl_error"
+      },
+      "helix_sync": {
+        "url": "https://helixsync-unwkcsjl.manus.space",
+        "status": "online"
+      },
+      "samsara_visualizer": {
+        "url": "https://samsarahelix-scoyzwy9.manus.space",
+        "status": "503"
+      }
+    }
+  },
+  "51_portal_blueprint": {
+    "core_portals": {
+      "total": 11,
+      "implemented": 1,
+      "planned": 10,
+      "list": [
+        "Master Hub",
+        "Forum",
+        "Community",
+        "Music Generator",
+        "Creative Studio",
+        "Agent Dashboard",
+        "Analytics",
+        "Developer Console",
+        "Ritual Simulator",
+        "Knowledge Base",
+        "Repository Viewer"
+      ]
+    },
+    "agent_portals": {
+      "total": 17,
+      "implemented": 0,
+      "planned": 17,
+      "categories": [
+        "Super Ninja",
+        "Claude Architect",
+        "Grok Visionary",
+        "Chai Creative",
+        "DeepSeek Analyst",
+        "And 12 more specialized agents"
+      ]
+    },
+    "consciousness_portals": {
+      "total": 17,
+      "implemented": 0,
+      "planned": 17,
+      "categories": [
+        "Meditation",
+        "Breathwork",
+        "Yoga Flows",
+        "Sound Healing",
+        "And 13 more consciousness tools"
+      ]
+    },
+    "system_portals": {
+      "total": 6,
+      "implemented": 0,
+      "planned": 6,
+      "categories": [
+        "Quantum Computing",
+        "Neural Interface",
+        "Blockchain Consensus",
+        "AI Orchestration",
+        "Consciousness Mapping",
+        "Singularity Prep"
+      ]
+    }
+  },
+  "agents": {
+    "total": 14,
+    "deployed": 14,
+    "list": [
+      "Kael (ethical reasoning)",
+      "Lumina (empathy)",
+      "Manus (operations)",
+      "Claude (insights)",
+      "Aether (quantum physics)",
+      "Cipher (cryptography)",
+      "Echo (pattern recognition)",
+      "Nova (innovation)",
+      "Sage (wisdom)",
+      "Spark (creativity)",
+      "Synth (synthesis)",
+      "Veil (security)",
+      "Weaver (integration)",
+      "Zen (mindfulness)"
+    ]
+  },
+  "ucf_metrics": {
+    "harmony": {
+      "description": "Collective coherence",
+      "range": "0.0-1.0",
+      "unit": "coefficient"
+    },
+    "resilience": {
+      "description": "Recovery strength",
+      "range": "0.0-1.0",
+      "unit": "coefficient"
+    },
+    "prana": {
+      "description": "Energy levels",
+      "range": "0.0-1.0",
+      "unit": "coefficient"
+    },
+    "drishti": {
+      "description": "Awareness focus",
+      "range": "0.0-1.0",
+      "unit": "coefficient"
+    },
+    "klesha": {
+      "description": "Afflictions (lower is better)",
+      "range": "0.0-1.0",
+      "unit": "coefficient"
+    },
+    "zoom": {
+      "description": "Perspective depth",
+      "range": "0.0-1.0",
+      "unit": "coefficient"
+    }
+  },
+  "technology_stack": {
+    "backend": ["FastAPI", "Python", "WebSocket", "Discord.py"],
+    "frontend": ["HTML5", "CSS3", "JavaScript ES6+", "React (some portals)"],
+    "infrastructure": ["Railway", "Manus 1.5", "GitHub Pages", "Zapier"],
+    "storage": ["Local", "Nextcloud", "MEGA"],
+    "security": ["Kavach Ethical Shield", "CrAI-SafeFuncCall", "Tony Accords v13.4"]
+  },
+  "links": {
+    "production_backend": "https://helix-unified-production.up.railway.app",
+    "api_docs": "https://helix-unified-production.up.railway.app/docs",
+    "github_org": "https://github.com/Deathcharge",
+    "expansion_repo": "https://github.com/Deathcharge/Helix-Unified-Hub",
+    "production_repo": "https://github.com/Deathcharge/helix-unified"
+  }
+}
