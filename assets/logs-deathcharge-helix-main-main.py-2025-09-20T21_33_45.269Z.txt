@@ -1,0 +1,170 @@
+
+[     UTC     ] Logs for aoinhelix.streamlit.app/
+────────────────────────────────────────────────────────────────────────────────────────
+[21:17:12] 🚀 Starting up repository: 'helix', branch: 'main', main module: 'main.py'
+[21:17:12] 🐙 Cloning repository...
+[21:17:13] 🐙 Cloning into '/mount/src/helix'...
+Warning: Permanently added the ED25519 host key for IP address '140.82.116.4' to the list of known hosts.
+
+[21:17:13] 🐙 Cloned repository!
+[21:17:13] 🐙 Pulling code changes from Github...
+[21:17:14] 📦 Processing dependencies...
+
+──────────────────────────────────────── uv ───────────────────────────────────────────
+
+Using uv pip install.
+Using Python 3.13.6 environment at /home/adminuser/venv
+Resolved 57 packages in 692ms
+Prepared 57 packages in 2.19s
+Installed 57 packages in 104ms
+ + altair==5.5.0
+ + annotated-types==0.7.0
+ + anyio==4.10.0
+ + attrs==25.3.0
+ + blinker==1.9.0
+ + cachetools==6.2.0
+ + certifi==2025.8.3
+ + charset-normalizer==3.4.3
+ + click==8.3.0
+ + contourpy==1.3.3
+ + cycler==0.12.1
+ + [2025-09-20 21:17:18.051271] distro==1.9.0
+ + fonttools==4.60.0
+ + gitdb==4.0.12
+ + gitpython==3.1.45
+ + h11==0.16.0
+ + httpcore==1.0.9
+ + httpx==0.28.1
+ + idna==3.10
+ + jinja2==3.1.6
+ + jiter==0.11.0
+ + jsonschema==4.25.1
+ + jsonschema-specifications==2025.9.1
+ + kiwisolver==1.4.9
+ + markupsafe==3.0.2
+ + matplotlib==3.10.6
+ + narwhals==2.5.0
+ + numpy==2.3.3
+ + openai==1.108.1
+ + packaging==25.0
+ + pandas==2.3.2
+ + pillow==11.3.0
+ + protobuf==6.32.1
+ + pyarrow==21.0.0
+ + pydantic==2.11.9
+ + pydantic-core==2.33.2
+ + pydeck==0.9.1
+ + pyparsing==3.2.4
+ + python-dateutil==2.9.0.post0
+ + pytz==2025.2
+ + referencing==0.36.2
+ + requests==2.32.5
+ + rpds-py==0.27.1
+ + scipy==1.16.2
+ + six==1.17.0
+ + smmap==5.0.2
+ + sniffio==1.3.1
+ + streamlit==1.49.1
+ + tenacity==9.1.2
+ + toml==0.10.2
+ + tornado==6.5.2
+ + tqdm==4.67.1
+ + typing-extensions==4.15.0
+ + typing-inspection==0.4.1
+ + tzdata==2025.2
+ + urllib3==2.5.0
+ + watchdog==6.0.0
+Checking if Streamlit is installed
+Found Streamlit version 1.49.1 in the environment
+Installing rich for an improved exception logging
+Using uv pip install.
+Using Python 3.13.6 environment at /home/adminuser/venv
+Resolved 4 packages in 147ms
+Prepared 4 packages in 114ms
+Installed 4 packages in 16ms
+ + markdown-it-py==4.0.0
+ + mdurl==0.1.2
+ + pygments==2.19.2[2025-09-20 21:17:19.580793] 
+ + rich==14.1.0
+
+────────────────────────────────────────────────────────────────────────────────────────
+
+[21:17:20] 🐍 Python dependencies were installed from /mount/src/helix/requirements.txt using uv.
+Check if streamlit is installed
+Streamlit is already installed
+[21:17:22] 📦 Processed dependencies!
+
+
+
+────────────────────── Traceback (most recent call last) ───────────────────────
+  /home/adminuser/venv/lib/python3.13/site-packages/streamlit/runtime/scriptru  
+  nner/exec_code.py:128 in exec_func_with_error_handling                        
+                                                                                
+  /home/adminuser/venv/lib/python3.13/site-packages/streamlit/runtime/scriptru  
+  nner/script_runner.py:669 in code_to_exec                                     
+                                                                                
+  /mount/src/helix/main.py:375 in <module>                                      
+                                                                                
+    372 # --- Handle rerun flag ---                                             
+    373 if st.session_state.get('rerun_flag', False):                           
+    374 │   st.session_state.rerun_flag = False                                 
+  ❱ 375 │   st.experimental_rerun()                                             
+    376                                                                         
+────────────────────────────────────────────────────────────────────────────────
+AttributeError: module 'streamlit' has no attribute 'experimental_rerun'
+2025-09-20 21:18:09.496 The `use_column_width` parameter has been deprecated and will be removed in a future release. Please utilize the `use_container_width` parameter instead.
+────────────────────── Traceback (most recent call last) ───────────────────────
+  /home/adminuser/venv/lib/python3.13/site-packages/streamlit/runtime/scriptru  
+  nner/exec_code.py:128 in exec_func_with_error_handling                        
+                                                                                
+  /home/adminuser/venv/lib/python3.13/site-packages/streamlit/runtime/scriptru  
+  nner/script_runner.py:669 in code_to_exec                                     
+                                                                                
+  /mount/src/helix/main.py:375 in <module>                                      
+                                                                                
+    372 # --- Handle rerun flag ---                                             
+    373 if st.session_state.get('rerun_flag', False):                           
+    374 │   st.session_state.rerun_flag = False                                 
+  ❱ 375 │   st.experimental_rerun()                                             
+    376                                                                         
+────────────────────────────────────────────────────────────────────────────────
+AttributeError: module 'streamlit' has no attribute 'experimental_rerun'
+[21:32:12] 🐙 Pulling code changes from Github...
+[21:32:13] 📦 Processing dependencies...
+[21:32:13] 📦 Processed dependencies!
+────────────────────── Traceback (most recent call last) ───────────────────────
+  /home/adminuser/venv/lib/python3.13/site-packages/streamlit/runtime/scriptru  
+  nner/exec_code.py:128 in exec_func_with_error_handling                        
+                                                                                
+  /home/adminuser/venv/lib/python3.13/site-packages/streamlit/runtime/scriptru  
+  nner/script_runner.py:669 in code_to_exec                                     
+                                                                                
+  /mount/src/helix/main.py:364 in <module>                                      
+                                                                                
+    361 │   animation_ui()                                                      
+    362                                                                         
+    363 with tabs[4]:                                                           
+  ❱ 364 │   gallery_ui()                                                        
+    365                                                                         
+    366 with tabs[5]:                                                           
+    367 │   settings_ui()                                                       
+────────────────────────────────────────────────────────────────────────────────
+KeyError: 'fractal_type'
+[21:32:15] 🔄 Updated app!
+2025-09-20 21:32:45.679 The `use_column_width` parameter has been deprecated and will be removed in a future release. Please utilize the `use_container_width` parameter instead.
+────────────────────── Traceback (most recent call last) ───────────────────────
+  /home/adminuser/venv/lib/python3.13/site-packages/streamlit/runtime/scriptru  
+  nner/exec_code.py:128 in exec_func_with_error_handling                        
+                                                                                
+  /home/adminuser/venv/lib/python3.13/site-packages/streamlit/runtime/scriptru  
+  nner/script_runner.py:669 in code_to_exec                                     
+                                                                                
+  /mount/src/helix/main.py:402 in <module>                                      
+                                                                                
+    399 # --- Handle rerun flag ---                                             
+    400 if st.session_state.get('rerun_flag', False):                           
+    401 │   st.session_state.rerun_flag = False                                 
+  ❱ 402 │   st.experimental_rerun()                                             
+    403                                                                         
+────────────────────────────────────────────────────────────────────────────────
+AttributeError: module 'streamlit' has no attribute 'experimental_rerun'
