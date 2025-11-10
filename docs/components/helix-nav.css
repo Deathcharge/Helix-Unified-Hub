@@ -1,0 +1,92 @@
+/* 🌀 HELIX HUB UNIFIED NAVIGATION SYSTEM */
+/* Shared Component Library for All Portal Sites */
+
+/* ===== CORE NAVIGATION STYLES ===== */
+.helix-nav {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.helix-nav.scrolled {
+  background: rgba(26, 26, 46, 0.95);
+  box-shadow: 0 4px 30px rgba(100, 255, 218, 0.1);
+}
+
+/* ===== NAVIGATION CONTAINER ===== */
+.helix-nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+}
+
+/* ===== LOGO & BRANDING ===== */
+.helix-nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: #64ffda;
+  font-weight: 700;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.helix-nav-logo:hover {
+  transform: translateY(-2px);
+  text-shadow: 0 0 20px rgba(100, 255, 218, 0.5);
+}
+
+.helix-nav-logo-icon {
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle, #64ffda 0%, #4fc3f7 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.9; }
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+@media (max-width: 768px) {
+  .helix-nav-container {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .helix-nav {
+    height: 60px;
+  }
+
+  .helix-nav-container {
+    height: 60px;
+  }
+
+  .helix-nav-logo {
+    font-size: 1rem;
+  }
+
+  .helix-nav-logo-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 1.2rem;
+  }
+}
