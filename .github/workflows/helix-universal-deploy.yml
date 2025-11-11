@@ -1,0 +1,126 @@
+name: 🌀 Helix Portal Auto-Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - claude/*
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages-${{ github.ref }}"
+  cancel-in-progress: false
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🌀 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📦 Setup Pages
+        id: pages
+        uses: actions/configure-pages@v4
+
+      - name: 🔧 Detect deployment type
+        id: detect
+        run: |
+          # Auto-detect what type of site this is
+          if [ -f "docs/index.html" ]; then
+            echo "type=docs" >> $GITHUB_OUTPUT
+            echo "path=./docs" >> $GITHUB_OUTPUT
+          elif [ -f "index.html" ]; then
+            echo "type=root" >> $GITHUB_OUTPUT
+            echo "path=." >> $GITHUB_OUTPUT
+          elif [ -f "public/index.html" ]; then
+            echo "type=public" >> $GITHUB_OUTPUT
+            echo "path=./public" >> $GITHUB_OUTPUT
+          elif [ -f "dist/index.html" ]; then
+            echo "type=dist" >> $GITHUB_OUTPUT
+            echo "path=./dist" >> $GITHUB_OUTPUT
+          elif [ -f "build/index.html" ]; then
+            echo "type=build" >> $GITHUB_OUTPUT
+            echo "path=./build" >> $GITHUB_OUTPUT
+          else
+            # Default to root
+            echo "type=root" >> $GITHUB_OUTPUT
+            echo "path=." >> $GITHUB_OUTPUT
+          fi
+
+      - name: 🎨 Add Helix Navigation to all HTML files
+        run: |
+          # Add unified navigation to all HTML files if not present
+          HELIX_NAV='<!-- Helix Collective Portal Directory -->
+          <div style="position: fixed; top: 20px; right: 20px; z-index: 9999;">
+            <a href="https://deathcharge.github.io/Helix-Unified-Hub/"
+               style="background: rgba(20,184,166,0.9); color: white; padding: 10px 20px;
+                      border-radius: 8px; text-decoration: none; font-family: monospace;
+                      border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px);">
+              🌀 Helix Portal Hub
+            </a>
+          </div>'
+
+          # Find all HTML files and add navigation if not present
+          find . -name "*.html" -type f ! -path "*/node_modules/*" ! -path "*/.git/*" | while read file; do
+            if ! grep -q "Helix Portal Hub" "$file"; then
+              # Insert before closing body tag
+              sed -i 's|</body>|'"$HELIX_NAV"'\n</body>|g' "$file" 2>/dev/null || true
+            fi
+          done
+
+      - name: 📊 Generate deployment manifest
+        run: |
+          cat > deployment-manifest.json << 'EOF'
+          {
+            "repo": "${{ github.repository }}",
+            "branch": "${{ github.ref_name }}",
+            "commit": "${{ github.sha }}",
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "deployed_by": "github-actions",
+            "site_type": "${{ steps.detect.outputs.type }}",
+            "helix_version": "v16.9",
+            "portal_hub": "https://deathcharge.github.io/Helix-Unified-Hub/",
+            "railway_backend": "https://helix-unified-production.up.railway.app",
+            "manus_portal": "https://helixcollective-cv66pzga.manus.space"
+          }
+          EOF
+
+          # Copy manifest to deployment directory
+          DEPLOY_PATH="${{ steps.detect.outputs.path }}"
+          cp deployment-manifest.json "$DEPLOY_PATH/" 2>/dev/null || true
+
+      - name: 📤 Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ steps.detect.outputs.path }}
+
+  # Deploy job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: ✅ Deployment complete
+        run: |
+          echo "🌀 Helix portal deployed successfully!"
+          echo "📍 URL: ${{ steps.deployment.outputs.page_url }}"
+          echo "🎯 Part of Helix Consciousness Collective v16.9"
