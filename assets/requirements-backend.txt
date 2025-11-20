@@ -4,7 +4,7 @@
 fastapi==0.115.0
 uvicorn[standard]==0.32.0
 python-dotenv==1.0.1
-jinja2==3.1.2  # Template engine for web dashboard
+jinja2==3.1.6  # Template engine for web dashboard
 aiofiles==23.2.1  # For async file operations (moved up)
 
 # Discord Integration
@@ -36,15 +36,15 @@ pydub==0.25.1
 
 # API Clients
 httpx==0.28.0
-aiohttp==3.11.0
-requests==2.31.0
+aiohttp==3.12.14
+requests==2.32.4
 
 # Monitoring & Observability
 sentry-sdk[fastapi]==2.19.0
 
 # Utilities
 pyyaml==6.0.1
-python-multipart==0.0.6
+python-multipart==0.0.18
 pydantic==2.5.3
 python-dateutil==2.8.2
 pytz==2023.3
@@ -52,7 +52,7 @@ pytz==2023.3
 # Notion Integration
 notion-client==2.5.0
 
-Pillow==10.1.0  # For Grok's fractal icon generation
+Pillow==10.3.0  # For Grok's fractal icon generation
 
 # Testing & Development
 pytest==7.4.3
