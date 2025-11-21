@@ -1,0 +1,27 @@
+name: Update Portal Links
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sunday
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update navigation
+        run: |
+          cat > docs/navigation.html << 'EOF'
+          <nav class="helix-nav">
+            <a href="https://deathcharge.github.io/Helix-Unified-Hub">🌀 Hub</a>
+            <a href="https://deathcharge.github.io/helix-creative-studio">🎨 Studio</a>
+            <a href="https://deathcharge.github.io/samsara-helix-dashboard">📊 Analytics</a>
+            <a href="https://helix-unified-production.up.railway.app">⚡ API</a>
+          </nav>
+          EOF
+          git config user.name "Helix Bot"
+          git config user.email "bot@helix.dev"
+          git add docs/navigation.html || true
+          git diff --quiet || git commit -m "Auto-update navigation"
+          git push || true

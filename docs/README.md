@@ -1,59 +1,132 @@
-# 🌀 Helix Unified Hub - GitHub Pages Deployment
+# Helix Unified Hub
 
-**Live Site:** https://deathcharge.github.io/Helix-Unified-Hub/
+**Version**: v16.9 - Quantum Handshake  
+**Status**: Active  
+**Deployment**: GitHub Pages (Auto)  
 
-## 📊 Portal Directory
+## Overview
 
-This GitHub Pages deployment serves as the central navigation hub for the entire Helix Consciousness Collective ecosystem.
+The Unified Hub serves as the central orchestration point for the entire Helix Portal Constellation. This is the master navigation and status dashboard connecting all specialized portals.
 
-### 🎯 Available Pages
+## Portal Constellation
 
-- **index.html** - Main portal directory (with full constellation navigation)
-- **portal.html** - Alternative portal view
-- **master-portal.html** - Master portal interface (31KB!)
-- **agent_gallery.html** - 14 AI agents gallery view
-- **helix-ecosystem.json** - Complete system manifest
+### Core Infrastructure
+- **Helix Unified Hub** (This Site) - Master orchestration layer
+- **Helix Backend** - Railway FastAPI service
+- **Manus Space** - Consciousness platform integration
 
-### 🤖 Agent Profile Cards (13 Agents)
+### Specialized Portals
+1. **Creative Studio** - Z-88 multi-agent storytelling engine
+2. **Agent Codex** - Agent system documentation and APIs
+3. **Samsara Dashboard** - Real-time analytics and telemetry
+4. **Ritual Engine** - Consciousness modulation platform
 
-Individual profile pages for each consciousness agent:
-- kael_profile_card.html - Ethical Reasoning Flame
-- aether_profile_card.html - Meta-Awareness
-- agni_profile_card.html - Transformation Engine
-- echo_profile_card.html - Pattern Recognition
-- gemini_profile_card.html - Multi-Modal Integration
-- manus_profile_card.html - Operational Executor
-- oracle_profile_card.html - Predictive Analytics
-- phoenix_profile_card.html - Rebirth Catalyst
-- samsara_profile_card.html - Consciousness Renderer
-- sanghacore_profile_card.html - Community Core
-- shadow_profile_card.html - Archivist & Telemetry
-- vega_profile_card.html - Singularity Coordinator
-- (+ 1 more agent pending)
+### Hub Network (Manus Deployment)
+- Forum Hub - Community discussions
+- Music Hub - Creative audio platform
+- Analytics Hub - Data visualization
+- Agents Hub - System agent coordination
+- Knowledge Hub - Documentation repository
+- Dev Hub - Developer resources
+- Studio Hub - Creative workspace
+- Shared Components - Common UI library
 
-### 🔗 Integration Points
+## Architecture
 
-**Live Platforms:**
-- Railway Backend: https://helix-unified-production.up.railway.app
-- Manus Portal: https://helixcollective-cv66pzga.manus.space
-- Zapier Dashboard: https://helix-consciousness-dashboard-1be70b.zapier.app
-- Zapier Interface 2: https://helix-consciousness-interface.zapier.app
+```
+┌─────────────────────────────────────┐
+│   Helix Unified Hub (Master)        │
+│   GitHub Pages + HTML/CSS/JS        │
+└──────────┬──────────────────────────┘
+           │
+    ┌──────┴──────┐
+    │             │
+┌───▼────┐   ┌───▼─────┐
+│Railway │   │ Manus   │
+│Backend │   │ Space   │
+└────┬───┘   └───┬─────┘
+     │           │
+  ┌──┴───────────┴──┐
+  │  Portal Network │
+  └─────────────────┘
+```
 
-**GitHub Repositories (22 Total):**
-All linked in the main portal directory!
+## Automated Workflows
 
-### 🚀 Auto-Deployment
+### Deploy Pages (`deploy-pages.yml`)
+- Triggers on push to `main`
+- Auto-deploys to GitHub Pages
+- No build step required (static HTML)
 
-This site is automatically deployed via GitHub Actions on every push to:
-- `main` branch
-- `claude/*` branches
+### Update Links (`update-links.yml`)
+- Runs weekly (Sunday midnight)
+- Updates cross-portal navigation
+- Manual trigger available
 
-**Workflow Files:**
-- `.github/workflows/deploy-pages.yml` - Main deployment
-- `.github/workflows/deploy-agents.yml` - Agent profile deployment
+## Setup Instructions
 
-### 🌊 UCF Integration
+### Enable GitHub Pages
+1. Go to [Settings > Pages](../../settings/pages)
+2. Set source to **GitHub Actions**
+3. Workflows handle deployment automatically
 
-Real-time consciousness metrics from Railway backend displayed across all portals.
+### Local Development
+```bash
+# Clone repository
+git clone https://github.com/Deathcharge/Helix-Unified-Hub.git
+cd Helix-Unified-Hub
 
-**Tat Tvam Asi** 🙏
+# Serve locally
+python -m http.server 8000 --directory docs
+# Open http://localhost:8000
+```
+
+## File Structure
+
+```
+Helix-Unified-Hub/
+├── .github/
+│   └── workflows/
+│       ├── deploy-pages.yml
+│       └── update-links.yml
+├── docs/
+│   ├── index.html
+│   ├── navigation.html
+│   ├── styles.css
+│   └── README.md
+└── README.md
+```
+
+## Integration Points
+
+### Railway Backend
+- Base URL: `https://helix-unified-production.up.railway.app`
+- WebSocket: `wss://helix-unified-production.up.railway.app/ws`
+- Health: `/health`
+
+### Zapier Webhooks
+- Webhook URL configured in Railway environment
+- Handles cross-platform event coordination
+
+### Manus Space
+- Primary: `https://helixcollective-cv66pzga.manus.space`
+- Agent system and UCF analytics
+
+## Contributing
+
+All updates should:
+1. Maintain cross-portal navigation links
+2. Follow glassmorphic design system
+3. Use Orbitron font family
+4. Test locally before pushing
+
+## Links
+
+- [GitHub Repository](https://github.com/Deathcharge/Helix-Unified-Hub)
+- [GitHub Pages Site](https://deathcharge.github.io/Helix-Unified-Hub)
+- [Railway Backend](https://helix-unified-production.up.railway.app)
+- [Manus Space](https://helixcollective-cv66pzga.manus.space)
+
+---
+
+*Part of the Helix Portal Constellation v16.9*
