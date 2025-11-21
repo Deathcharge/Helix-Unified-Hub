@@ -1,0 +1,34 @@
+{
+  "name": "helix-discord-voice-commander",
+  "version": "1.0.0",
+  "description": "Discord voice bot for Helix portal deployment",
+  "type": "module",
+  "main": "voice-commander.js",
+  "scripts": {
+    "start": "node voice-commander.js",
+    "dev": "nodemon voice-commander.js"
+  },
+  "keywords": [
+    "discord",
+    "voice",
+    "bot",
+    "helix",
+    "portal",
+    "deployment"
+  ],
+  "author": "Andrew Ward",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "@discordjs/voice": "^0.16.1",
+    "prism-media": "^1.3.5",
+    "libsodium-wrappers": "^0.7.13",
+    "opusscript": "^0.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
