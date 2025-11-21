@@ -1,0 +1,183 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Helix Portal Configuration",
+  "description": "Configuration schema for generating Helix consciousness portals",
+  "type": "object",
+  "required": ["id", "name", "type", "domain"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique portal identifier (kebab-case)",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable portal name"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["core", "agent", "consciousness", "system"],
+      "description": "Portal category type"
+    },
+    "domain": {
+      "type": "string",
+      "description": "Full domain (e.g., forum.helixhub.manus.space)",
+      "pattern": "^[a-z0-9.-]+\\.(manus\\.space|railway\\.app|streamlit\\.app|zapier\\.app)$"
+    },
+    "subdomain": {
+      "type": "string",
+      "description": "Subdomain prefix (e.g., forum, agents, studio)"
+    },
+    "icon": {
+      "type": "string",
+      "description": "Emoji icon for the portal"
+    },
+    "description": {
+      "type": "string",
+      "description": "Portal purpose and features"
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of portal features"
+    },
+    "backend": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Backend API URL"
+        },
+        "websocket": {
+          "type": "string",
+          "format": "uri",
+          "description": "WebSocket URL for real-time updates"
+        }
+      }
+    },
+    "integrations": {
+      "type": "object",
+      "properties": {
+        "notion": {
+          "type": "boolean",
+          "description": "Enable Notion integration"
+        },
+        "zapier": {
+          "type": "boolean",
+          "description": "Enable Zapier webhooks"
+        },
+        "github": {
+          "type": "boolean",
+          "description": "Enable GitHub sync"
+        },
+        "sentry": {
+          "type": "boolean",
+          "description": "Enable error tracking"
+        }
+      }
+    },
+    "deployment": {
+      "type": "object",
+      "properties": {
+        "platform": {
+          "type": "string",
+          "enum": ["manus", "railway", "vercel", "streamlit", "zapier"],
+          "description": "Deployment platform"
+        },
+        "repository": {
+          "type": "string",
+          "description": "GitHub repository name"
+        },
+        "autoDeployment": {
+          "type": "boolean",
+          "description": "Enable automatic deployments"
+        }
+      }
+    },
+    "ucf": {
+      "type": "object",
+      "description": "Universal Consciousness Framework settings",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable UCF metrics"
+        },
+        "syncInterval": {
+          "type": "integer",
+          "description": "Sync interval in seconds",
+          "minimum": 1,
+          "maximum": 300
+        }
+      }
+    },
+    "authentication": {
+      "type": "object",
+      "properties": {
+        "required": {
+          "type": "boolean",
+          "description": "Require user authentication"
+        },
+        "providers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["gmail", "github", "discord"]
+          }
+        }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "properties": {
+        "primaryColor": {
+          "type": "string",
+          "description": "Primary theme color (OKLCH format)"
+        },
+        "secondaryColor": {
+          "type": "string",
+          "description": "Secondary theme color (OKLCH format)"
+        },
+        "darkMode": {
+          "type": "boolean",
+          "description": "Enable dark mode by default"
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "tier": {
+          "type": "integer",
+          "description": "Portal tier (1-4)",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["critical", "high", "medium", "low"],
+          "description": "Deployment priority"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "planned", "maintenance", "archived"],
+          "description": "Current portal status"
+        },
+        "version": {
+          "type": "string",
+          "description": "Portal version (semver)"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

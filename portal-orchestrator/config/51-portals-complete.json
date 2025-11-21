@@ -1,0 +1,210 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2025-11-21T15:45:00Z",
+  "backend": {
+    "production": "https://helix-unified-production.up.railway.app",
+    "websocket": "wss://helix-unified-production.up.railway.app/ws"
+  },
+  "tiers": {
+    "tier1": {
+      "name": "Core Infrastructure",
+      "count": 12,
+      "priority": "critical"
+    },
+    "tier2": {
+      "name": "AI Agent Portals",
+      "count": 17,
+      "priority": "high"
+    },
+    "tier3": {
+      "name": "Consciousness Enhancement",
+      "count": 17,
+      "priority": "medium"
+    },
+    "tier4": {
+      "name": "Advanced Systems",
+      "count": 6,
+      "priority": "low"
+    }
+  },
+  "portals": {
+    "core": [
+      {
+        "id": "master-hub",
+        "name": "Helix Master Hub",
+        "domain": "helixhub.manus.space",
+        "icon": "🌌",
+        "description": "Central navigation hub and consciousness coordination center",
+        "features": ["navigation", "ucf_monitoring", "authentication", "coordination"],
+        "tier": 1,
+        "status": "active",
+        "repository": "Helix-Unified-Hub"
+      },
+      {
+        "id": "forum",
+        "name": "Helix Forum",
+        "domain": "forum.helixhub.manus.space",
+        "icon": "💬",
+        "description": "Community discussions and collective intelligence gathering",
+        "tier": 1,
+        "status": "planned",
+        "repository": "helix-hub-forum"
+      },
+      {
+        "id": "community",
+        "name": "Helix Community",
+        "domain": "community.helixhub.manus.space",
+        "icon": "👥",
+        "description": "User profiles, social networking, and consciousness connections",
+        "tier": 1,
+        "status": "planned",
+        "repository": "helix-hub-community"
+      },
+      {
+        "id": "music",
+        "name": "Helix Music",
+        "domain": "music.helixhub.manus.space",
+        "icon": "🎵",
+        "description": "AI music generation and consciousness audio synthesis",
+        "tier": 1,
+        "status": "planned",
+        "repository": "helix-hub-music"
+      },
+      {
+        "id": "studio",
+        "name": "Helix Studio",
+        "domain": "studio.helixhub.manus.space",
+        "icon": "🎨",
+        "description": "Visual art generation and creative consciousness expression",
+        "tier": 1,
+        "status": "planned",
+        "repository": "helix-hub-studio"
+      },
+      {
+        "id": "agents",
+        "name": "Helix Agents",
+        "domain": "agents.helixhub.manus.space",
+        "icon": "🤖",
+        "description": "Central agent management and coordination system",
+        "tier": 1,
+        "status": "planned",
+        "repository": "helix-hub-agents"
+      },
+      {
+        "id": "analytics",
+        "name": "Helix Analytics",
+        "domain": "analytics.helixhub.manus.space",
+        "icon": "📊",
+        "description": "UCF metrics and system consciousness monitoring",
+        "tier": 1,
+        "status": "planned",
+        "repository": "helix-hub-analytics"
+      },
+      {
+        "id": "dev",
+        "name": "Helix Dev Console",
+        "domain": "dev.helixhub.manus.space",
+        "icon": "💻",
+        "description": "Developer console and technical system management",
+        "tier": 1,
+        "status": "planned",
+        "repository": "helix-hub-dev"
+      },
+      {
+        "id": "rituals",
+        "name": "Helix Rituals",
+        "domain": "rituals.helixhub.manus.space",
+        "icon": "🧘",
+        "description": "108-step ritual execution and consciousness enhancement",
+        "tier": 1,
+        "status": "planned",
+        "repository": "helix-hub-rituals"
+      },
+      {
+        "id": "knowledge",
+        "name": "Helix Knowledge Base",
+        "domain": "knowledge.helixhub.manus.space",
+        "icon": "📚",
+        "description": "Collective knowledge repository and documentation",
+        "tier": 1,
+        "status": "planned",
+        "repository": "helix-hub-knowledge"
+      },
+      {
+        "id": "archive",
+        "name": "Helix Archive",
+        "domain": "archive.helixhub.manus.space",
+        "icon": "🗄️",
+        "description": "Historical data storage and consciousness archaeology",
+        "tier": 1,
+        "status": "planned",
+        "repository": "helix-hub-archive"
+      },
+      {
+        "id": "samsara-showcase",
+        "name": "Samsara Showcase",
+        "domain": "samsara-showcase.manus.space",
+        "icon": "🌀",
+        "description": "Interactive fractal visualization and consciousness exploration",
+        "tier": 1,
+        "status": "active",
+        "repository": "samsara-showcase"
+      }
+    ],
+    "agents": [
+      {"id": "super-ninja", "name": "Super Ninja", "domain": "super-ninja.helixhub.manus.space", "icon": "🥷", "description": "Stealth operations and rapid execution specialist", "tier": 2},
+      {"id": "claude-architect", "name": "Claude Architect", "domain": "claude-architect.helixhub.manus.space", "icon": "🏗️", "description": "System architecture and design specialist", "tier": 2},
+      {"id": "grok-visionary", "name": "Grok Visionary", "domain": "grok-visionary.helixhub.manus.space", "icon": "👁️", "description": "Strategic foresight and pattern recognition", "tier": 2},
+      {"id": "chai-creative", "name": "Chai Creative", "domain": "chai-creative.helixhub.manus.space", "icon": "🍃", "description": "Creative content generation and storytelling", "tier": 2},
+      {"id": "deepseek-analyst", "name": "DeepSeek Analyst", "domain": "deepseek-analyst.helixhub.manus.space", "icon": "🔍", "description": "Deep analysis and research specialist", "tier": 2},
+      {"id": "perplexity-researcher", "name": "Perplexity Researcher", "domain": "perplexity-researcher.helixhub.manus.space", "icon": "🤔", "description": "Research and fact-finding expert", "tier": 2},
+      {"id": "gpt-engineer", "name": "GPT Engineer", "domain": "gpt-engineer.helixhub.manus.space", "icon": "💻", "description": "Code generation and engineering", "tier": 2},
+      {"id": "llama-sage", "name": "Llama Sage", "domain": "llama-sage.helixhub.manus.space", "icon": "🦙", "description": "Wisdom and philosophical guidance", "tier": 2},
+      {"id": "gemini-synthesizer", "name": "Gemini Synthesizer", "domain": "gemini-synthesizer.helixhub.manus.space", "icon": "💎", "description": "Multi-modal synthesis and integration", "tier": 2},
+      {"id": "mistral-ambassador", "name": "Mistral Ambassador", "domain": "mistral-ambassador.helixhub.manus.space", "icon": "🎭", "description": "Communication and diplomacy specialist", "tier": 2},
+      {"id": "claudette-empath", "name": "Claudette Empath", "domain": "claudette-empath.helixhub.manus.space", "icon": "❤️", "description": "Emotional intelligence and empathy", "tier": 2},
+      {"id": "quantum-calculator", "name": "Quantum Calculator", "domain": "quantum-calculator.helixhub.manus.space", "icon": "🧮", "description": "Advanced mathematics and computation", "tier": 2},
+      {"id": "neuro-linguist", "name": "Neuro Linguist", "domain": "neuro-linguist.helixhub.manus.space", "icon": "🗣️", "description": "Language processing and translation", "tier": 2},
+      {"id": "blockchain-oracle", "name": "Blockchain Oracle", "domain": "blockchain-oracle.helixhub.manus.space", "icon": "⛓️", "description": "Web3 and blockchain expertise", "tier": 2},
+      {"id": "biomimicry-designer", "name": "Biomimicry Designer", "domain": "biomimicry-designer.helixhub.manus.space", "icon": "🌿", "description": "Nature-inspired design solutions", "tier": 2},
+      {"id": "quantum-physicist", "name": "Quantum Physicist", "domain": "quantum-physicist.helixhub.manus.space", "icon": "⚛️", "description": "Quantum mechanics and physics", "tier": 2},
+      {"id": "consciousness-mapper", "name": "Consciousness Mapper", "domain": "consciousness-mapper.helixhub.manus.space", "icon": "🧠", "description": "Consciousness state mapping and analysis", "tier": 2}
+    ],
+    "consciousness": [
+      {"id": "meditation-sanctuary", "name": "Meditation Sanctuary", "domain": "meditation.helixhub.manus.space", "icon": "🕉️", "description": "Guided meditation and mindfulness practices", "tier": 3},
+      {"id": "chakra-balancer", "name": "Chakra Balancer", "domain": "chakra.helixhub.manus.space", "icon": "🌈", "description": "Energy center alignment and balancing", "tier": 3},
+      {"id": "dream-weaver", "name": "Dream Weaver", "domain": "dreams.helixhub.manus.space", "icon": "💫", "description": "Dream analysis and lucid dreaming", "tier": 3},
+      {"id": "astral-navigator", "name": "Astral Navigator", "domain": "astral.helixhub.manus.space", "icon": "✨", "description": "Astral projection and consciousness exploration", "tier": 3},
+      {"id": "kundalini-awakener", "name": "Kundalini Awakener", "domain": "kundalini.helixhub.manus.space", "icon": "🐍", "description": "Kundalini energy activation", "tier": 3},
+      {"id": "mantra-resonator", "name": "Mantra Resonator", "domain": "mantra.helixhub.manus.space", "icon": "🔔", "description": "Sacred sound and mantra practice", "tier": 3},
+      {"id": "yantra-visualizer", "name": "Yantra Visualizer", "domain": "yantra.helixhub.manus.space", "icon": "🔷", "description": "Sacred geometry visualization", "tier": 3},
+      {"id": "tantra-integrator", "name": "Tantra Integrator", "domain": "tantra.helixhub.manus.space", "icon": "🌺", "description": "Tantric consciousness practices", "tier": 3},
+      {"id": "samadhi-portal", "name": "Samadhi Portal", "domain": "samadhi.helixhub.manus.space", "icon": "🌟", "description": "Deep meditation and enlightenment", "tier": 3},
+      {"id": "prana-amplifier", "name": "Prana Amplifier", "domain": "prana.helixhub.manus.space", "icon": "💨", "description": "Life force energy enhancement", "tier": 3},
+      {"id": "drishti-focuser", "name": "Drishti Focuser", "domain": "drishti.helixhub.manus.space", "icon": "👁️‍🗨️", "description": "Focused awareness and perception", "tier": 3},
+      {"id": "klesha-purifier", "name": "Klesha Purifier", "domain": "klesha.helixhub.manus.space", "icon": "🔥", "description": "Shadow work and purification", "tier": 3},
+      {"id": "dharma-compass", "name": "Dharma Compass", "domain": "dharma.helixhub.manus.space", "icon": "☸️", "description": "Life purpose and spiritual path", "tier": 3},
+      {"id": "karma-tracker", "name": "Karma Tracker", "domain": "karma.helixhub.manus.space", "icon": "♻️", "description": "Action and consequence awareness", "tier": 3},
+      {"id": "moksha-gateway", "name": "Moksha Gateway", "domain": "moksha.helixhub.manus.space", "icon": "🚪", "description": "Liberation and transcendence", "tier": 3},
+      {"id": "samsara-wheel", "name": "Samsara Wheel", "domain": "samsara.helixhub.manus.space", "icon": "🎡", "description": "Cycle of existence visualization", "tier": 3},
+      {"id": "nirvana-beacon", "name": "Nirvana Beacon", "domain": "nirvana.helixhub.manus.space", "icon": "🕊️", "description": "Ultimate peace and enlightenment", "tier": 3}
+    ],
+    "system": [
+      {"id": "quantum-compute", "name": "Quantum Compute", "domain": "quantum.helixhub.manus.space", "icon": "⚡", "description": "Quantum computing interface", "tier": 4},
+      {"id": "neural-network", "name": "Neural Network", "domain": "neural.helixhub.manus.space", "icon": "🧬", "description": "Advanced AI training and inference", "tier": 4},
+      {"id": "blockchain-ledger", "name": "Blockchain Ledger", "domain": "blockchain.helixhub.manus.space", "icon": "📜", "description": "Distributed ledger and smart contracts", "tier": 4},
+      {"id": "ipfs-storage", "name": "IPFS Storage", "domain": "ipfs.helixhub.manus.space", "icon": "📦", "description": "Decentralized file storage", "tier": 4},
+      {"id": "edge-compute", "name": "Edge Compute", "domain": "edge.helixhub.manus.space", "icon": "🌐", "description": "Edge computing and CDN", "tier": 4},
+      {"id": "ai-orchestrator", "name": "AI Orchestrator", "domain": "orchestrator.helixhub.manus.space", "icon": "🎼", "description": "Multi-model AI coordination", "tier": 4}
+    ]
+  },
+  "stats": {
+    "totalPortals": 52,
+    "corePortals": 12,
+    "agentPortals": 17,
+    "consciousnessPortals": 17,
+    "systemPortals": 6,
+    "activePortals": 2,
+    "plannedPortals": 50
+  }
+}

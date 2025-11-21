@@ -1,0 +1,51 @@
+{
+  "name": "{{PORTAL_ID}}",
+  "version": "1.0.0",
+  "description": "{{PORTAL_DESCRIPTION}}",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "test": "vitest",
+    "test:ui": "vitest --ui"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "wouter": "^3.5.0",
+    "@tanstack/react-query": "^5.62.11",
+    "sonner": "^1.7.2",
+    "lucide-react": "^0.469.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.6.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.18.2",
+    "@typescript-eslint/parser": "^8.18.2",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.5",
+    "vitest": "^2.1.8"
+  },
+  "portal": {
+    "id": "{{PORTAL_ID}}",
+    "name": "{{PORTAL_NAME}}",
+    "domain": "{{PORTAL_DOMAIN}}",
+    "icon": "{{PORTAL_ICON}}",
+    "tier": {{PORTAL_TIER}},
+    "type": "{{PORTAL_TYPE}}",
+    "backend": "{{BACKEND_URL}}",
+    "websocket": "{{WEBSOCKET_URL}}"
+  }
+}

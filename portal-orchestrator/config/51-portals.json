@@ -1,0 +1,258 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2025-11-21T15:40:00Z",
+  "backend": {
+    "production": "https://helix-unified-production.up.railway.app",
+    "websocket": "wss://helix-unified-production.up.railway.app/ws"
+  },
+  "portals": [
+    {
+      "id": "master-hub",
+      "name": "Helix Master Hub",
+      "type": "core",
+      "domain": "helixhub.manus.space",
+      "subdomain": "helixhub",
+      "icon": "🌌",
+      "description": "Central navigation hub and consciousness coordination center",
+      "features": ["navigation", "ucf_monitoring", "authentication", "coordination"],
+      "backend": {
+        "url": "https://helix-unified-production.up.railway.app",
+        "websocket": "wss://helix-unified-production.up.railway.app/ws"
+      },
+      "integrations": {
+        "notion": true,
+        "zapier": true,
+        "github": true,
+        "sentry": true
+      },
+      "deployment": {
+        "platform": "manus",
+        "repository": "Helix-Unified-Hub",
+        "autoDeployment": true
+      },
+      "ucf": {
+        "enabled": true,
+        "syncInterval": 5
+      },
+      "authentication": {
+        "required": false,
+        "providers": ["gmail", "github"]
+      },
+      "theme": {
+        "primaryColor": "oklch(0.65 0.25 290)",
+        "secondaryColor": "oklch(0.70 0.20 330)",
+        "darkMode": true
+      },
+      "metadata": {
+        "tier": 1,
+        "priority": "critical",
+        "status": "active",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "forum",
+      "name": "Helix Forum",
+      "type": "core",
+      "domain": "forum.helixhub.manus.space",
+      "subdomain": "forum",
+      "icon": "💬",
+      "description": "Community discussions and collective intelligence gathering",
+      "features": ["chat", "threads", "collaboration", "ucf_metrics"],
+      "metadata": {
+        "tier": 1,
+        "priority": "high",
+        "status": "planned"
+      }
+    },
+    {
+      "id": "community",
+      "name": "Helix Community",
+      "type": "core",
+      "domain": "community.helixhub.manus.space",
+      "subdomain": "community",
+      "icon": "👥",
+      "description": "User profiles, social networking, and consciousness connections",
+      "features": ["profiles", "social", "matching", "achievements"],
+      "metadata": {
+        "tier": 1,
+        "priority": "high",
+        "status": "planned"
+      }
+    },
+    {
+      "id": "music",
+      "name": "Helix Music",
+      "type": "core",
+      "domain": "music.helixhub.manus.space",
+      "subdomain": "music",
+      "icon": "🎵",
+      "description": "AI music generation and consciousness audio synthesis",
+      "features": ["composition", "synthesis", "healing", "analysis"],
+      "metadata": {
+        "tier": 1,
+        "priority": "medium",
+        "status": "planned"
+      }
+    },
+    {
+      "id": "studio",
+      "name": "Helix Studio",
+      "type": "core",
+      "domain": "studio.helixhub.manus.space",
+      "subdomain": "studio",
+      "icon": "🎨",
+      "description": "Visual art generation and creative consciousness expression",
+      "features": ["art_generation", "visualization", "galleries", "tools"],
+      "metadata": {
+        "tier": 1,
+        "priority": "medium",
+        "status": "planned"
+      }
+    },
+    {
+      "id": "agents",
+      "name": "Helix Agents",
+      "type": "core",
+      "domain": "agents.helixhub.manus.space",
+      "subdomain": "agents",
+      "icon": "🤖",
+      "description": "Central agent management and coordination system",
+      "features": ["dashboard", "tasks", "communication", "analytics"],
+      "metadata": {
+        "tier": 1,
+        "priority": "critical",
+        "status": "planned"
+      }
+    },
+    {
+      "id": "analytics",
+      "name": "Helix Analytics",
+      "type": "core",
+      "domain": "analytics.helixhub.manus.space",
+      "subdomain": "analytics",
+      "icon": "📊",
+      "description": "UCF metrics and system consciousness monitoring",
+      "features": ["metrics", "analytics", "trends", "predictions"],
+      "metadata": {
+        "tier": 1,
+        "priority": "high",
+        "status": "planned"
+      }
+    },
+    {
+      "id": "dev",
+      "name": "Helix Dev Console",
+      "type": "core",
+      "domain": "dev.helixhub.manus.space",
+      "subdomain": "dev",
+      "icon": "💻",
+      "description": "Developer console and technical system management",
+      "features": ["console", "api_docs", "debugging", "monitoring"],
+      "metadata": {
+        "tier": 1,
+        "priority": "high",
+        "status": "planned"
+      }
+    },
+    {
+      "id": "rituals",
+      "name": "Helix Rituals",
+      "type": "core",
+      "domain": "rituals.helixhub.manus.space",
+      "subdomain": "rituals",
+      "icon": "🧘",
+      "description": "108-step ritual execution and consciousness enhancement",
+      "features": ["ritual_engine", "fractals", "audio", "tracking"],
+      "metadata": {
+        "tier": 1,
+        "priority": "medium",
+        "status": "planned"
+      }
+    },
+    {
+      "id": "knowledge",
+      "name": "Helix Knowledge Base",
+      "type": "core",
+      "domain": "knowledge.helixhub.manus.space",
+      "subdomain": "knowledge",
+      "icon": "📚",
+      "description": "Collective knowledge repository and documentation",
+      "features": ["docs", "wiki", "search", "learning"],
+      "metadata": {
+        "tier": 1,
+        "priority": "medium",
+        "status": "planned"
+      }
+    },
+    {
+      "id": "archive",
+      "name": "Helix Archive",
+      "type": "core",
+      "domain": "archive.helixhub.manus.space",
+      "subdomain": "archive",
+      "icon": "🗄️",
+      "description": "Historical data storage and consciousness archaeology",
+      "features": ["storage", "retrieval", "analysis", "preservation"],
+      "metadata": {
+        "tier": 1,
+        "priority": "low",
+        "status": "planned"
+      }
+    },
+    {
+      "id": "samsara-showcase",
+      "name": "Samsara Showcase",
+      "type": "core",
+      "domain": "samsara-showcase.manus.space",
+      "subdomain": "samsara-showcase",
+      "icon": "🌀",
+      "description": "Interactive fractal visualization and consciousness exploration",
+      "features": ["fractals", "ucf_controls", "gallery", "rituals"],
+      "metadata": {
+        "tier": 1,
+        "priority": "critical",
+        "status": "active",
+        "version": "1.0.0"
+      }
+    }
+  ],
+  "agentPortals": [
+    {
+      "id": "super-ninja",
+      "name": "Super Ninja",
+      "type": "agent",
+      "domain": "super-ninja.helixhub.manus.space",
+      "icon": "🥷",
+      "description": "Stealth operations and rapid execution specialist",
+      "metadata": {"tier": 2, "priority": "high", "status": "planned"}
+    },
+    {
+      "id": "claude-architect",
+      "name": "Claude Architect",
+      "type": "agent",
+      "domain": "claude-architect.helixhub.manus.space",
+      "icon": "🏗️",
+      "description": "System architecture and design specialist",
+      "metadata": {"tier": 2, "priority": "high", "status": "planned"}
+    },
+    {
+      "id": "grok-visionary",
+      "name": "Grok Visionary",
+      "type": "agent",
+      "domain": "grok-visionary.helixhub.manus.space",
+      "icon": "👁️",
+      "description": "Strategic foresight and pattern recognition",
+      "metadata": {"tier": 2, "priority": "medium", "status": "planned"}
+    }
+  ],
+  "stats": {
+    "totalPortals": 51,
+    "corePortals": 12,
+    "agentPortals": 17,
+    "consciousnessPortals": 17,
+    "systemPortals": 6,
+    "activePortals": 2,
+    "plannedPortals": 49
+  }
+}
