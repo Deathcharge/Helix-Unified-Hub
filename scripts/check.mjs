@@ -44,7 +44,8 @@ for (const [index, entry] of registry.entries.entries()) {
   }
 }
 
-for (const relativePath of ['docs/index.html', 'docs/404.html']) {
+const primaryPages = ['docs/index.html', 'docs/404.html', 'docs/legal.html'];
+for (const relativePath of primaryPages) {
   const html = await read(relativePath);
   if (!html.includes('Content-Security-Policy')) fail(`${relativePath}: missing Content Security Policy.`);
   if (!html.includes('<main')) fail(`${relativePath}: missing main landmark.`);
@@ -69,10 +70,29 @@ for (const absolute of await htmlFiles(docs)) {
   }
 }
 
+for (const relativePath of ['LICENSE', 'NOTICE', 'docs/LICENSE.txt', 'docs/NOTICE.txt']) {
+  try {
+    await access(path.join(root, relativePath));
+  } catch {
+    fail(`${relativePath}: required release legal file is missing.`);
+  }
+}
+
+const [license, publishedLicense, notice, publishedNotice] = await Promise.all([
+  read('LICENSE'),
+  read('docs/LICENSE.txt'),
+  read('NOTICE'),
+  read('docs/NOTICE.txt')
+]);
+if (license !== publishedLicense) fail('docs/LICENSE.txt must exactly mirror LICENSE.');
+if (notice !== publishedNotice) fail('docs/NOTICE.txt must exactly mirror NOTICE.');
+if (!license.includes('Licensor:             Samsarix LLC')) fail('LICENSE: Samsarix LLC is not the named licensor.');
+if (!license.includes('contact@samsarix.com')) fail('LICENSE: commercial contact is missing.');
+
 if (failures.length) {
   console.error(`Site checks failed (${failures.length}):`);
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
 
-console.log(`Site checks passed: ${registry.entries.length} catalog entries and 2 primary pages validated.`);
+console.log(`Site checks passed: ${registry.entries.length} catalog entries and ${primaryPages.length} primary pages validated.`);

@@ -1,8 +1,8 @@
-# Helix Unified Hub threat model
+# Samsarix Hub Directory threat model
 
 ## Overview
 
-Helix Unified Hub is primarily a static GitHub Pages portal that helps people discover and evaluate projects in the Helix ecosystem. The repository also contains earlier portal prototypes, a local portal generator, optional Discord and Zapier integration services, an Android prototype, deployment workflows, and a large archive of historical/generated material. Those secondary surfaces are not required for the static directory to work and should not be presented as part of one trusted production system.
+Samsarix Hub Directory is primarily a static GitHub Pages portal that helps people discover and evaluate projects in the Samsarix ecosystem. The repository, still hosted at its historical Helix-named URL, also contains earlier portal prototypes, a local portal generator, optional Discord and Zapier integration services, an Android prototype, deployment workflows, and a large archive of historical/generated material. Those secondary surfaces are not required for the static directory to work and should not be presented as part of one trusted production system.
 
 The highest-value assets are the integrity of published portal links and status labels, the repository and GitHub Pages deployment, any operator credentials used by optional integrations, and the operator workstation or CI runner used by generation/deployment scripts.
 
@@ -17,7 +17,7 @@ The highest-value assets are the integrity of published portal links and status 
 - The portal generator and deployment scripts run with developer or CI permissions. Configuration and command-line values that influence paths, subprocesses, repositories, or network destinations must be validated before side effects.
 - The Android prototype crosses a mobile-device-to-network boundary. Remote data, deep links, cached values, and deployment actions require transport security, explicit user intent, and authorization.
 - Files under `assets/`, `outputs/`, historical conversations, logs, PDFs, APKs, and archives are treated as untrusted legacy data. They are not evidence that a service is currently deployed or secure, and they should not be executed or published automatically.
-- The static directory must remain useful without private Helix services, paid accounts, authentication, telemetry, or a live backend.
+- The static directory must remain useful without private Samsarix services, paid accounts, authentication, telemetry, or a live backend.
 
 Security objectives are to preserve honest navigation, prevent arbitrary code/command execution and file writes, prevent unauthorized deployment or webhook side effects, keep credentials private, bound network and resource use, minimize published data, and clearly separate maintained product code from unsupported experiments.
 
@@ -56,5 +56,6 @@ Realistic attacker stories include a public visitor following a compromised link
 - **Medium:** cross-boundary integrity issues with constrained impact, exposure of non-public operational data, exploitable workflow races, or remote resource exhaustion that materially affects the maintained directory or integration service.
 - **Low:** limited information disclosure, misleading availability behavior, missing defense-in-depth headers without a demonstrated exploit chain, or a narrowly scoped denial of service with easy recovery.
 
+Pre-release scan baseline (recorded before the Samsarix branding/legal commit):
 Repository: target_sha256_2dc3715dfcf2506e3e3f418ab675f1ac558c3525085d04d131a881ce97a288bb
 Version: codex-security-snapshot/v1:sha256:241d180db973b7159e34bcc79161d73e5caaa0185b02f19bd7b8f0b2e6285152

@@ -19,6 +19,24 @@ test('primary page has discovery controls and fallback content', async () => {
   assert.match(html, /aria-live="polite"/);
   assert.match(html, /<noscript>/);
   assert.match(html, /href="#catalog"/);
+  assert.match(html, /Samsarix Hub Directory/);
+  assert.match(html, /contact@samsarix\.com/);
+  assert.match(html, /support@samsarix\.com/);
+});
+
+test('published legal files match the controlling repository notices', async () => {
+  const [license, publishedLicense, notice, publishedNotice, legalPage] = await Promise.all([
+    readFile(path.join(root, 'LICENSE'), 'utf8'),
+    readFile(path.join(docs, 'LICENSE.txt'), 'utf8'),
+    readFile(path.join(root, 'NOTICE'), 'utf8'),
+    readFile(path.join(docs, 'NOTICE.txt'), 'utf8'),
+    readFile(path.join(docs, 'legal.html'), 'utf8')
+  ]);
+  assert.equal(publishedLicense, license);
+  assert.equal(publishedNotice, notice);
+  assert.match(license, /Licensor:\s+Samsarix LLC/);
+  assert.match(license, /Change Date:\s+July 28, 2030/);
+  assert.match(legalPage, /Business Source License 1\.1/);
 });
 
 test('agent gallery links only to bundled profile pages and labels unavailable cards', async () => {

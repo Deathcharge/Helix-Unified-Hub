@@ -4,11 +4,11 @@
 
 The repository originally described a large “portal constellation,” but the checked-in, deployable surface is a collection of static HTML pages under `docs/`. It also contains archived conversations and logs, duplicated portal prototypes, incomplete Android/Node/Python experiments, deployment scripts, and claims about services that are not implemented here. The previous README documented nonexistent `src/`, `tests/`, `examples/`, development requirements, CI, API documentation, and an MIT license.
 
-The maintained product is now **Helix Hub Directory**: a dependency-free static catalog that lets someone discover the pages actually bundled in this repository and distinguishes them from external or archived destinations.
+The maintained product is now **Samsarix Hub Directory**: a dependency-free static catalog from Samsarix LLC that lets someone discover the pages actually bundled in this repository and distinguishes them from external or archived destinations. “Helix” remains only where needed for repository URLs, filenames, or clearly historical artifacts.
 
 ## Target user and primary use case
 
-The target user is a Helix collaborator, evaluator, or curious visitor who wants a reliable map of this repository without private infrastructure or tribal knowledge. The primary journey is: open the site, understand its lifecycle labels, search or filter the catalog, and open a checked local page or explicitly external destination.
+The target user is a Samsarix collaborator, evaluator, or curious visitor who wants a reliable map of this repository without private infrastructure or tribal knowledge. The primary journey is: open the site, understand its lifecycle labels, search or filter the catalog, and open a checked local page or explicitly external destination.
 
 ## Key product and architecture decisions
 
@@ -29,7 +29,7 @@ The target user is a Helix collaborator, evaluator, or curious visitor who wants
 ## Assumptions
 
 - GitHub Pages remains the intended distribution channel because the existing deployment publishes `docs/`.
-- The BSL/proprietary files reflect owner intent, but their applicability and the BSL parameters require owner/legal confirmation.
+- Samsarix LLC is the owner-provided company identity, with `contact@samsarix.com` and `support@samsarix.com` as the confirmed contact routes. The repository implements the requested BSL/commercial direction, subject to counsel review before production promotion.
 - Existing legacy artifacts must be preserved unless a later owner-approved cleanup explicitly archives or removes them.
 
 ## Baseline command results
@@ -79,7 +79,7 @@ Recorded on 2026-07-28 at commit `52a7375b614aca8b3b88843e8e5ab3798239e938` befo
 - Empty, load-failure, no-JavaScript, reduced-motion, mobile, keyboard, and 404 paths are represented.
 - A single least-privilege Pages workflow gates deployment on the checks.
 - No locally actionable P0 issue remains.
-- The README and UI make limitations, license uncertainty, privacy behavior, and legacy scope explicit.
+- The README and UI make limitations, source-available licensing, privacy behavior, ownership, and legacy scope explicit.
 
 ## Completed work
 
@@ -94,11 +94,12 @@ Recorded on 2026-07-28 at commit `52a7375b614aca8b3b88843e8e5ab3798239e938` befo
 - Required authentication and bounded inputs for the Zapier service prototype, made Discord deployment authorization fail closed, bounded voice capture, removed shell command composition, contained generator output paths, and required local database/cache secrets.
 - Removed remote executable scripts and font imports from the Pages artifact, pinned every privileged GitHub Action to an immutable revision, and repaired the agent gallery's bundled links.
 - Verified the built journey in a real browser at desktop and 390×844 mobile sizes, including search, lifecycle filtering, bundled navigation, and a clean browser console.
+- Rebranded the maintained product to Samsarix, added public ownership/support routes, and replaced conflicting legacy license claims with a scoped BSL 1.1 release, commercial notice, trademark policy, third-party boundary, and contributor gate.
 
 ## Deferred and owner-blocked work
 
 - Production deployment is not performed without explicit owner authorization.
-- Legal confirmation is required for the license scope, licensed-work name, pricing URL, contact address, and BSL change-date parameters.
+- Counsel review remains recommended for the BSL scope, Additional Use Grant, Change License, trademark policy, and future commercial agreement; the obsolete pricing domains and unsupported click-through proprietary terms were removed.
 - The provenance and release status of the checked-in APK, PDFs, archives, exported conversations, and logs require owner review before removal or redistribution decisions.
 - Credentials and external account configuration for Railway, Discord, Zapier, Manus, domains, and app signing are intentionally not fabricated.
 - A historical GitHub PAT and three Zapier bearer hooks must be revoked/rotated by the account owner; current-tree redaction cannot invalidate them or erase Git history.
@@ -109,7 +110,7 @@ Recorded on 2026-07-28 at commit `52a7375b614aca8b3b88843e8e5ab3798239e938` befo
 - The repository remains much larger and less coherent than the maintained static product because legacy material is preserved.
 - External URLs can change independently; the product labels them external and does not fabricate health.
 - Secondary prototypes may contain security or reliability flaws and must not be deployed as supported services without separate hardening.
-- Production promotion remains blocked on credential rotation, personal-data disposition, and license confirmation even though the generated `dist/` artifact passes its local acceptance checks.
+- Production promotion remains blocked on credential rotation, personal-data disposition, Pages settings, and legal review even though the generated `dist/` artifact passes its local acceptance checks.
 
 ## Final verification evidence
 

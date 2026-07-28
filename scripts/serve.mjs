@@ -6,7 +6,7 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', process.argv.includes('--dist') ? 'dist' : 'docs');
-const requestedPort = Number.parseInt(process.env.HELIX_HUB_PORT || '4173', 10);
+const requestedPort = Number.parseInt(process.env.SAMSARIX_HUB_PORT || '4173', 10);
 const port = Number.isInteger(requestedPort) && requestedPort > 0 && requestedPort < 65536 ? requestedPort : 4173;
 const mime = new Map([
   ['.css', 'text/css; charset=utf-8'],
@@ -40,11 +40,11 @@ const server = http.createServer(async (request, response) => {
 
 server.on('error', (error) => {
   console.error(error.code === 'EADDRINUSE'
-    ? `Cannot start Helix Hub: 127.0.0.1:${port} is already in use. Set HELIX_HUB_PORT to another local port.`
-    : `Cannot start Helix Hub: ${error.message}`);
+    ? `Cannot start Samsarix Hub: 127.0.0.1:${port} is already in use. Set SAMSARIX_HUB_PORT to another local port.`
+    : `Cannot start Samsarix Hub: ${error.message}`);
   process.exitCode = 1;
 });
 
 server.listen(port, '127.0.0.1', () => {
-  console.log(`Helix Hub available at http://127.0.0.1:${port}/`);
+  console.log(`Samsarix Hub available at http://127.0.0.1:${port}/`);
 });
