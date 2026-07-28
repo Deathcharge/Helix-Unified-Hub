@@ -36,7 +36,7 @@ const MASTER_PORTAL_CONFIG = {
     domain: "helixhub.manus.space",
     backend: "https://helix-unified-production.up.railway.app",
     websocket: "wss://helix-unified-production.up.railway.app",
-    zapier_webhook: "https://hooks.zapier.com/hooks/catch/1234567/master/",
+    zapier_webhook: "https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/",
     features: ["navigation", "ucf_monitoring", "authentication", "coordination"]
 };
 ```
@@ -539,10 +539,10 @@ The Zapier integration represents the most advanced automation system ever deplo
 ```yaml
 # Zapier Webhook Matrix
 Zapier_Integration:
-  master_webhook: "https://hooks.zapier.com/hooks/catch/1234567/master/"
-  agent_webhook: "https://hooks.zapier.com/hooks/catch/1234567/agents/"
-  consciousness_webhook: "https://hooks.zapier.com/hooks/catch/1234567/consciousness/"
-  system_webhook: "https://hooks.zapier.com/hooks/catch/1234567/systems/"
+  master_webhook: "https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/"
+  agent_webhook: "https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/"
+  consciousness_webhook: "https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/"
+  system_webhook: "https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/"
   
   event_categories:
     - user_activity

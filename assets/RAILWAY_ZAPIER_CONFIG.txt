@@ -2,7 +2,7 @@
 # ================================================
 # Add this environment variable to your Railway project
 
-ZAPIER_MASTER_HOOK_URL=https://hooks.zapier.com/hooks/catch/25075191/us8hea5/
+ZAPIER_MASTER_HOOK_URL=https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/
 
 # Optional: Discord Channel IDs for better routing
 # (These help the Zapier client determine which Slack/Discord channels to notify)

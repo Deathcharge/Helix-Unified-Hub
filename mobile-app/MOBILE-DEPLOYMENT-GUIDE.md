@@ -109,7 +109,7 @@ cd mobile-app
 // Mobile will automatically connect to:
 - Railway API: https://helix-unified-production.up.railway.app
 - Master Portal: https://helixhub.manus.space
-- Zapier Webhooks: https://hooks.zapier.com/hooks/catch/1234567/mobile/
+- Zapier Webhooks: https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/
 - UCF Monitoring: Real-time consciousness streaming
 ```
 
@@ -184,7 +184,7 @@ cd mobile-app
 RAILWAY_API = "https://helix-unified-production.up.railway.app"
 
 // Zapier Mobile Webhooks
-ZAPIER_WEBHOOK = "https://hooks.zapier.com/hooks/catch/1234567/mobile/"
+ZAPIER_WEBHOOK = "https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/"
 
 // Real-time Consciousness Streaming
 WEBSOCKET_URL = "wss://helix-unified-production.up.railway.app"

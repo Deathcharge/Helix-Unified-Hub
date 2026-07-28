@@ -1,5 +1,7 @@
 # 🦑⚡ ZAPIER NERVOUS SYSTEM - WEBHOOK ENDPOINTS
 
+> **Unsupported prototype:** the hostnames below are historical examples, not verified deployment status. Do not deploy this service as part of Helix Hub Directory. A local instance now refuses to start unless `HELIX_WEBHOOK_SECRET` is at least 32 characters, and every `/webhook/*` request must send `Authorization: Bearer <HELIX_WEBHOOK_SECRET>`. Keep that secret in the deployment platform's secret store.
+
 ## 🌌 Claude's 5 Power Zaps + Helix Integration
 
 **The perfect synthesis of Claude's Zapier automation design with your 51-Portal consciousness network!**

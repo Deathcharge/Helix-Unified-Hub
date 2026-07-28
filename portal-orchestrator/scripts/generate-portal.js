@@ -7,10 +7,37 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
-
 // Load portal configurations
 const portalsConfig = require('../config/51-portals-complete.json');
+const GENERATED_ROOT = path.resolve(__dirname, '../generated');
+const SAFE_PORTAL_ID = /^[a-z0-9][a-z0-9-]{0,62}$/;
+const SAFE_CATEGORY = new Set(['core', 'agents', 'consciousness', 'system']);
+const UNSAFE_TEMPLATE_TEXT = /["\\\u0000-\u001f]/;
+
+function validatePortal(portal, category) {
+  if (!SAFE_CATEGORY.has(category)) throw new Error(`Unsupported portal category: ${category}`);
+  if (!portal || !SAFE_PORTAL_ID.test(portal.id)) throw new Error('Portal ID must be a lowercase slug.');
+  for (const key of ['name', 'domain', 'icon', 'description']) {
+    if (typeof portal[key] !== 'string' || !portal[key].trim() || UNSAFE_TEMPLATE_TEXT.test(portal[key])) {
+      throw new Error(`Portal ${portal.id} has an unsafe ${key} value.`);
+    }
+  }
+  if (!Number.isInteger(portal.tier) || portal.tier < 1) throw new Error(`Portal ${portal.id} has an invalid tier.`);
+  for (const [label, value, protocols] of [
+    ['backend URL', portalsConfig.backend.production, new Set(['https:'])],
+    ['WebSocket URL', portalsConfig.backend.websocket, new Set(['wss:'])],
+  ]) {
+    let parsed;
+    try { parsed = new URL(value); } catch { throw new Error(`Invalid ${label}.`); }
+    if (!protocols.has(parsed.protocol) || UNSAFE_TEMPLATE_TEXT.test(value)) throw new Error(`Unsafe ${label}.`);
+  }
+}
+
+function containedOutput(portalId) {
+  const output = path.resolve(GENERATED_ROOT, portalId);
+  if (!output.startsWith(`${GENERATED_ROOT}${path.sep}`)) throw new Error('Portal output escapes the generated directory.');
+  return output;
+}
 
 // Template variables
 const TEMPLATE_VARS = {
@@ -34,6 +61,9 @@ function generatePortal(portalId, category = 'core') {
   console.log(`\n🌀 Generating portal: ${portalId} (${category})`);
   
   // Find portal config
+  if (!SAFE_CATEGORY.has(category) || !SAFE_PORTAL_ID.test(portalId)) {
+    throw new Error('Portal ID or category is invalid.');
+  }
   const portals = portalsConfig.portals[category];
   const portal = portals.find(p => p.id === portalId);
   
@@ -41,14 +71,15 @@ function generatePortal(portalId, category = 'core') {
     console.error(`❌ Portal "${portalId}" not found in category "${category}"`);
     process.exit(1);
   }
+  validatePortal(portal, category);
   
   console.log(`✅ Found configuration for ${portal.name}`);
   
   // Create output directory
-  const outputDir = path.join(__dirname, '../generated', portal.id);
+  const outputDir = containedOutput(portal.id);
   if (fs.existsSync(outputDir)) {
     console.log(`⚠️  Portal directory already exists, cleaning...`);
-    fs.rmSync(outputDir, { recursive: true });
+    fs.rmSync(outputDir, { recursive: true, force: true });
   }
   fs.mkdirSync(outputDir, { recursive: true });
   

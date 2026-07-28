@@ -1,0 +1,17 @@
+{
+  "name": "helix-unified-hub",
+  "version": "1.0.0-rc.1",
+  "private": true,
+  "type": "module",
+  "description": "A curated, dependency-free directory for the Helix ecosystem.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "npm run lint && npm test && npm run build",
+    "lint": "node scripts/check.mjs",
+    "serve": "node scripts/serve.mjs",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

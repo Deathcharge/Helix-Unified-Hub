@@ -25,21 +25,43 @@ import {
 import { createWriteStream } from 'fs';
 import { pipeline } from 'stream/promises';
 import prism from 'prism-media';
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 import { promisify } from 'util';
 import * as fs from 'fs/promises';
+import { tmpdir } from 'os';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
+const repositoryRoot = fileURLToPath(new URL('..', import.meta.url));
+const generator = fileURLToPath(new URL('../portal-orchestrator/scripts/generate-portal.js', import.meta.url));
+
+async function runGenerator(args) {
+  return execFileAsync(process.execPath, [generator, ...args], {
+    cwd: repositoryRoot,
+    timeout: 60_000,
+    maxBuffer: 1024 * 1024,
+    windowsHide: true,
+  });
+}
 
 // Configuration
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 const ADMIN_USER_ID = process.env.DISCORD_ADMIN_USER_ID; // Your Discord user ID
 const VOICE_CHANNEL_ID = process.env.DISCORD_VOICE_CHANNEL_ID; // Optional: specific channel
 
-if (!DISCORD_BOT_TOKEN) {
-  console.error('❌ DISCORD_BOT_TOKEN environment variable is required');
+if (!DISCORD_BOT_TOKEN || !ADMIN_USER_ID) {
+  console.error('❌ DISCORD_BOT_TOKEN and DISCORD_ADMIN_USER_ID environment variables are required');
   process.exit(1);
 }
+
+if (!/^\d{17,20}$/.test(ADMIN_USER_ID)) {
+  console.error('❌ DISCORD_ADMIN_USER_ID must be a numeric Discord user ID');
+  process.exit(1);
+}
+
+const activeRecordings = new Set();
+const MAX_CAPTURE_MS = 30_000;
 
 // Create Discord client
 const client = new Client({
@@ -133,7 +155,7 @@ async function executeDeployment(command) {
   try {
     if (command.target === 'all') {
       console.log('🚀 Deploying all 51 portals...');
-      const { stdout } = await execAsync('node portal-orchestrator/scripts/generate-portal.js --all');
+      const { stdout } = await runGenerator(['--all']);
       return {
         success: true,
         message: 'All 51 portals queued for deployment',
@@ -143,7 +165,7 @@ async function executeDeployment(command) {
     
     if (command.target === 'single' && command.portalId) {
       console.log(`🚀 Deploying portal: ${command.portalId}`);
-      const { stdout } = await execAsync(`node portal-orchestrator/scripts/generate-portal.js --portal ${command.portalId}`);
+      const { stdout } = await runGenerator([command.portalId]);
       return {
         success: true,
         message: `Portal ${command.portalId} deployed successfully`,
@@ -153,7 +175,7 @@ async function executeDeployment(command) {
     
     if (['core', 'agents', 'consciousness', 'system'].includes(command.target)) {
       console.log(`🚀 Deploying ${command.target} portals...`);
-      const { stdout } = await execAsync(`node portal-orchestrator/scripts/generate-portal.js --type ${command.target}`);
+      const { stdout } = await runGenerator([`--all-${command.target}`]);
       return {
         success: true,
         message: `${command.target} portals queued for deployment`,
@@ -177,11 +199,9 @@ async function executeDeployment(command) {
 // Get portal status
 async function getPortalStatus() {
   try {
-    const { stdout } = await execAsync('node portal-orchestrator/scripts/generate-portal.js --status');
     return {
-      success: true,
-      message: 'Portal status retrieved',
-      details: stdout,
+      success: false,
+      message: 'Portal status is not implemented by the local generator.',
     };
   } catch (error) {
     return {
@@ -294,6 +314,8 @@ client.on(Events.VoiceStateUpdate, async (oldState, newState) => {
         
         // Listen to audio
         connection.receiver.speaking.on('start', async (userId) => {
+          if (userId !== ADMIN_USER_ID || activeRecordings.has(userId)) return;
+          activeRecordings.add(userId);
           console.log(`🎤 User ${userId} started speaking`);
           
           const audioStream = connection.receiver.subscribe(userId, {
@@ -303,8 +325,9 @@ client.on(Events.VoiceStateUpdate, async (oldState, newState) => {
             },
           });
           
-          const audioFilePath = `/tmp/discord-voice-${userId}-${Date.now()}.pcm`;
+          const audioFilePath = path.join(tmpdir(), `discord-voice-${userId}-${Date.now()}.pcm`);
           const writeStream = createWriteStream(audioFilePath);
+          const captureTimeout = setTimeout(() => audioStream.destroy(), MAX_CAPTURE_MS);
           
           const opusDecoder = new prism.opus.Decoder({
             frameSize: 960,
@@ -329,9 +352,11 @@ client.on(Events.VoiceStateUpdate, async (oldState, newState) => {
               }
             }
             
-            // Clean up audio file
-            await fs.unlink(audioFilePath).catch(console.error);
-          }).catch(console.error);
+          }).catch(console.error).finally(async () => {
+            clearTimeout(captureTimeout);
+            activeRecordings.delete(userId);
+            await fs.unlink(audioFilePath).catch(() => {});
+          });
         });
         
         // Handle connection state changes

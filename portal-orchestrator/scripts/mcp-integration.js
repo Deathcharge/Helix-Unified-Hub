@@ -5,7 +5,7 @@
  * Unified interface for all MCP servers (Notion, Zapier, Vercel, Neon, Sentry, etc.)
  */
 
-const { execSync } = require('child_process');
+const { execFileSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
@@ -14,9 +14,11 @@ const path = require('path');
  */
 function executeMCP(server, command, args = []) {
   try {
-    const argString = args.map(arg => `"${arg}"`).join(' ');
-    const cmd = `manus-mcp-cli --server ${server} ${command} ${argString}`;
-    const result = execSync(cmd, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] });
+    const result = execFileSync(
+      'manus-mcp-cli',
+      ['--server', String(server), String(command), ...args.map(String)],
+      { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'], shell: false, timeout: 30_000 }
+    );
     
     // Try to parse as JSON
     try {
