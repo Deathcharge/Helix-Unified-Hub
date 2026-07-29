@@ -7,14 +7,14 @@ This roadmap separates four gates: merge, release, publication, and flagship ado
 Portfolio role: **merge/consolidation candidate**. Preserve the productized branch and migrate unique assets into the canonical Samsarix surface through an explicit consolidation plan; do not maintain two competing implementations.
 Planned repository identity: `Deathcharge/samsarix-hub-directory` (merge-then-consolidate).
 
-Current disposition: Merge the truthful productization state, then consolidate deliberately.
+Current disposition: The truthful productization state is merged. General lifecycle/boundary guidance has been represented in the canonical Field Guide without migrating source, binaries, exports, or sensitive-history categories. Preserve this repository as a consolidation source while credential, retention, rename, freeze, and archive decisions remain owner-controlled.
 
 ## Stabilize the productized default
 
 - Keep the default branch buildable from a clean checkout and preserve exact-head CI evidence.
 - Keep Samsarix LLC branding, package identity, license metadata, and compatibility aliases internally consistent.
 - Preserve the pre-productization default under a rollback ref before merging; do not delete legacy history.
-- Review priority: Rotate historical credential categories, decide personal-data/binary retention, migrate unique catalog content, and stop separate deployment investment.
+- Review priority: Rotate historical credential categories, decide personal-data/binary retention, and stop treating this maintained directory as a competing general portfolio front door.
 
 ## Release candidate
 
