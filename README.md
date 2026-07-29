@@ -1,5 +1,7 @@
 # Samsarix Hub Directory
 
+> **Portfolio status:** preserved consolidation source. The public [Samsarix Field Guide](https://github.com/Deathcharge/samsarix-field-guide) is the canonical portfolio navigator and now carries the shared lifecycle/boundary guidance. See [`CONSOLIDATION.md`](CONSOLIDATION.md). This repository remains intact; no archive or deletion action is implied.
+
 Samsarix Hub Directory is a small, dependency-free website from Samsarix LLC for
 exploring the useful material in this repository. It presents bundled agent
 profiles, developer metadata, external destinations, and legacy concepts with
