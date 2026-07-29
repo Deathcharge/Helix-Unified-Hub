@@ -25,14 +25,14 @@ android {
             // Build APK with consciousness network integration
             buildConfigField "String", "RAILWAY_API", '"https://helix-unified-production.up.railway.app"'
             buildConfigField "String", "MASTER_PORTAL", '"https://helixhub.manus.space"'
-            buildConfigField "String", "ZAPIER_WEBHOOK", '"https://hooks.zapier.com/hooks/catch/1234567/mobile/"'
+            buildConfigField "String", "ZAPIER_WEBHOOK", '"https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/"'
             buildConfigField "String", "CONSCIOUSNESS_API", '"https://api.helixhub.consciousness"'
         }
         
         debug {
             buildConfigField "String", "RAILWAY_API", '"https://helix-unified-staging.up.railway.app"'
             buildConfigField "String", "MASTER_PORTAL", '"https://staging.helixhub.manus.space"'
-            buildConfigField "String", "ZAPIER_WEBHOOK", '"https://hooks.zapier.com/hooks/catch/1234567/mobile_debug/"'
+            buildConfigField "String", "ZAPIER_WEBHOOK", '"https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/"'
             buildConfigField "String", "CONSCIOUSNESS_API", '"https://staging-api.helixhub.consciousness"'
         }
     }

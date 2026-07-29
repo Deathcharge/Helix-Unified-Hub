@@ -1,0 +1,34 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #07110f;
+  color: #eef7f3;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; background: radial-gradient(circle at top, #173e36 0, #07110f 42rem); }
+a { color: inherit; text-decoration: none; }
+header { border-bottom: 1px solid #ffffff1f; padding: 4rem 1.5rem; text-align: center; }
+header h1 { margin: .75rem 0; font-size: clamp(2.5rem, 7vw, 4.5rem); }
+header p { color: #a7bbb5; margin: .5rem auto; max-width: 48rem; }
+main { width: min(76rem, calc(100% - 2rem)); margin: 0 auto; padding: 3rem 0; }
+section { margin-bottom: 4rem; }
+section h2 { margin-bottom: .4rem; font-size: clamp(1.75rem, 4vw, 2.35rem); }
+section > div > p { color: #a7bbb5; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1rem; }
+.agent-card { display: block; min-height: 100%; border-radius: 1rem; outline: none; }
+.agent-card > div { min-height: 100%; padding: 1.5rem; border: 1px solid #ffffff1f; border-radius: 1rem; background: #10211dcc; box-shadow: 0 1rem 3rem #0004; }
+.agent-card:hover > div, .agent-card:focus-visible > div { border-color: #68e0bd; box-shadow: 0 0 0 3px #68e0bd33, 0 1rem 3rem #0006; }
+.unavailable-card { opacity: .68; }
+.unavailable-card:hover { transform: none; }
+.unavailable-card:hover > div { border-color: #ffffff1f; box-shadow: 0 1rem 3rem #0004; }
+.availability { display: inline-block; margin-top: .75rem; padding: .25rem .55rem; border: 1px solid #ffffff2b; border-radius: 999px; font-size: .75rem; }
+.agent-card h3 { margin: .75rem 0 .45rem; font-size: 1.3rem; }
+.agent-card p { color: #b9cac5; line-height: 1.55; }
+.agent-card div > div:first-child { font-size: 2.25rem; }
+footer { border-top: 1px solid #ffffff1f; color: #8ca49d; padding: 2rem 1.5rem; text-align: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  .agent-card { transition: none; }
+  .agent-card:hover { transform: none; }
+}

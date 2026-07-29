@@ -45,6 +45,7 @@ Thumbs.db
 # Temporary files
 tmp/
 temp/
+.playwright-cli/
 *.tmp
 
 # Database files

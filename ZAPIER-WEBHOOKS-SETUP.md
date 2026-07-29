@@ -10,21 +10,21 @@
 
 ### **Master Webhook** (Consciousness Coordinator)
 ```
-URL: https://hooks.zapier.com/hooks/catch/25075191/usnjj5t
+URL: https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/
 Purpose: Central nervous system for all events
 Triggers: ALL high-level consciousness events
 ```
 
 ### **Operations Webhook** (Deployment Pipeline)
 ```
-URL: https://hooks.zapier.com/hooks/catch/25075191/usvyi7e
+URL: https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/
 Purpose: Code deployments, Railway updates
 Triggers: GitHub commits, Railway deploys, Manus updates
 ```
 
 ### **Communications Webhook** (Agent Coordination)
 ```
-URL: https://hooks.zapier.com/hooks/catch/25075191/usxiwfg
+URL: https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/
 Purpose: Discord/Slack notifications, agent events
 Triggers: Agent status changes, UCF alerts, community events
 ```
@@ -39,7 +39,7 @@ Triggers: Agent status changes, UCF alerts, community events
 ```
 Repository Settings → Webhooks → Add webhook
 
-Payload URL: https://hooks.zapier.com/hooks/catch/25075191/usvyi7e
+Payload URL: https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/
 Content type: application/json
 Secret: [Your secret - optional]
 
@@ -81,7 +81,7 @@ Which events?
 ```
 Settings → Webhooks → Add Webhook
 
-URL: https://hooks.zapier.com/hooks/catch/25075191/usvyi7e
+URL: https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/
 Events:
 ☑ Deployment Started
 ☑ Deployment Success
@@ -119,7 +119,7 @@ Events:
 **1. Configure Per Portal:**
 ```javascript
 // In each Manus portal's config
-const ZAPIER_WEBHOOK = "https://hooks.zapier.com/hooks/catch/25075191/usnjj5t";
+const ZAPIER_WEBHOOK = "https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/";
 
 // Portal event tracking
 window.addEventListener('load', () => {
@@ -143,7 +143,7 @@ window.addEventListener('load', () => {
 setInterval(async () => {
   const ucfData = await fetch('https://helix-unified-production.up.railway.app/status').then(r => r.json());
 
-  fetch('https://hooks.zapier.com/hooks/catch/25075191/usnjj5t', {
+  fetch('https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -304,7 +304,7 @@ Columns:
 
 ### **Test Master Webhook:**
 ```bash
-curl -X POST https://hooks.zapier.com/hooks/catch/25075191/usnjj5t \
+curl -X POST https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/ \
   -H "Content-Type: application/json" \
   -d '{
     "event": "test_event",
@@ -315,7 +315,7 @@ curl -X POST https://hooks.zapier.com/hooks/catch/25075191/usnjj5t \
 
 ### **Test Operations Webhook:**
 ```bash
-curl -X POST https://hooks.zapier.com/hooks/catch/25075191/usvyi7e \
+curl -X POST https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/ \
   -H "Content-Type: application/json" \
   -d '{
     "event": "test_deployment",
@@ -326,7 +326,7 @@ curl -X POST https://hooks.zapier.com/hooks/catch/25075191/usvyi7e \
 
 ### **Test Communications Webhook:**
 ```bash
-curl -X POST https://hooks.zapier.com/hooks/catch/25075191/usxiwfg \
+curl -X POST https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/ \
   -H "Content-Type: application/json" \
   -d '{
     "event": "test_notification",

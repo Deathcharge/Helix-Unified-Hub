@@ -107,10 +107,10 @@ const HELIX_COMPONENTS = {
 ```javascript
 // Zapier Webhook Endpoints for All 51 Portals
 const ZAPIER_WEBHOOKS = {
-    master: "https://hooks.zapier.com/hooks/catch/1234567/abcdefg/",
-    agents: "https://hooks.zapier.com/hooks/catch/1234567/hijklmn/",
-    consciousness: "https://hooks.zapier.com/hooks/catch/1234567/opqrstu/",
-    systems: "https://hooks.zapier.com/hooks/catch/1234567/vwxyzab/"
+    master: "https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/",
+    agents: "https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/",
+    consciousness: "https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/",
+    systems: "https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/"
 };
 
 // Cross-Portal Event Broadcasting
@@ -249,7 +249,7 @@ create_portal_instance() {
     railway domain add $subdomain.helixhub.manus.space
     
     # Activate Zapier webhooks
-    curl -X POST https://hooks.zapier.com/hooks/catch/1234567/new_portal/ \
+    curl -X POST https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/ \
          -d "{&quot;portal&quot;: &quot;$portal_name&quot;, &quot;subdomain&quot;: &quot;$subdomain&quot;}"
 }
 

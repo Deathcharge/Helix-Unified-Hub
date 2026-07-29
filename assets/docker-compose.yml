@@ -5,12 +5,15 @@ services:
   redis:
     image: redis:7-alpine
     container_name: helix-redis
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?set REDIS_PASSWORD}
+    command: ["sh", "-c", "exec redis-server --appendonly yes --requirepass \"$${REDIS_PASSWORD}\""]
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD-SHELL", "redis-cli -a \"$${REDIS_PASSWORD}\" ping"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -23,10 +26,10 @@ services:
     container_name: helix-postgres
     environment:
       POSTGRES_USER: helix_user
-      POSTGRES_PASSWORD: helix_password
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
       POSTGRES_DB: helix_collective
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -49,8 +52,8 @@ services:
       DISCORD_TOKEN: ${DISCORD_TOKEN}
       DISCORD_GUILD_ID: ${DISCORD_GUILD_ID}
       ARCHITECT_ID: ${ARCHITECT_ID}
-      REDIS_URL: redis://redis:6379
-      DATABASE_URL: postgresql://helix_user:helix_password@postgres:5432/helix_collective
+      REDIS_URL: redis://:${REDIS_PASSWORD:?set REDIS_PASSWORD}@redis:6379
+      DATABASE_URL: postgresql://helix_user:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@postgres:5432/helix_collective
       NOTION_API_KEY: ${NOTION_API_KEY}
       NOTION_DATABASE_ID: ${NOTION_DATABASE_ID}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
@@ -95,4 +98,3 @@ volumes:
 networks:
   helix-network:
     driver: bridge
-

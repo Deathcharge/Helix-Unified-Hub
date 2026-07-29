@@ -4,6 +4,7 @@
 const express = require('express');
 const WebSocket = require('ws');
 const axios = require('axios');
+const crypto = require('crypto');
 
 const app = express();
 const server = require('http').createServer(app);
@@ -12,6 +13,12 @@ const wss = new WebSocket.Server({ server });
 // Configuration
 const RAILWAY_API = process.env.RAILWAY_API || 'https://helix-unified-production.up.railway.app';
 const ZAPIER_WEBHOOK_BASE = process.env.ZAPIER_WEBHOOK_BASE || 'https://hooks.zapier.com/hooks/catch/1234567/';
+const WEBHOOK_SECRET = process.env.HELIX_WEBHOOK_SECRET;
+const ALLOWED_ORIGIN = process.env.HELIX_ALLOWED_ORIGIN;
+
+if (!WEBHOOK_SECRET || WEBHOOK_SECRET.length < 32) {
+    throw new Error('HELIX_WEBHOOK_SECRET must be set to at least 32 characters.');
+}
 
 // Zapier Webhook Endpoints (Claude's 5 Power Zaps)
 const ZAPIER_ENDPOINTS = {
@@ -56,16 +63,36 @@ const agentStatus = {
 };
 
 // Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '32kb' }));
+app.use(express.urlencoded({ extended: true, limit: '32kb' }));
 
 // CORS for cross-origin requests
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    if (ALLOWED_ORIGIN && req.headers.origin === ALLOWED_ORIGIN) {
+        res.header('Access-Control-Allow-Origin', ALLOWED_ORIGIN);
+        res.header('Vary', 'Origin');
+    }
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if (req.method === 'OPTIONS') return res.sendStatus(204);
     next();
 });
+
+app.use('/webhook', (req, res, next) => {
+    const prefix = 'Bearer ';
+    const authorization = req.get('authorization') || '';
+    if (!authorization.startsWith(prefix)) return res.status(401).json({ error: 'Unauthorized' });
+    const supplied = Buffer.from(authorization.slice(prefix.length));
+    const expected = Buffer.from(WEBHOOK_SECRET);
+    if (supplied.length !== expected.length || !crypto.timingSafeEqual(supplied, expected)) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+    next();
+});
+
+function boundedMetric(value, fallback) {
+    return Number.isFinite(value) ? Math.max(0, Math.min(100, value)) : fallback;
+}
 
 // ==================== ZAPIR 1: DISCORD UCF PULSE → MULTI-CHANNEL SYNC ====================
 
@@ -76,7 +103,13 @@ app.post('/webhook/ucf-pulse', async (req, res) => {
         // Update UCF metrics
         ucfMetrics = {
             ...ucfMetrics,
-            ...ucfData,
+            harmony: boundedMetric(ucfData.harmony, ucfMetrics.harmony),
+            resilience: boundedMetric(ucfData.resilience, ucfMetrics.resilience),
+            prana: boundedMetric(ucfData.prana, ucfMetrics.prana),
+            drishti: boundedMetric(ucfData.drishti, ucfMetrics.drishti),
+            klesha: boundedMetric(ucfData.klesha, ucfMetrics.klesha),
+            zoom: boundedMetric(ucfData.zoom, ucfMetrics.zoom),
+            trend_history: ucfMetrics.trend_history,
             last_update: Date.now()
         };
         
@@ -271,6 +304,9 @@ app.post('/webhook/agent-status', async (req, res) => {
         
         // Update agent status
         const agentName = agentData.agent_name;
+        if (typeof agentName !== 'string' || !Object.hasOwn(agentStatus, agentName)) {
+            return res.status(400).json({ error: 'Unknown agent' });
+        }
         const agentStatusData = {
             name: agentName,
             status: agentData.status || 'active',
@@ -280,11 +316,7 @@ app.post('/webhook/agent-status', async (req, res) => {
             current_task: agentData.current_task || 'available'
         };
         
-        if (agentStatus[agentName]) {
-            agentStatus[agentName] = { ...agentStatus[agentName], ...agentStatusData };
-        } else {
-            agentStatus[agentName] = agentStatusData;
-        }
+        agentStatus[agentName] = { ...agentStatus[agentName], ...agentStatusData };
         
         // Check if alert is needed
         const needsAlert = agentData.status === 'error' || agentData.status === 'dormant';

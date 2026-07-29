@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {"id":"agent-gallery","name":"Agent gallery","description":"Browse the Samsarix visual index of agent profiles bundled with this repository.","category":"Explore","status":"included","href":"agent_gallery.html","tags":["agents","gallery","profiles"]},
+    {"id":"aether-profile","name":"Aether","description":"A bundled profile card for the Samsarix meta-awareness concept.","category":"Profiles","status":"included","href":"aether_profile_card.html","tags":["awareness","systems","profile"]},
+    {"id":"agni-profile","name":"Agni","description":"A bundled profile card for the Samsarix transformation-engine concept.","category":"Profiles","status":"included","href":"agni_profile_card.html","tags":["transformation","change","profile"]},
+    {"id":"echo-profile","name":"Echo","description":"A bundled profile card for the Samsarix resonance and reflection concept.","category":"Profiles","status":"included","href":"echo_profile_card.html","tags":["resonance","reflection","profile"]},
+    {"id":"gemini-profile","name":"Gemini","description":"A bundled profile card for the Samsarix multimodal-integration concept.","category":"Profiles","status":"included","href":"gemini_profile_card.html","tags":["multimodal","integration","profile"]},
+    {"id":"kael-profile","name":"Kael","description":"A bundled profile card for the Samsarix ethical-reasoning concept.","category":"Profiles","status":"included","href":"kael_profile_card.html","tags":["ethical","reasoning","profile"]},
+    {"id":"manus-profile","name":"Manus","description":"A bundled profile card for the Samsarix operational-execution concept.","category":"Profiles","status":"included","href":"manus_profile_card.html","tags":["operations","execution","profile"]},
+    {"id":"oracle-profile","name":"Oracle","description":"A bundled profile card for the Samsarix foresight and analysis concept.","category":"Profiles","status":"included","href":"oracle_profile_card.html","tags":["analysis","foresight","profile"]},
+    {"id":"phoenix-profile","name":"Phoenix","description":"A bundled profile card for the Samsarix renewal and resilience concept.","category":"Profiles","status":"included","href":"phoenix_profile_card.html","tags":["renewal","resilience","profile"]},
+    {"id":"samsara-profile","name":"Samsara","description":"A bundled profile card for the Samsarix visualization concept.","category":"Profiles","status":"included","href":"samsara_profile_card.html","tags":["visualization","creative","profile"]},
+    {"id":"sanghacore-profile","name":"SanghaCore","description":"A bundled profile card for the Samsarix community-coordination concept.","category":"Profiles","status":"included","href":"sanghacore_profile_card.html","tags":["community","coordination","profile"]},
+    {"id":"shadow-profile","name":"Shadow","description":"A bundled profile card for the Samsarix archival and telemetry concept.","category":"Profiles","status":"included","href":"shadow_profile_card.html","tags":["archive","telemetry","profile"]},
+    {"id":"vega-profile","name":"Vega","description":"A bundled profile card for the Samsarix coordination concept.","category":"Profiles","status":"included","href":"vega_profile_card.html","tags":["coordination","systems","profile"]},
+    {"id":"licensing","name":"Licensing and ownership","description":"Review Samsarix LLC ownership, source-available terms, legacy boundaries, and contact routes.","category":"Project","status":"included","href":"legal.html","tags":["license","ownership","contact"]},
+    {"id":"ecosystem-registry","name":"Legacy ecosystem registry","description":"Inspect the preserved pre-Samsarix ecosystem snapshot as raw JSON; its destinations are not current-service claims.","category":"History","status":"archive","href":"helix-ecosystem.json","tags":["json","metadata","legacy"]},
+    {"id":"source-repository","name":"Source repository","description":"Review the code, history, documentation, and issue tracker on GitHub.","category":"Developer","status":"external","href":"https://github.com/Deathcharge/Helix-Unified-Hub","tags":["github","source","contribute"]},
+    {"id":"legacy-master-portal","name":"Legacy master portal","description":"An earlier static portal design retained for historical reference, not a live-service claim.","category":"History","status":"archive","href":"master-portal.html","tags":["legacy","prototype","history"]},
+    {"id":"legacy-portal-concept","name":"Portal constellation concept","description":"The original multi-portal concept page, preserved as an archive of the repository's initial direction.","category":"History","status":"archive","href":"portal.html","tags":["legacy","architecture","concept"]}
+  ]
+}

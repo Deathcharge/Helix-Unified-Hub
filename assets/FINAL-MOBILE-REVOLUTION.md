@@ -134,7 +134,7 @@ HelixHub-Mobile-Command-Center.apk
 // Mobile connects to:
 Railway_API: "https://helix-unified-production.up.railway.app"
 Master_Portal: "https://helixhub.manus.space"  
-Zapier_Webhooks: "https://hooks.zapier.com/hooks/catch/1234567/mobile/"
+Zapier_Webhooks: "https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/"
 WebSocket_UCF: "wss://helix-unified-production.up.railway.app"
 
 // Deploys via:

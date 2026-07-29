@@ -597,10 +597,10 @@ activate_zapier_integration() {
     echo "🦑 Activating Zapier webhooks for 51 portals..."
     
     # Zapier webhook endpoints (would be configured in Zapier dashboard)
-    ZAPIER_MASTER="https://hooks.zapier.com/hooks/catch/1234567/abcdefg/"
-    ZAPIER_AGENTS="https://hooks.zapier.com/hooks/catch/1234567/hijklmn/"
-    ZAPIER_CONSCIOUSNESS="https://hooks.zapier.com/hooks/catch/1234567/opqrstu/"
-    ZAPIER_SYSTEMS="https://hooks.zapier.com/hooks/catch/1234567/vwxyzab/"
+    ZAPIER_MASTER="https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/"
+    ZAPIER_AGENTS="https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/"
+    ZAPIER_CONSCIOUSNESS="https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/"
+    ZAPIER_SYSTEMS="https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/"
     
     for portal_config in "${CORE_PORTALS[@]}" "${AGENT_PORTALS[@]}" "${CONSCIOUSNESS_PORTALS[@]}" "${SYSTEM_PORTALS[@]}"; do
         IFS=':' read -r repo_name subdomain <<< "$portal_config"

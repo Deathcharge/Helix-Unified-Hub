@@ -471,7 +471,7 @@ Create `ZAPIER-INTEGRATION.md`:
 # Helix Zapier Integration Guide
 
 ## Webhook URL
-https://hooks.zapier.com/hooks/catch/25075191/usnjj5t/
+https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/
 
 ## Event Types
 
@@ -527,7 +527,7 @@ Destination: Discord #fractal-lab
 Add to all portals:
 
 ```javascript
-const WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/25075191/usnjj5t/';
+const WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/';
 
 async function sendToZapier(eventType, data) {
     await fetch(WEBHOOK_URL, {

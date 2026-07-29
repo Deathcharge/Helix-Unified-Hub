@@ -1,93 +1,137 @@
-# Helix-Unified-Hub
+# Samsarix Hub Directory
 
-Hub interface for Helix Unified
+Samsarix Hub Directory is a small, dependency-free website from Samsarix LLC for
+exploring the useful material in this repository. It presents bundled agent
+profiles, developer metadata, external destinations, and legacy concepts with
+explicit lifecycle labels instead of implying that every historical portal is a
+running service.
 
-## 🎯 Overview
+The project is a release candidate. The static directory and its build checks are
+maintained; the Android, Discord, Zapier, orchestration, deployment, and historical
+artifact folders are preserved prototypes and are not part of the supported runtime.
 
-This repository is part of the [Helix Collective](https://github.com/Deathcharge/helix-platform), a comprehensive ecosystem for building intelligent, multi-agent systems with consciousness frameworks and advanced LLM integration.
+## Fastest setup
 
-## 🚀 Quick Start
+Prerequisites:
 
-### Installation
+- Node.js 20 or newer
+- npm 10 or newer
 
-\`\`\`bash
+```bash
 git clone https://github.com/Deathcharge/Helix-Unified-Hub.git
 cd Helix-Unified-Hub
-pip install -r requirements.txt
-\`\`\`
+npm ci
+npm run check
+npm run serve
+```
 
-### Basic Usage
+Open `http://127.0.0.1:4173/`. No environment variables, credentials, database,
+account, or external Samsarix service is required.
 
-See the [examples/](examples/) directory for working examples and integration patterns.
+If that port is occupied, set `SAMSARIX_HUB_PORT` to another local port before
+running `npm run serve`.
 
-## 📚 Documentation
+## What users can do
 
-- **[Architecture](docs/ARCHITECTURE.md)** - System design and components
-- **[API Reference](docs/API.md)** - Complete API documentation
-- **[Integration Guide](docs/INTEGRATION.md)** - How to integrate with other Helix repos
-- **[Deployment](docs/DEPLOYMENT.md)** - Production deployment guide
-- **[Contributing](CONTRIBUTING.md)** - How to contribute
+1. Search the catalog by name, purpose, or tag.
+2. Filter by category and lifecycle.
+3. Open a destination bundled in this Pages site.
+4. Follow an explicitly labeled external link in a separate tab.
+5. Browse preserved concepts without mistaking them for maintained services.
 
-## 🔗 Related Repositories
+Catalog entries live in [`docs/portals.json`](docs/portals.json). The browser code
+renders values with DOM text nodes, validates destination protocols, and does not
+inject catalog HTML.
 
-- **[helix-platform](https://github.com/Deathcharge/helix-platform)** - Central hub and integration guide
-- **[helix-unified](https://github.com/Deathcharge/helix-unified)** - Main unified codebase
-- **[helix-core](https://github.com/Deathcharge/helix-core)** - Core utilities and LLM integration
+## Development commands
 
-See [HELIX_REPOSITORY_INDEX.md](https://github.com/Deathcharge/helix-platform/blob/main/HELIX_REPOSITORY_INDEX.md) for the complete ecosystem map.
+| Command | Purpose |
+| --- | --- |
+| `npm run serve` | Serve `docs/` locally on `127.0.0.1:4173`. |
+| `npm run lint` | Validate catalog data, safe links, local destinations, CSP, legal files, and primary HTML contracts. |
+| `npm test` | Run dependency-free unit and integration checks with Node's test runner. |
+| `npm run build` | Copy the release site to `dist/`. |
+| `npm run check` | Run lint, tests, and build in the same order as CI. |
 
-## 🧪 Testing
+There are no npm runtime dependencies. `package-lock.json` makes installation
+behavior deterministic.
 
-Run tests with pytest:
+## Deployment
 
-\`\`\`bash
-pytest tests/ -v --cov=src
-\`\`\`
+GitHub Actions validates the project and publishes the generated `dist/` directory
+to GitHub Pages on pushes to `main`. Production deployment, custom domains, and
+environment protection rules remain owner-controlled settings; this repository does
+not provision or mutate them.
 
-## 🔄 CI/CD
+## Architecture
 
-This repository uses GitHub Actions for:
-- ✅ Automated testing (Python 3.9, 3.10, 3.11)
-- ✅ Code linting (flake8)
-- ✅ Type checking (mypy)
-- ✅ Security scanning (bandit, safety)
-- ✅ Coverage reporting (Codecov)
+- `docs/index.html` — accessible application shell and fallback content
+- `docs/assets/styles.css` — responsive visual system with reduced-motion support
+- `docs/assets/catalog.mjs` — pure catalog filtering and URL safety functions
+- `docs/assets/app.mjs` — load, success, empty, and failure UI behavior
+- `docs/portals.json` — versioned source of truth for catalog entries
+- `scripts/` — dependency-free validation, build, and local serving
+- `tests/` — catalog, legal-surface, and primary-journey checks
+- `docs/PRODUCTIZATION.md` — assessment, decisions, priorities, gates, and remaining work
+- `docs/THREAT_MODEL.md` — repository-wide security boundaries and severity model
 
-See [.github/workflows/ci.yml](.github/workflows/ci.yml) for details.
+All other root-level application material is legacy or experimental unless this
+README says otherwise.
 
-## 📋 Requirements
+## Security and privacy
 
-- Python 3.9+
-- Dependencies listed in requirements.txt
-- Development dependencies in requirements-dev.txt
+The maintained site is static, has no authentication, makes no analytics calls,
+collects no personal data, and does not require a backend. The primary page uses a
+restrictive Content Security Policy and no third-party runtime CDN. External
+destinations leave this trust boundary and are labeled accordingly.
 
-## 🤝 Contributing
+Report vulnerabilities privately to `support@samsarix.com`; do not open an issue
+containing exploit details. See [`SECURITY.md`](SECURITY.md) and
+[`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md).
 
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for:
-- Development setup
-- Code style guide
-- Testing requirements
-- Pull request process
+### Owner gates before production
 
-## 📄 License
+Do not promote this release candidate to production until the repository owner has:
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+1. revoked the GitHub personal access token found in tracked history;
+2. rotated or disabled the three Zapier catch hooks found in tracked history;
+3. removed, redacted, or explicitly approved the tracked conversation/context
+   exports and decided whether Git history needs rewriting; and
+4. confirmed the GitHub Pages environment, domain, and branch-protection settings.
 
-## 🆘 Support
+The current tree and preserved ZIP were scrubbed of GitHub-token and non-placeholder
+Zapier-hook values. That does not revoke credentials or erase earlier commits.
 
-- **Issues**: Report bugs or request features via [GitHub Issues](https://github.com/Deathcharge/Helix-Unified-Hub/issues)
-- **Discussions**: Ask questions in [GitHub Discussions](https://github.com/Deathcharge/Helix-Unified-Hub/discussions)
-- **Documentation**: See the [docs/](docs/) directory
-- **Ecosystem**: Visit [helix-platform](https://github.com/Deathcharge/helix-platform)
+## Limitations and project status
 
-## 🎓 Learn More
+- External link availability is not guaranteed or represented as live health.
+- Archived pages retain historical wording and may describe unimplemented ideas.
+- The checked-in Android APK is not a supported release and has no reproducible
+  signed-build path here.
+- Optional integration prototypes require separate dependency, credential,
+  authorization, retry, and operational hardening before use.
+- Legacy logs, exports, PDFs, and conversation archives remain pending an
+  owner-controlled retention decision.
 
-- [Helix Collective Repository Index](https://github.com/Deathcharge/helix-platform/blob/main/HELIX_REPOSITORY_INDEX.md)
-- [Architecture Guide](https://github.com/Deathcharge/helix-platform/blob/main/docs/ARCHITECTURE.md)
-- [Integration Examples](https://github.com/Deathcharge/helix-platform/tree/main/examples)
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) before proposing changes.
 
----
+## Ownership and license
 
-**Status**: ✅ Production Ready  
-**Last Updated**: June 19, 2026  
-**Maintainer**: Helix Collective Contributors
+Copyright © 2026 Samsarix LLC. The Samsarix-authored Licensed Work identified in
+[`LICENSE`](LICENSE) is source-available under the Business Source License 1.1
+(`BUSL-1.1`). Its Additional Use Grant permits specified personal, educational,
+charitable, and internal-business production use; hosted, managed, substitute, or
+other production use may require a separate written commercial agreement.
+
+Each covered version changes to the GNU Affero General Public License v3 or later on
+the date stated in `LICENSE` or the fourth anniversary of its first public BSL
+distribution, whichever comes first. BSL is not an Open Source license before that
+transition.
+
+Legacy and third-party material is excluded unless its file expressly says otherwise.
+See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md),
+[`TRADEMARKS.md`](TRADEMARKS.md), and [`LICENSE.PROPRIETARY`](LICENSE.PROPRIETARY).
+Commercial and general inquiries: `contact@samsarix.com`.
+
+These repository notices implement the owner's stated licensing direction but are
+not legal advice; counsel should review them before the release is promoted.

@@ -110,9 +110,9 @@
 - Interface 2: https://helix-consciousness-interface.zapier.app/home-dashboard
 
 **Zapier Webhooks:**
-- Master: https://hooks.zapier.com/hooks/catch/25075191/usnjj5t
-- Operations: https://hooks.zapier.com/hooks/catch/25075191/usvyi7e
-- Communications: https://hooks.zapier.com/hooks/catch/25075191/usxiwfg
+- Master: https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/
+- Operations: https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/
+- Communications: https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/
 
 **Railway Backend:**
 - API: https://helix-unified-production.up.railway.app

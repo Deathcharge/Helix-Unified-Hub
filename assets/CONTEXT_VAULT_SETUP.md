@@ -81,7 +81,7 @@ NOTION_API_KEY=secret_xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 NOTION_CONTEXT_VAULT_DB_ID=abc123def456789
 
 # Zapier Webhook for Context Archiving
-ZAPIER_CONTEXT_ARCHIVE_WEBHOOK=https://hooks.zapier.com/hooks/catch/xxxxx/yyyyy/
+ZAPIER_CONTEXT_ARCHIVE_WEBHOOK=https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/
 ```
 
 ## Zapier Automation Setup
@@ -107,7 +107,7 @@ ZAPIER_CONTEXT_ARCHIVE_WEBHOOK=https://hooks.zapier.com/hooks/catch/xxxxx/yyyyy/
 ### Test the Webhook
 
 ```bash
-curl -X POST https://hooks.zapier.com/hooks/catch/xxxxx/yyyyy/ \
+curl -X POST https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/ \
   -H "Content-Type: application/json" \
   -d '{
     "session_name": "Test Checkpoint",

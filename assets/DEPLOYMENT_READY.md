@@ -120,7 +120,7 @@ Read `RAILWAY_ENV_CLEANUP.md` and update your Railway variables.
 ```bash
 DISCORD_INTEGRATION_MODE=hybrid
 ZAPIER_DISCORD_ENABLED=true
-ZAPIER_DISCORD_WEBHOOK_URL=https://hooks.zapier.com/hooks/catch/XXXXX/YYYYY/
+ZAPIER_DISCORD_WEBHOOK_URL=https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/
 ```
 
 **Variables You Can Remove:**
@@ -210,7 +210,7 @@ ARCHITECT_ID=your_user_id
 # Webhook Integration (HYBRID MODE)
 DISCORD_INTEGRATION_MODE=hybrid
 ZAPIER_DISCORD_ENABLED=true
-ZAPIER_DISCORD_WEBHOOK_URL=https://hooks.zapier.com/hooks/catch/XXXXX/YYYYY/
+ZAPIER_DISCORD_WEBHOOK_URL=https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/
 
 # Direct Discord Webhooks (12 essential)
 DISCORD_WEBHOOK_🧩UCF_SYNC=https://discord.com/api/webhooks/1436514451384701101/...

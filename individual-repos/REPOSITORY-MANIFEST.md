@@ -154,7 +154,7 @@ for repo in helix-hub-master helix-hub-shared helix-hub-forum helix-hub-music he
     gh repo create helix-hub-manus/$repo --public --description "$(grep 'Purpose:' README.md | cut -d':' -f2- | xargs)"
     
     # Add remote and push
-    git remote add origin https://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@github.com/helix-hub-manus/$repo.git
+    git remote add origin https://REDACTED_GITHUB_TOKEN@github.com/helix-hub-manus/$repo.git
     git push -u origin main
     
     cd ..

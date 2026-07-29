@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     // Network Configuration
     private static final String RAILWAY_API = "https://helix-unified-production.up.railway.app";
     private static final String MASTER_PORTAL = "https://helixhub.manus.space";
-    private static final String ZAPIER_WEBHOOK = "https://hooks.zapier.com/hooks/catch/1234567/mobile/";
+    private static final String ZAPIER_WEBHOOK = "https://hooks.zapier.com/hooks/catch/ACCOUNT_ID/HOOK_ID/";
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {

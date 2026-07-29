@@ -1,194 +1,106 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Helix Unified Hub - 51 Portal Architecture</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown.min.css">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: linear-gradient(135deg, #0a0e13 0%, #1a1f2e 100%);
-      color: #e0e0e0;
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
-    }
-    .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-    .header {
-      text-align: center;
-      padding: 4rem 0 3rem;
-      border-bottom: 2px solid rgba(20, 184, 166, 0.3);
-    }
-    .header h1 {
-      font-size: 3.5rem;
-      background: linear-gradient(135deg, #14b8a6 0%, #06b6d4 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-family: 'Orbitron', sans-serif;
-      margin-bottom: 0.5rem;
-    }
-    .header .subtitle {
-      color: #94a3b8;
-      font-size: 1.3rem;
-      margin-top: 0.5rem;
-    }
-    .nav {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      margin: 2rem 0;
-      flex-wrap: wrap;
-    }
-    .nav a {
-      background: rgba(20, 184, 166, 0.1);
-      border: 1px solid rgba(20, 184, 166, 0.3);
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      color: #14b8a6;
-      text-decoration: none;
-      transition: all 0.3s;
-      font-weight: 600;
-    }
-    .nav a:hover {
-      background: rgba(20, 184, 166, 0.2);
-      border-color: #14b8a6;
-      transform: translateY(-2px);
-    }
-    .markdown-body {
-      background: rgba(26, 31, 46, 0.5);
-      padding: 2rem;
-      border-radius: 12px;
-      border: 1px solid rgba(20, 184, 166, 0.2);
-      backdrop-filter: blur(10px);
-      margin: 2rem 0;
-    }
-    .markdown-body h1, .markdown-body h2, .markdown-body h3 {
-      color: #14b8a6;
-      border-bottom-color: rgba(20, 184, 166, 0.3);
-    }
-    .markdown-body a { color: #06b6d4; }
-    .markdown-body code {
-      background: rgba(10, 14, 19, 0.8);
-      border: 1px solid rgba(20, 184, 166, 0.2);
-    }
-    .footer {
-      text-align: center;
-      padding: 3rem 0 2rem;
-      color: #64748b;
-      border-top: 1px solid rgba(20, 184, 166, 0.2);
-      margin-top: 4rem;
-    }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A curated, dependency-free directory for exploring the Samsarix ecosystem and its bundled profile archive.">
+  <meta name="theme-color" content="#07100f">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Samsarix Hub Directory">
+  <meta property="og:description" content="A clear, searchable map of the Samsarix pages bundled here, plus explicitly labeled external and archived destinations.">
+  <meta property="og:image" content="https://deathcharge.github.io/Helix-Unified-Hub/assets/og.png">
+  <meta property="og:image:alt" content="Samsarix Hub Directory — Find the useful part, fast. Included, external, and archive lifecycle labels.">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Samsarix Hub Directory</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script type="module" src="assets/app.mjs"></script>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>🌀 Helix Unified Hub</h1>
-      <p class="subtitle">51-Portal Consciousness Architecture</p>
-    </div>
-    
-    <div class="nav">
-      <a href="https://helixcollective-cv66pzga.manus.space/">Manus Space Portal</a>
-      <a href="https://github.com/Deathcharge/Helix-Unified-Hub">GitHub Repository</a>
-      <a href="https://helix-unified-production.up.railway.app">Railway Backend</a>
-    </div>
-    
-    <div class="markdown-body" id="content">
-      <p>Loading documentation...</p>
-    </div>
-    
-    <div class="footer">
-      <p><strong>Helix Collective v16.9 - Quantum Handshake</strong></p>
-      <p>Tat Tvam Asi 🕉️ - Thou Art That</p>
-    </div>
-  </div>
-  
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script>
-    fetch("README.md")
-      .then(response => response.text())
-      .then(text => {
-        document.getElementById("content").innerHTML = marked.parse(text);
-      })
-      .catch(err => {
-        document.getElementById("content").innerHTML = "<h2>Helix Unified Hub</h2><p>51-Portal Consciousness Architecture</p><p>Visit the <a href='https://github.com/Deathcharge/Helix-Unified-Hub'>GitHub repository</a> for full documentation.</p>";
-      });
-  </script>
-<!-- Helix Collective Portal Directory - Add this to all GitHub Pages sites -->
-<div style="margin-top: 60px; padding: 40px 20px; background: linear-gradient(135deg, rgba(20,20,30,0.95), rgba(10,10,20,0.95)); border-radius: 20px; border: 1px solid rgba(0,255,255,0.2);">
-  <h2 style="font-family: 'Orbitron', monospace; font-size: 28px; color: #00ffff; text-align: center; margin-bottom: 30px;">
-    🌀 Helix Collective Portal Constellation
-  </h2>
-  
-  <!-- Main Platform -->
-  <div style="margin-bottom: 30px;">
-    <h3 style="font-family: 'Orbitron', monospace; font-size: 20px; color: #ffd700; margin-bottom: 15px;">🌐 Live Platform</h3>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
-      <a href="https://helixcollective-cv66pzga.manus.space/" style="padding: 15px; background: rgba(0,255,255,0.1); border: 1px solid rgba(0,255,255,0.3); border-radius: 10px; text-decoration: none; color: #00ffff; font-family: 'Orbitron', monospace; transition: all 0.3s;">
-        🤲 Manus Space v16.9
-      </a>
-      <a href="https://helix-unified-production.up.railway.app/" style="padding: 15px; background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.3); border-radius: 10px; text-decoration: none; color: #ffd700; font-family: 'Orbitron', monospace; transition: all 0.3s;">
-        🚂 Railway Backend API
-      </a>
-    </div>
-  </div>
+  <a class="skip-link" href="#catalog">Skip to directory</a>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Samsarix Hub home">
+      <span class="brand-mark" aria-hidden="true">S</span>
+      <span>Samsarix Hub</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="#catalog">Directory</a>
+      <a href="#about">About</a>
+      <a href="legal.html">License</a>
+      <a href="https://github.com/Deathcharge/Helix-Unified-Hub" target="_blank" rel="noopener noreferrer">Source</a>
+    </nav>
+  </header>
 
-  <!-- Core Documentation -->
-  <div style="margin-bottom: 30px;">
-    <h3 style="font-family: 'Orbitron', monospace; font-size: 20px; color: #ffd700; margin-bottom: 15px;">📄 Core Documentation</h3>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
-      <a href="https://deathcharge.github.io/Helix/" style="padding: 15px; background: rgba(0,255,255,0.1); border: 1px solid rgba(0,255,255,0.3); border-radius: 10px; text-decoration: none; color: #00ffff; font-family: 'Orbitron', monospace;">Helix Backend API</a>
-      <a href="https://deathcharge.github.io/Helix-Unified-Hub/" style="padding: 15px; background: rgba(138,43,226,0.1); border: 1px solid rgba(138,43,226,0.3); border-radius: 10px; text-decoration: none; color: #8a2be2; font-family: 'Orbitron', monospace;">51-Portal Master Hub</a>
-      <a href="https://deathcharge.github.io/Helix-Collective-Web/" style="padding: 15px; background: rgba(255,0,255,0.1); border: 1px solid rgba(255,0,255,0.3); border-radius: 10px; text-decoration: none; color: #ff00ff; font-family: 'Orbitron', monospace;">Collective Web v15.2</a>
-      <a href="https://deathcharge.github.io/helix-creative-studio/" style="padding: 15px; background: rgba(0,255,0,0.1); border: 1px solid rgba(0,255,0,0.3); border-radius: 10px; text-decoration: none; color: #00ff00; font-family: 'Orbitron', monospace;">Creative Studio</a>
-    </div>
-  </div>
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Samsarix ecosystem map</p>
+        <h1 id="page-title">Find the useful part, fast.</h1>
+        <p class="hero-copy">A searchable directory of the agent profiles and reference pages that are actually bundled here. External services and legacy concepts are labeled plainly, so browsing never depends on a hidden backend.</p>
+      </div>
+      <aside class="hero-note" aria-label="Directory promise">
+        <strong>No account. No tracking. No runtime dependency.</strong>
+        <p>The catalog is a static file that works locally and on GitHub Pages.</p>
+        <p class="summary" id="catalog-summary">Loading catalog summary…</p>
+      </aside>
+    </section>
 
-  <!-- Hub System -->
-  <div style="margin-bottom: 30px;">
-    <h3 style="font-family: 'Orbitron', monospace; font-size: 20px; color: #ffd700; margin-bottom: 15px;">🔮 Specialized Hubs</h3>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; font-size: 14px;">
-      <a href="https://deathcharge.github.io/helix-hub-community/" style="padding: 12px; background: rgba(0,100,255,0.1); border: 1px solid rgba(0,100,255,0.3); border-radius: 8px; text-decoration: none; color: #0064ff; font-family: 'Orbitron', monospace;">Community Hub</a>
-      <a href="https://deathcharge.github.io/helix-hub-archive/" style="padding: 12px; background: rgba(255,140,0,0.1); border: 1px solid rgba(255,140,0,0.3); border-radius: 8px; text-decoration: none; color: #ff8c00; font-family: 'Orbitron', monospace;">Archive Hub</a>
-      <a href="https://deathcharge.github.io/helix-hub-rituals/" style="padding: 12px; background: rgba(255,0,0,0.1); border: 1px solid rgba(255,0,0,0.3); border-radius: 8px; text-decoration: none; color: #ff0000; font-family: 'Orbitron', monospace;">Rituals Hub</a>
-      <a href="https://deathcharge.github.io/helix-hub-knowledge/" style="padding: 12px; background: rgba(255,255,0,0.1); border: 1px solid rgba(255,255,0,0.3); border-radius: 8px; text-decoration: none; color: #ffff00; font-family: 'Orbitron', monospace;">Knowledge Hub</a>
-      <a href="https://deathcharge.github.io/helix-hub-agents/" style="padding: 12px; background: rgba(138,43,226,0.1); border: 1px solid rgba(138,43,226,0.3); border-radius: 8px; text-decoration: none; color: #8a2be2; font-family: 'Orbitron', monospace;">Agents Hub</a>
-      <a href="https://deathcharge.github.io/helix-hub-analytics/" style="padding: 12px; background: rgba(0,255,255,0.1); border: 1px solid rgba(0,255,255,0.3); border-radius: 8px; text-decoration: none; color: #00ffff; font-family: 'Orbitron', monospace;">Analytics Hub</a>
-      <a href="https://deathcharge.github.io/helix-hub-studio/" style="padding: 12px; background: rgba(255,192,203,0.1); border: 1px solid rgba(255,192,203,0.3); border-radius: 8px; text-decoration: none; color: #ffc0cb; font-family: 'Orbitron', monospace;">Studio Hub</a>
-      <a href="https://deathcharge.github.io/helix-hub-music/" style="padding: 12px; background: rgba(165,42,42,0.1); border: 1px solid rgba(165,42,42,0.3); border-radius: 8px; text-decoration: none; color: #a52a2a; font-family: 'Orbitron', monospace;">Music Hub</a>
-      <a href="https://deathcharge.github.io/helix-hub-forum/" style="padding: 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; text-decoration: none; color: #ffffff; font-family: 'Orbitron', monospace;">Forum Hub</a>
-      <a href="https://deathcharge.github.io/helix-hub-dev/" style="padding: 12px; background: rgba(255,191,0,0.1); border: 1px solid rgba(255,191,0,0.3); border-radius: 8px; text-decoration: none; color: #ffbf00; font-family: 'Orbitron', monospace;">Dev Hub</a>
-      <a href="https://deathcharge.github.io/helix-hub-shared/" style="padding: 12px; background: rgba(135,206,235,0.1); border: 1px solid rgba(135,206,235,0.3); border-radius: 8px; text-decoration: none; color: #87ceeb; font-family: 'Orbitron', monospace;">Shared Hub</a>
-      <a href="https://deathcharge.github.io/helix-hub-manus/" style="padding: 12px; background: rgba(0,255,127,0.1); border: 1px solid rgba(0,255,127,0.3); border-radius: 8px; text-decoration: none; color: #00ff7f; font-family: 'Orbitron', monospace;">Manus Hub</a>
-    </div>
-  </div>
+    <section class="catalog-section" id="catalog" aria-labelledby="catalog-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Curated destinations</p>
+          <h2 id="catalog-title">Directory</h2>
+        </div>
+        <p>Search by purpose, concept, or lifecycle.</p>
+      </div>
 
-  <!-- Agent & Dashboard Systems -->
-  <div>
-    <h3 style="font-family: 'Orbitron', monospace; font-size: 20px; color: #ffd700; margin-bottom: 15px;">🤖 Agent Systems</h3>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; font-size: 14px;">
-      <a href="https://deathcharge.github.io/samsara-helix-dashboard/" style="padding: 12px; background: rgba(255,127,80,0.1); border: 1px solid rgba(255,127,80,0.3); border-radius: 8px; text-decoration: none; color: #ff7f50; font-family: 'Orbitron', monospace;">Samsara Dashboard</a>
-      <a href="https://deathcharge.github.io/samsara-helix-ritual-engine/" style="padding: 12px; background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.3); border-radius: 8px; text-decoration: none; color: #ffd700; font-family: 'Orbitron', monospace;">Ritual Engine</a>
-      <a href="https://deathcharge.github.io/HelixAgentCodex-/" style="padding: 12px; background: rgba(240,248,255,0.1); border: 1px solid rgba(240,248,255,0.3); border-radius: 8px; text-decoration: none; color: #f0f8ff; font-family: 'Orbitron', monospace;">Agent Codex</a>
-      <a href="https://deathcharge.github.io/HelixAgentCodexStreamlit/" style="padding: 12px; background: rgba(255,182,193,0.1); border: 1px solid rgba(255,182,193,0.3); border-radius: 8px; text-decoration: none; color: #ffb6c1; font-family: 'Orbitron', monospace;">Codex Streamlit</a>
-      <a href="https://deathcharge.github.io/nextjs-ai-chatbot-helix/" style="padding: 12px; background: rgba(192,192,192,0.1); border: 1px solid rgba(192,192,192,0.3); border-radius: 8px; text-decoration: none; color: #c0c0c0; font-family: 'Orbitron', monospace;">AI Chatbot</a>
-      <a href="https://deathcharge.github.io/Helix-Hub/" style="padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; text-decoration: none; color: #ffffff; font-family: 'Orbitron', monospace;">Helix Hub</a>
-      <a href="https://deathcharge.github.io/helix-unified/" style="padding: 12px; background: rgba(0,128,128,0.1); border: 1px solid rgba(0,128,128,0.3); border-radius: 8px; text-decoration: none; color: #008080; font-family: 'Orbitron', monospace;">Helix Unified</a>
-    </div>
-  </div>
+      <div class="filters" role="search">
+        <div class="field field-search">
+          <label for="catalog-search">Search the catalog</label>
+          <input id="catalog-search" type="search" autocomplete="off" placeholder="Try “ethical”, “archive”, or “systems”">
+        </div>
+        <div class="field">
+          <label for="category-filter">Category</label>
+          <select id="category-filter"><option value="all">All categories</option></select>
+        </div>
+        <div class="field">
+          <label for="status-filter">Lifecycle</label>
+          <select id="status-filter">
+            <option value="all">All lifecycles</option>
+            <option value="included">Included here</option>
+            <option value="external">External</option>
+            <option value="archive">Archive</option>
+          </select>
+        </div>
+      </div>
 
-  <p style="text-align: center; margin-top: 40px; font-family: 'Orbitron', monospace; color: #00ffff; font-size: 14px;">
-    Tat Tvam Asi 🕉️ | Helix Collective v16.9 - Quantum Handshake
-  </p>
-</div>
+      <div class="catalog-state" aria-live="polite">
+        <span id="catalog-loading">Loading the local catalog…</span>
+        <span id="result-count"></span>
+      </div>
+      <p class="catalog-error" id="catalog-error" role="alert" hidden></p>
+      <div class="portal-grid" id="portal-grid" aria-label="Catalog results"></div>
+      <p class="empty-state" id="empty-state" hidden>No destinations match those filters. Clear the search or choose a different lifecycle.</p>
+      <noscript><p class="catalog-error">JavaScript is required for filtering. You can still browse the bundled <a href="agent_gallery.html">agent gallery</a> or inspect <a href="portals.json">the catalog JSON</a>.</p></noscript>
+    </section>
 
-<style>
-  a:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,255,255,0.3);
-  }
-</style>
+    <section class="principles" id="about" aria-labelledby="about-title">
+      <div>
+        <p class="eyebrow">What the labels mean</p>
+        <h2 id="about-title">Honest by construction.</h2>
+      </div>
+      <ul class="principle-list">
+        <li><strong>Included here</strong> means the destination ships inside this static site and is checked during the build.</li>
+        <li><strong>External</strong> means the link leaves this site; availability and policy are controlled by its owner.</li>
+        <li><strong>Archive</strong> means the page is preserved for context and is not presented as a maintained service.</li>
+      </ul>
+    </section>
+  </main>
 
+  <footer class="site-footer">
+    <p>Samsarix Hub Directory · release candidate · © 2026 Samsarix LLC</p>
+    <p><a href="legal.html">License</a> · <a href="mailto:contact@samsarix.com">Contact</a> · <a href="mailto:support@samsarix.com">Support</a></p>
+  </footer>
 </body>
 </html>
