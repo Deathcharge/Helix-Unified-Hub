@@ -1,6 +1,10 @@
 # 🌀 HELIX UNIVERSAL GITHUB ACTIONS - DEPLOYMENT GUIDE
 
-**Status:** ✅ READY TO DEPLOY TO ALL 22 REPOSITORIES
+> **Historical plan — do not run these commands.** The maintained Hub Directory release path is
+> documented in `README.md` and `.github/workflows/`. This file preserves the earlier multi-repository
+> proposal; it is not approved to modify or deploy other repositories.
+
+**Status:** ⛔ HISTORICAL — NOT AN ACTIVE DEPLOYMENT PROCEDURE
 **Effort:** 5 minutes total
 **Cost:** $0 (GitHub Actions free tier)
 
@@ -155,7 +159,7 @@ Each deployment generates a manifest at `/deployment-manifest.json`:
 ```
 https://deathcharge.github.io/Helix/
 https://deathcharge.github.io/helix-unified/
-https://deathcharge.github.io/Helix-Collective-Web/
+https://deathcharge.github.io/samsarix-field-atlas/
 https://deathcharge.github.io/Helix-Unified-Hub/
 https://deathcharge.github.io/helix-hub-manus/
 https://deathcharge.github.io/helix-hub-shared/
@@ -170,7 +174,7 @@ https://deathcharge.github.io/helix-hub-rituals/
 https://deathcharge.github.io/helix-hub-studio/
 https://deathcharge.github.io/helix-hub-dev/
 https://deathcharge.github.io/Helix-Hub/
-https://deathcharge.github.io/helix-creative-studio/
+https://deathcharge.github.io/samsarix-story-studio/
 https://deathcharge.github.io/samsara-helix-dashboard/
 https://deathcharge.github.io/samsara-helix-ritual-engine/
 https://deathcharge.github.io/HelixAgentCodexStreamlit/
