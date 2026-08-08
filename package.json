@@ -1,6 +1,6 @@
 {
   "name": "samsarix-agent-readiness-registry",
-  "version": "1.1.0-rc.1",
+  "version": "1.2.0-rc.1",
   "private": true,
   "type": "module",
   "description": "A local-first, dependency-free readiness registry for AI agent inventories and evidence review.",
@@ -10,10 +10,14 @@
     "type": "git",
     "url": "https://github.com/Deathcharge/Helix-Unified-Hub.git"
   },
+  "bin": {
+    "samsarix-registry": "bin/samsarix-registry.mjs"
+  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "check": "npm run lint && npm test && npm run build",
     "lint": "node scripts/check.mjs",
+    "registry": "node bin/samsarix-registry.mjs",
     "serve": "node scripts/serve.mjs",
     "test": "node --test"
   },

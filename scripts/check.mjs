@@ -120,7 +120,7 @@ if (!license.includes('Licensor:             Samsarix LLC')) fail('LICENSE: Sams
 if (!license.includes('contact@samsarix.com')) fail('LICENSE: commercial contact is missing.');
 const citation = await read('CITATION.cff');
 if (!citation.includes('title: "Samsarix Agent Readiness Registry"')) fail('CITATION.cff: product title is inconsistent.');
-if (!citation.includes('version: "1.1.0-rc.1"')) fail('CITATION.cff: release version is inconsistent.');
+if (!citation.includes('version: "1.2.0-rc.1"')) fail('CITATION.cff: release version is inconsistent.');
 
 if (failures.length) {
   console.error(`Site checks failed (${failures.length}):`);

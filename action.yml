@@ -1,0 +1,28 @@
+name: Samsarix Agent Readiness Check
+description: Validate an agent registry and fail when selected deployment candidates are not ready.
+author: Samsarix LLC
+
+inputs:
+  registry:
+    description: Path to a Samsarix registry JSON file or one A2A Agent Card in the caller workspace.
+    required: true
+  lifecycle:
+    description: Comma-separated lifecycles to gate, or all.
+    required: false
+    default: review,production
+  require-candidates:
+    description: Fail when no records match the selected lifecycles.
+    required: false
+    default: "true"
+  now:
+    description: Optional YYYY-MM-DD or UTC timestamp for reproducible stale-evidence evaluation.
+    required: false
+    default: ""
+
+runs:
+  using: node20
+  main: bin/samsarix-action.mjs
+
+branding:
+  icon: shield
+  color: green
