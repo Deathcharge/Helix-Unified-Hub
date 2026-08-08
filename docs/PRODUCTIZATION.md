@@ -4,22 +4,31 @@
 
 The repository originally described a large “portal constellation,” but the checked-in, deployable surface is a collection of static HTML pages under `docs/`. It also contains archived conversations and logs, duplicated portal prototypes, incomplete Android/Node/Python experiments, deployment scripts, and claims about services that are not implemented here. The previous README documented nonexistent `src/`, `tests/`, `examples/`, development requirements, CI, API documentation, and an MIT license.
 
-The maintained product is now **Samsarix Hub Directory**: a dependency-free static catalog from Samsarix LLC that lets someone discover the pages actually bundled in this repository and distinguishes them from external or archived destinations. “Helix” remains only where needed for repository URLs, filenames, or clearly historical artifacts.
+The first maintained product release was **Samsarix Hub Directory**: a dependency-free static catalog from Samsarix LLC that lets someone discover the pages actually bundled in this repository and distinguishes them from external or archived destinations. That release remains useful as a secondary repository directory, but a general portfolio navigator now overlaps the canonical Samsarix Field Guide.
+
+The owner authorized a differentiated next release on 2026-08-08. The maintained product is evolving into **Samsarix Agent Readiness Registry**: a vendor-neutral, local-first workspace for inventorying AI agents, normalizing portable manifests, and explaining the evidence missing before deployment or integration. The accepted product decision, evidence, readiness model, and non-goals are recorded in [`AGENT_REGISTRY_PRODUCT.md`](AGENT_REGISTRY_PRODUCT.md). “Helix” remains only where needed for repository URLs, filenames, or clearly historical artifacts.
 
 ## Target user and primary use case
 
-The target user is a Samsarix collaborator, evaluator, or curious visitor who wants a reliable map of this repository without private infrastructure or tribal knowledge. The primary journey is: open the site, understand its lifecycle labels, search or filter the catalog, and open a checked local page or explicitly external destination.
+The initial target user is an individual builder or team of roughly 2–50 people prototyping agents across A2A, MCP, framework-specific, or custom interfaces without an enterprise control plane. The primary journey is: open a bundled inventory, understand why each agent is or is not ready, import a local Samsarix registry or A2A Agent Card, review explainable evidence gates and blockers, and export a deterministic JSON or Markdown review packet.
+
+The existing repository-directory journey remains available as a secondary path for Samsarix collaborators and evaluators.
 
 ## Key product and architecture decisions
 
-- Keep GitHub Pages and `docs/` as the sole maintained runtime surface.
+- Keep GitHub Pages and `docs/` as the sole maintained runtime surface; do not introduce a second host or backend for the first registry release.
 - Use semantic HTML, CSS, ES modules, and a versioned JSON catalog with no runtime packages or third-party CDN assets.
+- Add a portable, versioned agent-registry schema, with bounded local-file import and deterministic export. Normalize A2A Agent Cards without making network requests or treating discovery metadata as governance proof.
+- Calculate readiness from visible evidence gates and critical blockers. Treat the numerical result as a workflow signal, not a compliance certification or safety warranty.
+- Persist imported records only in the current browser, provide an explicit reset path, and never accept credential-bearing fields, prompts, traces, or production conversation data.
 - Treat “included,” “external,” and “archive” as lifecycle facts rather than claiming that every link is live.
 - Validate catalog schema, safe URL protocols, unique IDs, local destination existence, core accessibility hooks, and the release artifact with Node's standard library.
 - Keep experimental mobile, bot, webhook, orchestration, and archived material out of the core journey. They remain evidence and prototypes, not supported product features.
-- Do not add authentication, a database, analytics, AI APIs, or a backend; none is needed for the directory.
+- Do not add authentication, a database, analytics, AI APIs, live endpoint probing, or a backend; none is needed to prove the local readiness-review journey.
 
 ## Bounded ecosystem research
+
+The 2026-08-08 registry decision used official A2A discovery/specification material, Microsoft Agent Registry, Backstage, NIST AI RMF, LangSmith, and OWASP Agentic Top 10 sources. The concrete comparisons and citations are maintained in [`AGENT_REGISTRY_PRODUCT.md`](AGENT_REGISTRY_PRODUCT.md). The resulting wedge is pre-deployment inventory and evidence review for smaller teams, not runtime observability or an enterprise tenant control plane.
 
 - GitHub documents both branch-folder and Actions-based Pages publishing, and warns that published sites are public even when a repository may be private. Because this repository contains logs and archived conversations outside `docs/`, the release uses an explicit generated `dist/` artifact rather than publishing the repository root: <https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site>.
 - LinkStack demonstrates that a multi-user, self-hosted link manager can offer themes and administration, but those capabilities bring a server, database, accounts, updates, and a separate license boundary. This repository only needs a curated owner-maintained catalog, so the static wedge is intentionally narrower: <https://github.com/LinkStackOrg/LinkStack>.
@@ -29,6 +38,8 @@ The target user is a Samsarix collaborator, evaluator, or curious visitor who wa
 ## Assumptions
 
 - GitHub Pages remains the intended distribution channel because the existing deployment publishes `docs/`.
+- Imported inventory data can be sensitive architecture metadata. The first release therefore keeps processing and persistence on-device and makes exports an explicit user action.
+- An A2A Agent Card establishes discoverable identity and interface metadata, but does not by itself establish internal ownership, data handling, evaluation, oversight, or operational readiness.
 - Samsarix LLC is the owner-provided company identity, with `contact@samsarix.com` and `support@samsarix.com` as the confirmed contact routes. The repository implements the requested BSL/commercial direction, subject to counsel review before production promotion.
 - Existing legacy artifacts must be preserved unless a later owner-approved cleanup explicitly archives or removes them.
 
@@ -45,6 +56,16 @@ Recorded on 2026-07-28 at commit `52a7375b614aca8b3b88843e8e5ab3798239e938` befo
 | Docker readiness | Docker was unavailable locally; the root Dockerfile also referenced absent `backend/`, `Shadow/`, and `scripts/` paths. |
 | Android readiness | Gradle and project wrapper/settings files were absent; the checked-in APK cannot be reproduced from documented steps. |
 
+Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86ac90748816815e5` before implementation:
+
+| Command/check | Result |
+| --- | --- |
+| `git status --short --branch --untracked-files=all` | Clean updated `main` before branching; work continues on `agent/competitive-offering`. |
+| `npm ci` | Did not complete in the local Windows environment despite a dependency-free lockfile; the exact stalled `npm ci` process was stopped without touching unrelated Node processes. This is an open reproducibility finding until retried with a bounded command. |
+| `npm run check` | Pending for the new increment; no new pass is claimed yet. |
+| Existing maintained surface | Dependency-free static site under `docs/`, Node standard-library checks/tests/build, and GitHub Pages deployment from generated `dist/`. |
+| Product overlap | The generic directory overlaps the canonical Field Guide, so the new work must remain a distinct agent-readiness workflow rather than another portfolio homepage. |
+
 ## Findings and implementation checklist
 
 ### P0
@@ -53,6 +74,9 @@ Recorded on 2026-07-28 at commit `52a7375b614aca8b3b88843e8e5ab3798239e938` befo
 - [x] Replace the primary loading/CDN page with a self-contained core journey and explicit failure state.
 - [x] Add deterministic checks, tests, and a build artifact.
 - [x] Consolidate Pages deployment to one workflow that runs the real checks before publishing.
+- [ ] Implement the complete registry journey: sample inventory, bounded import, explainable assessment, local persistence, filtering, and deterministic export.
+- [ ] Update the first viewport, README, release artifact, and checks so product claims match the implemented registry rather than the earlier directory-only product.
+- [ ] Re-run bounded clean-install, full check, build/artifact, and primary-journey verification for the registry release.
 
 ### P1
 
@@ -62,12 +86,17 @@ Recorded on 2026-07-28 at commit `52a7375b614aca8b3b88843e8e5ab3798239e938` befo
 - [x] Add a repository threat model for the security review.
 - [x] Finish the repository-wide security candidate validation and apply locally actionable fixes.
 - [x] Quarantine the incomplete backend manifests, remove exact duplicate root Android build files, and consolidate duplicate deployment workflows.
+- [ ] Add unit and integration coverage for schema normalization, A2A import, critical blockers, stale evidence, secret-bearing input rejection, persistence boundaries, and exports.
+- [ ] Add accessible, responsive loading, empty, validation-failure, reset, and recovery states for the workspace.
+- [ ] Publish a starter registry manifest and precise trust-boundary/schema documentation.
 
 ### P2
 
 - [ ] Add an owner-maintained process for reviewing external link freshness.
 - [ ] Normalize or archive duplicate historical HTML and documentation after owner review.
 - [ ] Decide whether the Android, Discord, webhook, and generator prototypes should be extracted into separate repositories or removed.
+- [ ] Add a dependency-free CLI and GitHub check only after the browser schema and readiness policy stabilize with real inventories.
+- [ ] Validate demand before considering team history, signed approvals, managed hosting, or enterprise imports.
 
 ## Release acceptance criteria
 
@@ -80,6 +109,11 @@ Recorded on 2026-07-28 at commit `52a7375b614aca8b3b88843e8e5ab3798239e938` befo
 - A single least-privilege Pages workflow gates deployment on the checks.
 - No locally actionable P0 issue remains.
 - The README and UI make limitations, source-available licensing, privacy behavior, ownership, and legacy scope explicit.
+- A first-time visitor can understand the agent-readiness job from the first viewport and identify why a bundled concept is not deployable.
+- A valid Samsarix registry and a current A2A Agent Card import locally; malformed, oversized, duplicate-ID, unsafe-URL, and credential-bearing input fail safely with an actionable message.
+- Every record exposes its readiness gates, score rationale, blockers, and stale-review state; concept lifecycle records cannot be labeled ready.
+- Search plus lifecycle, risk, and readiness filters work locally, and JSON/Markdown exports are deterministic and useful without this application.
+- Browser storage behavior, reset semantics, import limits, non-goals, and the absence of telemetry/network execution are visible to the user.
 
 ## Completed work
 
@@ -95,6 +129,7 @@ Recorded on 2026-07-28 at commit `52a7375b614aca8b3b88843e8e5ab3798239e938` befo
 - Removed remote executable scripts and font imports from the Pages artifact, pinned every privileged GitHub Action to an immutable revision, and repaired the agent gallery's bundled links.
 - Verified the built journey in a real browser at desktop and 390×844 mobile sizes, including search, lifecycle filtering, bundled navigation, and a clean browser console.
 - Rebranded the maintained product to Samsarix, added public ownership/support routes, and replaced conflicting legacy license claims with a scoped BSL 1.1 release, commercial notice, trademark policy, third-party boundary, and contributor gate.
+- Researched current agent discovery, inventory, evaluation, and governance offerings and selected a differentiated local-first Agent Readiness Registry wedge with explicit v1.1 acceptance criteria.
 
 ## Deferred and owner-blocked work
 
@@ -111,6 +146,8 @@ Recorded on 2026-07-28 at commit `52a7375b614aca8b3b88843e8e5ab3798239e938` befo
 - External URLs can change independently; the product labels them external and does not fabricate health.
 - Secondary prototypes may contain security or reliability flaws and must not be deployed as supported services without separate hardening.
 - Production promotion remains blocked on credential rotation, personal-data disposition, Pages settings, and legal review even though the generated `dist/` artifact passes its local acceptance checks.
+- Readiness policy can create false confidence if scores are detached from evidence. The registry must keep blockers and evidence references primary and must not describe a score as certification.
+- Browser persistence reduces service-side exposure but is not encrypted storage; users must be told not to import secrets, prompts, traces, or sensitive production content.
 
 ## Final verification evidence
 
@@ -128,4 +165,4 @@ Recorded against the release-candidate working tree on 2026-07-28:
 
 ## Distribution and sustainability
 
-Distribute as a static GitHub Pages artifact built from `docs/`. Hosting cost is effectively the repository/Pages plan plus normal maintainer time; the core product has no API, database, AI-token, or telemetry cost. A plausible sustainability model is portfolio/community infrastructure maintained alongside the flagship project, with paid implementation or support handled outside this repository if the owner chooses. No market demand is claimed.
+Distribute as a static GitHub Pages artifact built from `docs/`. Hosting cost is effectively the repository/Pages plan plus normal maintainer time; the core product has no API, database, AI-token, or telemetry cost. The local registry is the free adoption surface. Plausible later revenue comes from managed private registries, policy packs, signed approval history, GitHub enforcement, migration/review services, and contracted support—but only after real demand and a separately approved security/operating model. No market demand or product-market fit is claimed.
