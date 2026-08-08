@@ -1,18 +1,27 @@
-# Samsarix Hub Directory
+# Samsarix Agent Readiness Registry
 
-> **Portfolio status:** preserved consolidation source. The public [Samsarix Field Guide](https://github.com/Deathcharge/samsarix-field-guide) is the canonical portfolio navigator and now carries the shared lifecycle/boundary guidance. See [`CONSOLIDATION.md`](CONSOLIDATION.md). This repository remains intact; no archive or deletion action is implied.
+Samsarix Agent Readiness Registry is a dependency-free, local-first web workspace
+from Samsarix LLC for answering a practical question: **which AI agents do we have,
+and what evidence is still missing before we deploy or integrate them?**
 
-Samsarix Hub Directory is a small, dependency-free website from Samsarix LLC for
-exploring the useful material in this repository. It presents bundled agent
-profiles, developer metadata, external destinations, and legacy concepts with
-explicit lifecycle labels instead of implying that every historical portal is a
-running service.
+It imports a versioned Samsarix registry or a current A2A Agent Card, normalizes the
+metadata without making network requests, evaluates nine visible readiness gates,
+and exports deterministic JSON or Markdown review packets. Imported data stays in
+the current browser unless the user explicitly exports it.
 
-The project is a release candidate. The static directory and its build checks are
-maintained; the Android, Discord, Zapier, orchestration, deployment, and historical
-artifact folders are preserved prototypes and are not part of the supported runtime.
+The initial audience is an individual builder or a team of roughly 2–50 people that
+needs an ownership and pre-deployment review workflow before an enterprise control
+plane is justified. The product is a v1.1 release candidate: the complete local
+review journey is implemented, while production promotion remains subject to the
+owner gates below.
 
-## Fastest setup
+The earlier Hub Directory remains available as a secondary repository map. The
+[Samsarix Field Guide](https://github.com/Deathcharge/samsarix-field-guide) remains
+the canonical portfolio navigator; this repository has the distinct agent-readiness
+role documented in [`docs/AGENT_REGISTRY_PRODUCT.md`](docs/AGENT_REGISTRY_PRODUCT.md)
+and [`CONSOLIDATION.md`](CONSOLIDATION.md).
+
+## Fastest successful path
 
 Prerequisites:
 
@@ -27,93 +36,136 @@ npm run check
 npm run serve
 ```
 
-Open `http://127.0.0.1:4173/`. No environment variables, credentials, database,
-account, or external Samsarix service is required.
+Open `http://127.0.0.1:4173/`, choose **Open readiness workspace**, and select a
+bundled concept to see its blockers. Import
+[`docs/agent-registry-template.json`](docs/agent-registry-template.json) or a local
+A2A Agent Card to review your own metadata. No environment variables, credentials,
+database, account, AI provider, or private Samsarix service is required.
 
 If that port is occupied, set `SAMSARIX_HUB_PORT` to another local port before
 running `npm run serve`.
 
-## What users can do
+## Core workflow
 
-1. Search the catalog by name, purpose, or tag.
-2. Filter by category and lifecycle.
-3. Open a destination bundled in this Pages site.
-4. Follow an explicitly labeled external link in a separate tab.
-5. Browse preserved concepts without mistaking them for maintained services.
+1. Start with the honest bundled inventory or download the starter manifest.
+2. Import one Samsarix registry JSON document or one A2A Agent Card JSON file.
+3. Review purpose, ownership, interface, authentication, data, evaluation,
+   security, oversight, and operations evidence.
+4. Search and filter by lifecycle, risk, readiness, or stale evidence.
+5. Export normalized JSON for version control or Markdown for a human review.
+6. Use **Reset sample** twice to explicitly clear the browser-saved inventory and
+   restore the bundled concepts.
 
-Catalog entries live in [`docs/portals.json`](docs/portals.json). The browser code
-renders values with DOM text nodes, validates destination protocols, and does not
-inject catalog HTML.
+Files are limited to 1 MiB and 500 agents. Duplicate identifiers, malformed JSON,
+non-HTTPS interface URLs, embedded URL credentials, unsupported schema values, and
+credential-bearing fields are rejected before the current workspace changes. The
+browser renders imported values as text, never imported HTML.
+
+The readiness score is an explainable workflow signal. It is not a compliance
+certification, a safety warranty, live health, or a substitute for evaluation and
+human approval. Concepts, paused records, and retired records cannot be labeled
+ready.
+
+## Registry format and A2A support
+
+- [`docs/AGENT_REGISTRY_SCHEMA.md`](docs/AGENT_REGISTRY_SCHEMA.md) defines the
+  versioned registry shape, constraints, evidence statuses, and import behavior.
+- [`docs/agent-registry.schema.json`](docs/agent-registry.schema.json) is the matching
+  Draft 2020-12 machine-readable contract for editors and tooling.
+- [`docs/agent-registry-template.json`](docs/agent-registry-template.json) is a valid,
+  intentionally incomplete starter that exposes its own readiness gaps.
+- [`docs/agents.json`](docs/agents.json) contains 12 bundled concepts; it does not
+  invent endpoints, security reviews, risk tiers, or deployment claims.
+- A2A import recognizes current `supportedInterfaces`, provider, version, skills,
+  security-scheme, and security-requirement fields. It carries discovery metadata
+  into the registry but leaves organization-specific governance evidence missing.
+- [`docs/a2a-agent-card-example.json`](docs/a2a-agent-card-example.json) is a
+  fictional current-format card that reproduces that import journey.
+
+The application never fetches an Agent Card URL or calls an imported interface.
 
 ## Development commands
 
 | Command | Purpose |
 | --- | --- |
 | `npm run serve` | Serve `docs/` locally on `127.0.0.1:4173`. |
-| `npm run lint` | Validate catalog data, safe links, local destinations, CSP, legal files, and primary HTML contracts. |
-| `npm test` | Run dependency-free unit and integration checks with Node's test runner. |
-| `npm run build` | Copy the release site to `dist/`. |
+| `npm run lint` | Validate both registries, safe links, local destinations, CSP, deterministic serialization, legal mirrors, and primary HTML contracts. |
+| `npm test` | Run dependency-free catalog, readiness-policy, security-boundary, export, and site-contract tests. |
+| `npm run build` | Recreate the complete static release in `dist/`. |
 | `npm run check` | Run lint, tests, and build in the same order as CI. |
 
-There are no npm runtime dependencies. `package-lock.json` makes installation
-behavior deterministic.
-
-## Deployment
-
-GitHub Actions validates the project and publishes the generated `dist/` directory
-to GitHub Pages on pushes to `main`. Production deployment, custom domains, and
-environment protection rules remain owner-controlled settings; this repository does
-not provision or mutate them.
+There are no npm runtime or development dependencies. `package-lock.json` records
+the package identity and Node compatibility for deterministic installation.
 
 ## Architecture
 
-- `docs/index.html` — accessible application shell and fallback content
-- `docs/assets/styles.css` — responsive visual system with reduced-motion support
-- `docs/assets/catalog.mjs` — pure catalog filtering and URL safety functions
-- `docs/assets/app.mjs` — load, success, empty, and failure UI behavior
-- `docs/portals.json` — versioned source of truth for catalog entries
+- `docs/index.html` — product landing page and secondary repository directory
+- `docs/registry.html` — accessible local readiness workspace and fallbacks
+- `docs/assets/readiness.mjs` — pure schema normalization, validation, scoring,
+  filtering, and deterministic export logic
+- `docs/assets/registry-app.mjs` — browser persistence, import/export, recovery, and
+  safe DOM rendering
+- `docs/agents.json` — bundled concept inventory
+- `docs/agent-registry-template.json` — portable starter registry
+- `docs/assets/catalog.mjs`, `docs/assets/app.mjs`, and `docs/portals.json` — retained
+  secondary directory journey
 - `scripts/` — dependency-free validation, build, and local serving
-- `tests/` — catalog, legal-surface, and primary-journey checks
-- `docs/PRODUCTIZATION.md` — assessment, decisions, priorities, gates, and remaining work
-- `docs/THREAT_MODEL.md` — repository-wide security boundaries and severity model
+- `tests/` — unit and integration contracts for the product and release artifact
+- `docs/PRODUCTIZATION.md` — living assessment, priorities, evidence, and release gates
+- `docs/THREAT_MODEL.md` — maintained and legacy trust boundaries
 
-All other root-level application material is legacy or experimental unless this
-README says otherwise.
+GitHub Actions validates the project and publishes only the generated `dist/`
+directory to GitHub Pages on pushes to `main`. The site has no hosted backend or
+ongoing API, database, AI-token, telemetry, or per-user infrastructure cost.
 
 ## Security and privacy
 
-The maintained site is static, has no authentication, makes no analytics calls,
-collects no personal data, and does not require a backend. The primary page uses a
-restrictive Content Security Policy and no third-party runtime CDN. External
-destinations leave this trust boundary and are labeled accordingly.
+Imported JSON and restored browser state are untrusted. The product applies bounded
+parsing and schemas, rejects credential-shaped keys, permits only HTTPS interface
+URLs without embedded credentials, and renders values through text nodes. It uses a
+restrictive Content Security Policy and has no third-party runtime scripts, fonts,
+analytics, remote model calls, or live endpoint probes.
 
-Report vulnerabilities privately to `support@samsarix.com`; do not open an issue
-containing exploit details. See [`SECURITY.md`](SECURITY.md) and
+Local-first does not mean encrypted: browser storage is readable by someone with
+access to the browser profile and is subject to device/browser controls. Do not
+import secrets, prompts, traces, production conversations, personal data, or
+sensitive architecture metadata that is inappropriate for that device. Export is an
+explicit download; resetting clears only this application's saved registry.
+
+Report vulnerabilities privately to `support@samsarix.com`; do not open a public
+issue containing exploit details. See [`SECURITY.md`](SECURITY.md) and
 [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md).
 
-### Owner gates before production
+### Owner gates before production promotion
 
-Do not promote this release candidate to production until the repository owner has:
+Do not promote this release candidate as production-ready until the repository owner
+has:
 
 1. revoked the GitHub personal access token found in tracked history;
 2. rotated or disabled the three Zapier catch hooks found in tracked history;
 3. removed, redacted, or explicitly approved the tracked conversation/context
-   exports and decided whether Git history needs rewriting; and
-4. confirmed the GitHub Pages environment, domain, and branch-protection settings.
+   exports and decided whether Git history needs rewriting;
+4. confirmed GitHub Pages environment, domain, and branch-protection settings; and
+5. obtained appropriate legal review of the Business Source License scope,
+   trademark policy, and any commercial offering.
 
-The current tree and preserved ZIP were scrubbed of GitHub-token and non-placeholder
-Zapier-hook values. That does not revoke credentials or erase earlier commits.
+Current-tree redaction does not revoke credentials or erase earlier commits.
 
 ## Limitations and project status
 
-- External link availability is not guaranteed or represented as live health.
-- Archived pages retain historical wording and may describe unimplemented ideas.
-- The checked-in Android APK is not a supported release and has no reproducible
-  signed-build path here.
-- Optional integration prototypes require separate dependency, credential,
-  authorization, retry, and operational hardening before use.
-- Legacy logs, exports, PDFs, and conversation archives remain pending an
-  owner-controlled retention decision.
+- The registry does not run agents, fetch Agent Cards, probe endpoints, monitor
+  production behavior, or replace an evaluation/observability system.
+- A2A discovery metadata cannot prove internal ownership, data handling, evaluation,
+  human oversight, incident response, or approval.
+- Readiness policy is deterministic and intentionally conservative, but teams must
+  review whether its gates and evidence are sufficient for their own risk context.
+- Browser storage is single-device, has no collaboration history or signed approval,
+  and may be cleared by browser policy or the user.
+- External directory-link availability is not represented as live health.
+- Archived pages and the Android, Discord, Zapier, orchestration, and deployment
+  folders are preserved prototypes, not supported product runtime.
+- Legacy logs, exports, PDFs, binaries, and conversation archives remain pending an
+  owner-controlled provenance and retention decision.
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) before proposing changes.
 
@@ -127,13 +179,14 @@ other production use may require a separate written commercial agreement.
 
 Each covered version changes to the GNU Affero General Public License v3 or later on
 the date stated in `LICENSE` or the fourth anniversary of its first public BSL
-distribution, whichever comes first. BSL is not an Open Source license before that
-transition.
+distribution, whichever comes first. BSL protects commercial substitution during
+the change period but is not an Open Source license before that transition.
 
 Legacy and third-party material is excluded unless its file expressly says otherwise.
 See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md),
 [`TRADEMARKS.md`](TRADEMARKS.md), and [`LICENSE.PROPRIETARY`](LICENSE.PROPRIETARY).
-Commercial and general inquiries: `contact@samsarix.com`.
+Commercial and general inquiries: `contact@samsarix.com`; product support and
+security reports: `support@samsarix.com`.
 
-These repository notices implement the owner's stated licensing direction but are
-not legal advice; counsel should review them before the release is promoted.
+These notices implement the owner's stated licensing direction but are not legal
+advice; counsel should review them before production or commercial promotion.

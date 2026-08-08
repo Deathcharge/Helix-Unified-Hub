@@ -1,4 +1,4 @@
-# Samsarix Hub Directory roadmap
+# Samsarix Agent Readiness Registry roadmap
 
 This roadmap separates four gates: merge, release, publication, and flagship adoption. Passing one does not imply the next.
 
@@ -14,10 +14,11 @@ The accepted product brief, market evidence, initial user, non-goals, readiness
 model, and v0.2 acceptance criteria are in
 [`docs/AGENT_REGISTRY_PRODUCT.md`](docs/AGENT_REGISTRY_PRODUCT.md).
 
-Near-term sequence:
+Release sequence:
 
-1. Ship the static registry workspace, portable schema, A2A Agent Card import,
-   explainable readiness assessment, and deterministic review-packet export.
+1. **Implemented for v1.1 RC:** static registry workspace, portable prose and JSON
+   Schema contracts, A2A Agent Card import, explainable readiness assessment, and
+   deterministic review-packet export.
 2. Add a CLI/GitHub check only after the browser workflow and schema stabilize.
 3. Validate demand before any multi-user service, live discovery, or runtime
    observability integration.
@@ -29,7 +30,7 @@ work authorized by the owner.
 ## Product boundary
 
 Portfolio role: **merge/consolidation candidate**. Preserve the productized branch and migrate unique assets into the canonical Samsarix surface through an explicit consolidation plan; do not maintain two competing implementations.
-Planned repository identity: `Deathcharge/samsarix-hub-directory` (merge-then-consolidate).
+Preferred future repository identity: `Deathcharge/samsarix-agent-readiness-registry`; the historical remote name remains owner-controlled.
 
 Current disposition: The truthful productization state is merged. General lifecycle/boundary guidance has been represented in the canonical Field Guide without migrating source, binaries, exports, or sensitive-history categories. Preserve this repository as a consolidation source while credential, retention, rename, freeze, and archive decisions remain owner-controlled.
 

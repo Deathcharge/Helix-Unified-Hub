@@ -3,6 +3,7 @@ import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import { SAFE_STATUSES, safeHref } from '../docs/assets/catalog.mjs';
+import { evaluateAgent, normalizeRegistryDocument, serializeRegistry } from '../docs/assets/readiness.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const docs = path.join(root, 'docs');
@@ -10,6 +11,18 @@ const failures = [];
 const fail = (message) => failures.push(message);
 const read = (relativePath) => readFile(path.join(root, relativePath), 'utf8');
 const registry = JSON.parse(await read('docs/portals.json'));
+let agentRegistry;
+let registryTemplate;
+let registrySchema;
+let a2aExample;
+try {
+  agentRegistry = normalizeRegistryDocument(JSON.parse(await read('docs/agents.json')));
+  registryTemplate = normalizeRegistryDocument(JSON.parse(await read('docs/agent-registry-template.json')));
+  registrySchema = JSON.parse(await read('docs/agent-registry.schema.json'));
+  a2aExample = normalizeRegistryDocument(JSON.parse(await read('docs/a2a-agent-card-example.json')));
+} catch (error) {
+  fail(`Agent registry data is invalid: ${error.message}`);
+}
 
 async function htmlFiles(directory) {
   const found = [];
@@ -44,7 +57,7 @@ for (const [index, entry] of registry.entries.entries()) {
   }
 }
 
-const primaryPages = ['docs/index.html', 'docs/404.html', 'docs/legal.html'];
+const primaryPages = ['docs/index.html', 'docs/registry.html', 'docs/404.html', 'docs/legal.html'];
 for (const relativePath of primaryPages) {
   const html = await read(relativePath);
   if (!html.includes('Content-Security-Policy')) fail(`${relativePath}: missing Content Security Policy.`);
@@ -59,6 +72,23 @@ for (const relativePath of primaryPages) {
   }
 }
 
+if (agentRegistry) {
+  if (agentRegistry.agents.length !== 12) fail('docs/agents.json must retain the 12 bundled agent concepts.');
+  if (agentRegistry.agents.some((agent) => agent.lifecycle !== 'concept')) fail('Bundled profiles must remain honestly labeled as concepts.');
+  if (serializeRegistry(agentRegistry) !== serializeRegistry(JSON.parse(serializeRegistry(agentRegistry)))) {
+    fail('Agent registry serialization must be deterministic.');
+  }
+}
+if (registryTemplate && registryTemplate.agents.length !== 1) fail('The starter registry template must contain exactly one example record.');
+if (registrySchema) {
+  if (registrySchema.$schema !== 'https://json-schema.org/draft/2020-12/schema') fail('The agent registry JSON Schema must use Draft 2020-12.');
+  if (registrySchema.properties?.schemaVersion?.const !== 1) fail('The agent registry JSON Schema must describe schemaVersion 1.');
+}
+if (a2aExample) {
+  if (a2aExample.agents.length !== 1 || !a2aExample.agents[0].id.startsWith('a2a-')) fail('The A2A example must normalize to one A2A-derived record.');
+  if (evaluateAgent(a2aExample.agents[0]).status !== 'blocked') fail('The A2A example must honestly retain governance blockers.');
+}
+
 for (const absolute of await htmlFiles(docs)) {
   const relativePath = path.relative(root, absolute).replaceAll(path.sep, '/');
   const html = await readFile(absolute, 'utf8');
@@ -70,7 +100,7 @@ for (const absolute of await htmlFiles(docs)) {
   }
 }
 
-for (const relativePath of ['LICENSE', 'NOTICE', 'docs/LICENSE.txt', 'docs/NOTICE.txt']) {
+for (const relativePath of ['LICENSE', 'NOTICE', 'CITATION.cff', 'docs/LICENSE.txt', 'docs/NOTICE.txt', 'docs/assets/og-agent-registry.png']) {
   try {
     await access(path.join(root, relativePath));
   } catch {
@@ -88,6 +118,9 @@ if (license !== publishedLicense) fail('docs/LICENSE.txt must exactly mirror LIC
 if (notice !== publishedNotice) fail('docs/NOTICE.txt must exactly mirror NOTICE.');
 if (!license.includes('Licensor:             Samsarix LLC')) fail('LICENSE: Samsarix LLC is not the named licensor.');
 if (!license.includes('contact@samsarix.com')) fail('LICENSE: commercial contact is missing.');
+const citation = await read('CITATION.cff');
+if (!citation.includes('title: "Samsarix Agent Readiness Registry"')) fail('CITATION.cff: product title is inconsistent.');
+if (!citation.includes('version: "1.1.0-rc.1"')) fail('CITATION.cff: release version is inconsistent.');
 
 if (failures.length) {
   console.error(`Site checks failed (${failures.length}):`);
@@ -95,4 +128,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Site checks passed: ${registry.entries.length} catalog entries and ${primaryPages.length} primary pages validated.`);
+console.log(`Site checks passed: ${registry.entries.length} catalog entries, ${agentRegistry?.agents.length || 0} agent records, and ${primaryPages.length} primary pages validated.`);

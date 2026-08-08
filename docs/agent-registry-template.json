@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "workspace": {
+    "name": "My agent inventory",
+    "description": "Local readiness review workspace.",
+    "updatedAt": "2026-08-08"
+  },
+  "agents": [
+    {
+      "id": "replace-with-agent-id",
+      "name": "Replace with agent name",
+      "summary": "Describe one bounded purpose and the decisions or actions this agent may take.",
+      "version": "0.1.0",
+      "lifecycle": "development",
+      "risk": "unassessed",
+      "owner": {
+        "name": "",
+        "contact": ""
+      },
+      "authentication": {
+        "schemes": [],
+        "notes": ""
+      },
+      "interfaces": [],
+      "skills": ["replace with one bounded skill"],
+      "data": {
+        "classification": "unassessed",
+        "sources": [],
+        "retention": ""
+      },
+      "deployment": {
+        "environment": "",
+        "monitoringOwner": "",
+        "incidentContact": "",
+        "runbook": ""
+      },
+      "evidence": {
+        "purpose": { "status": "missing", "reference": "", "reviewedAt": "" },
+        "ownership": { "status": "missing", "reference": "", "reviewedAt": "" },
+        "interface": { "status": "missing", "reference": "", "reviewedAt": "" },
+        "authentication": { "status": "missing", "reference": "", "reviewedAt": "" },
+        "data": { "status": "missing", "reference": "", "reviewedAt": "" },
+        "evaluation": { "status": "missing", "reference": "", "reviewedAt": "" },
+        "security": { "status": "missing", "reference": "", "reviewedAt": "" },
+        "oversight": { "status": "missing", "reference": "", "reviewedAt": "" },
+        "operations": { "status": "missing", "reference": "", "reviewedAt": "" }
+      }
+    }
+  ]
+}

@@ -1,9 +1,9 @@
 {
-  "name": "samsarix-hub-directory",
-  "version": "1.0.0-rc.1",
+  "name": "samsarix-agent-readiness-registry",
+  "version": "1.1.0-rc.1",
   "private": true,
   "type": "module",
-  "description": "A curated, dependency-free directory for the Samsarix ecosystem.",
+  "description": "A local-first, dependency-free readiness registry for AI agent inventories and evidence review.",
   "license": "BUSL-1.1",
   "author": "Samsarix LLC <contact@samsarix.com>",
   "repository": {

@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If this software or readiness model supports your work, cite Samsarix LLC and this repository."
+title: "Samsarix Agent Readiness Registry"
+type: software
+authors:
+  - name: "Samsarix LLC"
+version: "1.1.0-rc.1"
+abstract: "A local-first registry for AI agent inventory, portable manifest import, explainable readiness evidence, and deterministic review-packet export."
+repository-code: "https://github.com/Deathcharge/Helix-Unified-Hub"
+url: "https://deathcharge.github.io/Helix-Unified-Hub/"
+license: BUSL-1.1
+keywords:
+  - AI agents
+  - agent registry
+  - readiness
+  - governance
+  - A2A
+contact:
+  - name: "Samsarix LLC"
+    email: "contact@samsarix.com"

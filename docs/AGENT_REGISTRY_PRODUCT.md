@@ -115,7 +115,11 @@ substitute for testing.
 
 ## First registry release increment: v1.1
 
-The next release will add:
+Implementation status on 2026-08-08: complete on `agent/competitive-offering` with
+the local acceptance gate passing; GitHub PR/check/merge evidence remains the release
+step.
+
+The release includes:
 
 - an Agent Registry workspace linked from the primary product viewport;
 - a bundled, honestly classified sample inventory based on the existing agent

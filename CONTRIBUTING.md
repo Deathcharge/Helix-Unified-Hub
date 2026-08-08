@@ -1,7 +1,8 @@
 # Contributing
 
-Bug reports, catalog corrections, accessibility fixes, and documentation issues are
-welcome. Before a large change, open an issue so scope and ownership can be agreed.
+Bug reports, registry-policy corrections, portable-schema proposals, accessibility
+fixes, and documentation issues are welcome. Before a large change, open an issue so
+scope and ownership can be agreed.
 
 Run the complete local gate before submitting a change:
 
@@ -10,8 +11,9 @@ npm ci
 npm run check
 ```
 
-Keep the maintained directory dependency-free at runtime, preserve lifecycle labels,
-and add tests for behavior or catalog changes. Do not commit credentials, private
+Keep the maintained registry dependency-free at runtime, preserve lifecycle and
+readiness semantics, and add tests for behavior, schema, policy, or catalog changes.
+Do not commit credentials, private
 exports, generated account data, or claims that an external service is healthy.
 
 ## Contribution rights

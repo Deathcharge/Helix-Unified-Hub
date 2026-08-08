@@ -1,4 +1,4 @@
-Samsarix Hub Directory
+Samsarix Agent Readiness Registry
 Copyright © 2026 Samsarix LLC. All rights reserved.
 
 The Samsarix-authored Licensed Work identified in LICENSE is made available under

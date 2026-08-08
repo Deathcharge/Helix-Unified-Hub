@@ -61,8 +61,8 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 | Command/check | Result |
 | --- | --- |
 | `git status --short --branch --untracked-files=all` | Clean updated `main` before branching; work continues on `agent/competitive-offering`. |
-| `npm ci` | Did not complete in the local Windows environment despite a dependency-free lockfile; the exact stalled `npm ci` process was stopped without touching unrelated Node processes. This is an open reproducibility finding until retried with a bounded command. |
-| `npm run check` | Pending for the new increment; no new pass is claimed yet. |
+| `npm ci` | The first attempt did not complete in the local Windows environment despite a dependency-free lockfile; the exact stalled `npm ci` process was stopped without touching unrelated Node processes. A later bounded clean-install command passed; see current verification evidence below. |
+| `npm run check` | Pending at baseline; completed successfully after implementation as recorded below. |
 | Existing maintained surface | Dependency-free static site under `docs/`, Node standard-library checks/tests/build, and GitHub Pages deployment from generated `dist/`. |
 | Product overlap | The generic directory overlaps the canonical Field Guide, so the new work must remain a distinct agent-readiness workflow rather than another portfolio homepage. |
 
@@ -74,9 +74,9 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 - [x] Replace the primary loading/CDN page with a self-contained core journey and explicit failure state.
 - [x] Add deterministic checks, tests, and a build artifact.
 - [x] Consolidate Pages deployment to one workflow that runs the real checks before publishing.
-- [ ] Implement the complete registry journey: sample inventory, bounded import, explainable assessment, local persistence, filtering, and deterministic export.
-- [ ] Update the first viewport, README, release artifact, and checks so product claims match the implemented registry rather than the earlier directory-only product.
-- [ ] Re-run bounded clean-install, full check, build/artifact, and primary-journey verification for the registry release.
+- [x] Implement the complete registry journey: sample inventory, bounded import, explainable assessment, local persistence, filtering, and deterministic export.
+- [x] Update the first viewport, README, release artifact, and checks so product claims match the implemented registry rather than the earlier directory-only product.
+- [x] Re-run bounded clean-install, full check, build/artifact, and primary-journey verification for the registry release.
 
 ### P1
 
@@ -86,9 +86,9 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 - [x] Add a repository threat model for the security review.
 - [x] Finish the repository-wide security candidate validation and apply locally actionable fixes.
 - [x] Quarantine the incomplete backend manifests, remove exact duplicate root Android build files, and consolidate duplicate deployment workflows.
-- [ ] Add unit and integration coverage for schema normalization, A2A import, critical blockers, stale evidence, secret-bearing input rejection, persistence boundaries, and exports.
-- [ ] Add accessible, responsive loading, empty, validation-failure, reset, and recovery states for the workspace.
-- [ ] Publish a starter registry manifest and precise trust-boundary/schema documentation.
+- [x] Add unit and integration coverage for schema normalization, A2A import, critical blockers, stale evidence, secret-bearing input rejection, persistence boundaries, and exports.
+- [x] Add accessible, responsive loading, empty, validation-failure, reset, and recovery states for the workspace.
+- [x] Publish a starter registry manifest, machine-readable JSON Schema, A2A example, and precise trust-boundary documentation.
 
 ### P2
 
@@ -130,10 +130,15 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 - Verified the built journey in a real browser at desktop and 390×844 mobile sizes, including search, lifecycle filtering, bundled navigation, and a clean browser console.
 - Rebranded the maintained product to Samsarix, added public ownership/support routes, and replaced conflicting legacy license claims with a scoped BSL 1.1 release, commercial notice, trademark policy, third-party boundary, and contributor gate.
 - Researched current agent discovery, inventory, evaluation, and governance offerings and selected a differentiated local-first Agent Readiness Registry wedge with explicit v1.1 acceptance criteria.
+- Implemented the local registry workspace with a 12-concept starter inventory, one-version browser persistence, explicit two-step reset, search, lifecycle/risk/readiness/stale filters, detailed evidence tables, and ordinary loading/empty/error/recovery states.
+- Added bounded Samsarix registry and A2A Agent Card import with a 1 MiB/500-agent limit, iterative structural and credential-field scans, duplicate/enum/length validation, HTTPS-only interface URLs, and no remote fetching or agent execution.
+- Added deterministic normalized JSON and human-readable Markdown review packets, including control-syntax neutralization and visible score/blocker disclaimers.
+- Published a prose schema, Draft 2020-12 JSON Schema, starter manifest, fictional current-format A2A example, and citation metadata for adoption and attribution.
+- Updated the first viewport, product metadata, package/legal identity, security policy, threat model, supporting directory, and generated social card to Samsarix Agent Readiness Registry v1.1.0-rc.1.
 
 ## Deferred and owner-blocked work
 
-- Production deployment is not performed without explicit owner authorization.
+- The owner authorized pushing this work and merging validated changes to `main`; the existing Pages workflow will deploy the allowlisted `dist/` artifact after that merge. No custom domain, environment rule, live service, credential, or external account setting is created or changed here.
 - Counsel review remains recommended for the BSL scope, Additional Use Grant, Change License, trademark policy, and future commercial agreement; the obsolete pricing domains and unsupported click-through proprietary terms were removed.
 - The provenance and release status of the checked-in APK, PDFs, archives, exported conversations, and logs require owner review before removal or redistribution decisions.
 - Credentials and external account configuration for Railway, Discord, Zapier, Manus, domains, and app signing are intentionally not fabricated.
@@ -150,6 +155,22 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 - Browser persistence reduces service-side exposure but is not encrypted storage; users must be told not to import secrets, prompts, traces, or sensitive production content.
 
 ## Final verification evidence
+
+Registry release-candidate evidence recorded on 2026-08-08 on `agent/competitive-offering`:
+
+| Verification | Result |
+| --- | --- |
+| `npm ci --ignore-scripts --no-audit --no-fund` | Passed in 5 seconds; dependency-free lockfile was current. |
+| `node --check docs/assets/readiness.mjs`, `node --check docs/assets/registry-app.mjs`, `node --check scripts/check.mjs` | Passed with no syntax errors. |
+| `npm run check` | Passed: 22 catalog entries and 12 agent records validated, 20/20 tests passed, and `dist/` rebuilt. |
+| Readiness/adversarial fixtures | Passed for valid and stale ready records, bundled concepts, current A2A normalization, concrete authentication/data/operations requirements, published schema/example, duplicate IDs, HTTP/credential URLs, credential-bearing fields, malformed/oversized input, deterministic JSON/Markdown, Markdown control syntax, and composed filters. |
+| Built-artifact HTTP smoke | Eight contracts passed: landing page, registry, bundled registry, template, policy module, and social card returned 200 with expected content/types; missing and traversal-shaped paths returned 404. |
+| Source/artifact parity | `docs/` and rebuilt `dist/` each contained 44 files with zero missing or hash-mismatched paths. |
+| Social image | One image-generation edit produced `docs/assets/og-agent-registry.png`; text, spelling, safe margins, palette, and project metadata reference were visually inspected. |
+| Browser visual automation | Not run for this increment because the applicable Sites workflow requires explicit user request before browser QA. Responsive, keyboard-focus, reduced-motion, semantic/fallback, and live-region behavior is covered by implementation review and static contracts, not a new rendered-browser claim. |
+| Formal Codex Security diff scan | Not run: the desktop scan launcher returned `Transport closed` before issuing a scan ID. It was not retried or represented as completed; local threat-model review, bounded-input tests, syntax checks, CSP contracts, and the adversarial fixtures above remain the available evidence. |
+
+Earlier directory-release evidence is retained below for historical traceability.
 
 Recorded against the release-candidate working tree on 2026-07-28:
 
