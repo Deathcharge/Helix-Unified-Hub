@@ -3,7 +3,7 @@
 The current company and product identity is:
 
 - Company: **Samsarix LLC**
-- Product: **Samsarix Hub Directory**
+- Product: **Samsarix Agent Readiness Registry**
 - General and licensing email: `contact@samsarix.com`
 - Product, support, and security email: `support@samsarix.com`
 

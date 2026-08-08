@@ -1,6 +1,10 @@
 {
   "schemaVersion": 1,
   "entries": [
+    {"id":"agent-readiness-registry","name":"Agent Readiness Registry","description":"Inventory agents, import portable manifests, inspect evidence gates, and export a local readiness review packet.","category":"Product","status":"included","href":"registry.html","tags":["agents","governance","readiness"]},
+    {"id":"agent-registry-template","name":"Agent registry starter manifest","description":"Download a versioned JSON starter for a local agent inventory and evidence review.","category":"Developer","status":"included","href":"agent-registry-template.json","tags":["json","schema","template"]},
+    {"id":"agent-registry-schema","name":"Agent registry JSON Schema","description":"Use the Draft 2020-12 machine-readable contract for editor support and manifest tooling.","category":"Developer","status":"included","href":"agent-registry.schema.json","tags":["json-schema","contract","validation"]},
+    {"id":"a2a-agent-card-example","name":"A2A Agent Card example","description":"Download a current-format fictional Agent Card and import it to see which governance gaps discovery metadata leaves open.","category":"Developer","status":"included","href":"a2a-agent-card-example.json","tags":["a2a","example","import"]},
     {"id":"agent-gallery","name":"Agent gallery","description":"Browse the Samsarix visual index of agent profiles bundled with this repository.","category":"Explore","status":"included","href":"agent_gallery.html","tags":["agents","gallery","profiles"]},
     {"id":"aether-profile","name":"Aether","description":"A bundled profile card for the Samsarix meta-awareness concept.","category":"Profiles","status":"included","href":"aether_profile_card.html","tags":["awareness","systems","profile"]},
     {"id":"agni-profile","name":"Agni","description":"A bundled profile card for the Samsarix transformation-engine concept.","category":"Profiles","status":"included","href":"agni_profile_card.html","tags":["transformation","change","profile"]},

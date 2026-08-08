@@ -1,0 +1,39 @@
+{
+  "name": "Public Research Helper",
+  "description": "Finds public research sources and prepares a citation list for a human reviewer.",
+  "version": "0.4.0",
+  "provider": {
+    "organization": "Example Lab",
+    "url": "https://example.com"
+  },
+  "supportedInterfaces": [
+    {
+      "url": "https://agents.example.com/research",
+      "protocolBinding": "JSONRPC",
+      "protocolVersion": "1.0"
+    }
+  ],
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "extendedAgentCard": false
+  },
+  "securitySchemes": {
+    "oauth": {
+      "type": "oauth2",
+      "authorizationUrl": "https://auth.example.com/authorize"
+    }
+  },
+  "securityRequirements": [
+    { "oauth": ["agent.read"] }
+  ],
+  "defaultInputModes": ["text/plain"],
+  "defaultOutputModes": ["application/json"],
+  "skills": [
+    {
+      "id": "public-research",
+      "name": "Public research",
+      "description": "Finds sources for human review."
+    }
+  ]
+}

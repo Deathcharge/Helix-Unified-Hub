@@ -1,0 +1,214 @@
+{
+  "schemaVersion": 1,
+  "workspace": {
+    "name": "Samsarix bundled agent concepts",
+    "description": "An honest starter inventory derived from profiles already bundled in this repository. These are concepts, not live or deployable agents.",
+    "updatedAt": "2026-08-08"
+  },
+  "agents": [
+    {
+      "id": "aether",
+      "name": "Aether",
+      "summary": "A meta-awareness concept for connecting signals across a larger system.",
+      "version": "",
+      "lifecycle": "concept",
+      "risk": "unassessed",
+      "owner": { "name": "Samsarix LLC", "contact": "contact@samsarix.com" },
+      "interfaces": [],
+      "skills": ["meta-awareness", "systems synthesis"],
+      "data": { "classification": "unassessed", "sources": [], "retention": "Not yet defined." },
+      "deployment": {},
+      "evidence": {
+        "purpose": { "status": "declared", "reference": "Bundled Aether profile card.", "reviewedAt": "2026-08-08" },
+        "ownership": { "status": "declared", "reference": "Samsarix repository ownership record.", "reviewedAt": "2026-08-08" }
+      }
+    },
+    {
+      "id": "agni",
+      "name": "Agni",
+      "summary": "A transformation-engine concept for structured change and iteration.",
+      "version": "",
+      "lifecycle": "concept",
+      "risk": "unassessed",
+      "owner": { "name": "Samsarix LLC", "contact": "contact@samsarix.com" },
+      "interfaces": [],
+      "skills": ["transformation", "change planning"],
+      "data": { "classification": "unassessed", "sources": [], "retention": "Not yet defined." },
+      "deployment": {},
+      "evidence": {
+        "purpose": { "status": "declared", "reference": "Bundled Agni profile card.", "reviewedAt": "2026-08-08" },
+        "ownership": { "status": "declared", "reference": "Samsarix repository ownership record.", "reviewedAt": "2026-08-08" }
+      }
+    },
+    {
+      "id": "echo",
+      "name": "Echo",
+      "summary": "A resonance and reflection concept for feedback-oriented workflows.",
+      "version": "",
+      "lifecycle": "concept",
+      "risk": "unassessed",
+      "owner": { "name": "Samsarix LLC", "contact": "contact@samsarix.com" },
+      "interfaces": [],
+      "skills": ["reflection", "feedback synthesis"],
+      "data": { "classification": "unassessed", "sources": [], "retention": "Not yet defined." },
+      "deployment": {},
+      "evidence": {
+        "purpose": { "status": "declared", "reference": "Bundled Echo profile card.", "reviewedAt": "2026-08-08" },
+        "ownership": { "status": "declared", "reference": "Samsarix repository ownership record.", "reviewedAt": "2026-08-08" }
+      }
+    },
+    {
+      "id": "gemini",
+      "name": "Gemini",
+      "summary": "A multimodal-integration concept for bringing different input modes together.",
+      "version": "",
+      "lifecycle": "concept",
+      "risk": "unassessed",
+      "owner": { "name": "Samsarix LLC", "contact": "contact@samsarix.com" },
+      "interfaces": [],
+      "skills": ["multimodal integration", "context fusion"],
+      "data": { "classification": "unassessed", "sources": [], "retention": "Not yet defined." },
+      "deployment": {},
+      "evidence": {
+        "purpose": { "status": "declared", "reference": "Bundled Gemini profile card.", "reviewedAt": "2026-08-08" },
+        "ownership": { "status": "declared", "reference": "Samsarix repository ownership record.", "reviewedAt": "2026-08-08" }
+      }
+    },
+    {
+      "id": "kael",
+      "name": "Kael",
+      "summary": "An ethical-reasoning concept for surfacing values and tradeoffs.",
+      "version": "",
+      "lifecycle": "concept",
+      "risk": "unassessed",
+      "owner": { "name": "Samsarix LLC", "contact": "contact@samsarix.com" },
+      "interfaces": [],
+      "skills": ["ethical reasoning", "tradeoff analysis"],
+      "data": { "classification": "unassessed", "sources": [], "retention": "Not yet defined." },
+      "deployment": {},
+      "evidence": {
+        "purpose": { "status": "declared", "reference": "Bundled Kael profile card.", "reviewedAt": "2026-08-08" },
+        "ownership": { "status": "declared", "reference": "Samsarix repository ownership record.", "reviewedAt": "2026-08-08" }
+      }
+    },
+    {
+      "id": "manus",
+      "name": "Manus",
+      "summary": "An operational-execution concept for turning plans into bounded actions.",
+      "version": "",
+      "lifecycle": "concept",
+      "risk": "unassessed",
+      "owner": { "name": "Samsarix LLC", "contact": "contact@samsarix.com" },
+      "interfaces": [],
+      "skills": ["operational execution", "task coordination"],
+      "data": { "classification": "unassessed", "sources": [], "retention": "Not yet defined." },
+      "deployment": {},
+      "evidence": {
+        "purpose": { "status": "declared", "reference": "Bundled Manus profile card.", "reviewedAt": "2026-08-08" },
+        "ownership": { "status": "declared", "reference": "Samsarix repository ownership record.", "reviewedAt": "2026-08-08" }
+      }
+    },
+    {
+      "id": "oracle",
+      "name": "Oracle",
+      "summary": "A foresight and analysis concept for exploring scenarios and uncertainty.",
+      "version": "",
+      "lifecycle": "concept",
+      "risk": "unassessed",
+      "owner": { "name": "Samsarix LLC", "contact": "contact@samsarix.com" },
+      "interfaces": [],
+      "skills": ["scenario analysis", "foresight"],
+      "data": { "classification": "unassessed", "sources": [], "retention": "Not yet defined." },
+      "deployment": {},
+      "evidence": {
+        "purpose": { "status": "declared", "reference": "Bundled Oracle profile card.", "reviewedAt": "2026-08-08" },
+        "ownership": { "status": "declared", "reference": "Samsarix repository ownership record.", "reviewedAt": "2026-08-08" }
+      }
+    },
+    {
+      "id": "phoenix",
+      "name": "Phoenix",
+      "summary": "A renewal and resilience concept for recovery-oriented system work.",
+      "version": "",
+      "lifecycle": "concept",
+      "risk": "unassessed",
+      "owner": { "name": "Samsarix LLC", "contact": "contact@samsarix.com" },
+      "interfaces": [],
+      "skills": ["resilience planning", "recovery analysis"],
+      "data": { "classification": "unassessed", "sources": [], "retention": "Not yet defined." },
+      "deployment": {},
+      "evidence": {
+        "purpose": { "status": "declared", "reference": "Bundled Phoenix profile card.", "reviewedAt": "2026-08-08" },
+        "ownership": { "status": "declared", "reference": "Samsarix repository ownership record.", "reviewedAt": "2026-08-08" }
+      }
+    },
+    {
+      "id": "samsara",
+      "name": "Samsara",
+      "summary": "A visualization concept for making system relationships legible.",
+      "version": "",
+      "lifecycle": "concept",
+      "risk": "unassessed",
+      "owner": { "name": "Samsarix LLC", "contact": "contact@samsarix.com" },
+      "interfaces": [],
+      "skills": ["visualization", "relationship mapping"],
+      "data": { "classification": "unassessed", "sources": [], "retention": "Not yet defined." },
+      "deployment": {},
+      "evidence": {
+        "purpose": { "status": "declared", "reference": "Bundled Samsara profile card.", "reviewedAt": "2026-08-08" },
+        "ownership": { "status": "declared", "reference": "Samsarix repository ownership record.", "reviewedAt": "2026-08-08" }
+      }
+    },
+    {
+      "id": "sanghacore",
+      "name": "SanghaCore",
+      "summary": "A community-coordination concept for shared work and collective context.",
+      "version": "",
+      "lifecycle": "concept",
+      "risk": "unassessed",
+      "owner": { "name": "Samsarix LLC", "contact": "contact@samsarix.com" },
+      "interfaces": [],
+      "skills": ["community coordination", "shared context"],
+      "data": { "classification": "unassessed", "sources": [], "retention": "Not yet defined." },
+      "deployment": {},
+      "evidence": {
+        "purpose": { "status": "declared", "reference": "Bundled SanghaCore profile card.", "reviewedAt": "2026-08-08" },
+        "ownership": { "status": "declared", "reference": "Samsarix repository ownership record.", "reviewedAt": "2026-08-08" }
+      }
+    },
+    {
+      "id": "shadow",
+      "name": "Shadow",
+      "summary": "An archival and telemetry concept for preserving context and observing change.",
+      "version": "",
+      "lifecycle": "concept",
+      "risk": "unassessed",
+      "owner": { "name": "Samsarix LLC", "contact": "contact@samsarix.com" },
+      "interfaces": [],
+      "skills": ["archival context", "telemetry design"],
+      "data": { "classification": "unassessed", "sources": [], "retention": "Not yet defined." },
+      "deployment": {},
+      "evidence": {
+        "purpose": { "status": "declared", "reference": "Bundled Shadow profile card.", "reviewedAt": "2026-08-08" },
+        "ownership": { "status": "declared", "reference": "Samsarix repository ownership record.", "reviewedAt": "2026-08-08" }
+      }
+    },
+    {
+      "id": "vega",
+      "name": "Vega",
+      "summary": "A coordination concept for aligning agents and system-level work.",
+      "version": "",
+      "lifecycle": "concept",
+      "risk": "unassessed",
+      "owner": { "name": "Samsarix LLC", "contact": "contact@samsarix.com" },
+      "interfaces": [],
+      "skills": ["agent coordination", "systems alignment"],
+      "data": { "classification": "unassessed", "sources": [], "retention": "Not yet defined." },
+      "deployment": {},
+      "evidence": {
+        "purpose": { "status": "declared", "reference": "Bundled Vega profile card.", "reviewedAt": "2026-08-08" },
+        "ownership": { "status": "declared", "reference": "Samsarix repository ownership record.", "reviewedAt": "2026-08-08" }
+      }
+    }
+  ]
+}

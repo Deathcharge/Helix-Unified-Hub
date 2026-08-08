@@ -13,15 +13,42 @@ test('every bundled catalog destination exists', async () => {
   await Promise.all(local.map((entry) => access(path.join(docs, entry.href))));
 });
 
-test('primary page has discovery controls and fallback content', async () => {
+test('primary page leads with the readiness product and retains directory controls', async () => {
   const html = await readFile(path.join(docs, 'index.html'), 'utf8');
   assert.match(html, /<label[^>]+for="catalog-search"/);
   assert.match(html, /aria-live="polite"/);
   assert.match(html, /<noscript>/);
   assert.match(html, /href="#catalog"/);
-  assert.match(html, /Samsarix Hub Directory/);
+  assert.match(html, /Samsarix Agent Readiness Registry/);
+  assert.match(html, /Open readiness workspace/);
   assert.match(html, /contact@samsarix\.com/);
   assert.match(html, /support@samsarix\.com/);
+});
+
+test('registry page exposes the complete local-first workflow and fallback content', async () => {
+  const html = await readFile(path.join(docs, 'registry.html'), 'utf8');
+  assert.match(html, /id="registry-file"/);
+  assert.match(html, /id="export-json"/);
+  assert.match(html, /id="export-markdown"/);
+  assert.match(html, /id="reset-registry"/);
+  assert.match(html, /id="agent-search"/);
+  assert.match(html, /id="lifecycle-filter"/);
+  assert.match(html, /id="risk-filter"/);
+  assert.match(html, /id="readiness-filter"/);
+  assert.match(html, /aria-live="polite"/);
+  assert.match(html, /<noscript>/);
+  assert.match(html, /Your files stay in this browser/);
+  assert.match(html, /never import credentials or sensitive production content/);
+});
+
+test('registry browser controller preserves the local-only storage and rendering boundary', async () => {
+  const source = await readFile(path.join(docs, 'assets', 'registry-app.mjs'), 'utf8');
+  assert.match(source, /localStorage\.setItem\(STORAGE_KEY/);
+  assert.match(source, /localStorage\.removeItem\(STORAGE_KEY/);
+  assert.match(source, /Browser persistence is unavailable; export before leaving/);
+  assert.match(source, /URL\.revokeObjectURL/);
+  assert.match(source, /\.textContent = text/);
+  assert.doesNotMatch(source, /innerHTML|insertAdjacentHTML|eval\(|new Function/);
 });
 
 test('published legal files match the controlling repository notices', async () => {

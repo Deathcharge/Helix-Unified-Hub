@@ -1,14 +1,17 @@
-# Samsarix Hub Directory threat model
+# Samsarix Agent Readiness Registry threat model
 
 ## Overview
 
-Samsarix Hub Directory is primarily a static GitHub Pages portal that helps people discover and evaluate projects in the Samsarix ecosystem. The repository, still hosted at its historical Helix-named URL, also contains earlier portal prototypes, a local portal generator, optional Discord and Zapier integration services, an Android prototype, deployment workflows, and a large archive of historical/generated material. Those secondary surfaces are not required for the static directory to work and should not be presented as part of one trusted production system.
+Samsarix Agent Readiness Registry is primarily a static GitHub Pages workspace that imports local agent metadata, persists a normalized inventory in browser storage, applies an explainable readiness policy, and exports review packets. The earlier repository directory remains a secondary path. The repository, still hosted at its historical Helix-named URL, also contains portal prototypes, a local portal generator, optional Discord and Zapier integration services, an Android prototype, deployment workflows, and a large archive of historical/generated material. Those secondary surfaces are not required for the registry to work and must not be presented as part of one trusted production system.
 
-The highest-value assets are the integrity of published portal links and status labels, the repository and GitHub Pages deployment, any operator credentials used by optional integrations, and the operator workstation or CI runner used by generation/deployment scripts.
+The highest-value assets are the confidentiality and integrity of a user's imported agent inventory, the integrity and explainability of readiness results and exports, published links and lifecycle labels, the repository and GitHub Pages deployment, any operator credentials used by optional integrations, and the operator workstation or CI runner used by generation/deployment scripts.
 
 ## Threat Model, Trust Boundaries, and Assumptions
 
 - Public visitors and all browser-provided values are untrusted. Static content must not turn URL parameters, remote responses, or stored browser state into executable markup.
+- Imported JSON files and restored local-storage values are untrusted. They may be malformed, oversized, deeply nested, secret-bearing, or crafted for DOM injection, misleading scores, storage exhaustion, or unsafe outbound navigation.
+- Browser storage is a device-local persistence boundary, not encrypted storage or an access-control system. The UI must disclose that limitation, reject credential-shaped fields, bound file/record sizes, survive unavailable or quota-limited storage, and provide an explicit reset.
+- A2A Agent Cards are discovery metadata, not trusted proof of ownership, data handling, internal evaluation, security review, oversight, or operational readiness. The static site must not fetch imported URLs, call agents, or convert card metadata into verified evidence.
 - Portal metadata committed to the repository is trusted only after review. It controls destinations presented to users, so link changes are security-sensitive supply-chain changes.
 - External portal and API availability is not trusted. A remote service may be offline, compromised, redirected, slow, or return malformed data; the directory must fail closed without fabricating health.
 - GitHub Actions is a privileged boundary because workflows can publish Pages content or write to the repository. Workflows must use least privilege, pinned or reviewed actions, deterministic inputs, and no untrusted shell interpolation.
@@ -18,6 +21,7 @@ The highest-value assets are the integrity of published portal links and status 
 - The Android prototype crosses a mobile-device-to-network boundary. Remote data, deep links, cached values, and deployment actions require transport security, explicit user intent, and authorization.
 - Files under `assets/`, `outputs/`, historical conversations, logs, PDFs, APKs, and archives are treated as untrusted legacy data. They are not evidence that a service is currently deployed or secure, and they should not be executed or published automatically.
 - The static directory must remain useful without private Samsarix services, paid accounts, authentication, telemetry, or a live backend.
+- Readiness scores must remain deterministic and secondary to visible evidence and blockers. The UI and exports must not imply certification, compliance, endpoint health, or agent safety.
 
 Security objectives are to preserve honest navigation, prevent arbitrary code/command execution and file writes, prevent unauthorized deployment or webhook side effects, keep credentials private, bound network and resource use, minimize published data, and clearly separate maintained product code from unsupported experiments.
 
@@ -26,6 +30,10 @@ Security objectives are to preserve honest navigation, prevent arbitrary code/co
 ### Static site and portal data
 
 Relevant threats include malicious or stale outbound links, reverse-tabnabbing, DOM-based XSS, unsafe HTML rendering, third-party script compromise, misleading status claims, privacy-invasive analytics, and unbounded live health checks. Preferred controls are static rendering with no HTML injection, a restrictive Content Security Policy, `rel="noopener noreferrer"` for new tabs, explicit lifecycle labels, no telemetry by default, and opt-in bounded status checks when they are added.
+
+### Registry import, persistence, policy, and export
+
+Relevant threats include secret ingestion, malicious or over-complex JSON, duplicate identifiers, unsafe interface URLs, DOM injection, local-storage exhaustion or corruption, stale evidence presented as current, score gaming, Markdown control-character content, and accidental disclosure through exports. Controls are a 1 MiB/500-agent limit, iterative credential-key scanning with a structural cap, strict schemas and lengths, HTTPS-only interface URLs without embedded credentials, text-node rendering, deterministic normalization, conservative lifecycle/risk blockers, stale-review warnings, storage failure recovery, explicit two-step reset, and user-initiated downloads. Exported files remain user-controlled artifacts and may reveal architecture metadata when shared.
 
 ### GitHub Pages and CI
 

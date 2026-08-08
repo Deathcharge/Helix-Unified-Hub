@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-Email `support@samsarix.com` with the subject `Security: Samsarix Hub Directory`.
+Email `support@samsarix.com` with the subject `Security: Samsarix Agent Registry`.
 Include the affected path or commit, impact, reproduction steps, and any suggested
 mitigation. Do not include active credentials or sensitive personal data; describe
 how Samsarix LLC can obtain sensitive evidence safely.
@@ -13,7 +13,7 @@ promise a response or remediation service level.
 
 ## Supported scope
 
-The maintained static directory on the latest `main` branch is in scope. Historical
+The maintained static agent-readiness registry and secondary directory on the latest `main` branch are in scope. Historical
 exports and prototypes are retained for reference and are not supported production
 services. See `docs/THREAT_MODEL.md` for the trust boundaries and known owner gates.
 

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Inventory AI agents, import portable manifests, inspect readiness evidence, and export a local review packet with Samsarix Agent Readiness Registry.">
+  <meta name="theme-color" content="#07100f">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Samsarix Agent Readiness Registry">
+  <meta property="og:description" content="Know which agents are ready, which are blocked, and what evidence is missing—without uploading your inventory.">
+  <meta property="og:image" content="https://deathcharge.github.io/Helix-Unified-Hub/assets/og-agent-registry.png">
+  <meta property="og:image:alt" content="Samsarix Agent Readiness Registry — inventory, evidence, readiness.">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Agent Readiness Registry · Samsarix</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/registry.css">
+  <script type="module" src="assets/registry-app.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#workspace">Skip to readiness workspace</a>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Samsarix Agent Registry home">
+      <span class="brand-mark" aria-hidden="true">S</span>
+      <span>Samsarix Agent Registry</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a aria-current="page" href="registry.html">Registry</a>
+      <a href="index.html#catalog">Directory</a>
+      <a href="#method">Method</a>
+      <a href="legal.html">License</a>
+      <a href="https://github.com/Deathcharge/Helix-Unified-Hub" target="_blank" rel="noopener noreferrer">Source</a>
+    </nav>
+  </header>
+
+  <main id="workspace">
+    <section class="registry-hero" aria-labelledby="registry-title">
+      <div>
+        <p class="eyebrow">Local-first readiness workspace</p>
+        <h1 id="registry-title">Know what is ready before it acts.</h1>
+        <p class="hero-copy">Import an agent inventory or A2A Agent Card, inspect nine visible evidence gates, and take a deterministic review packet to the next decision.</p>
+      </div>
+      <aside class="privacy-note" aria-label="Privacy boundary">
+        <strong>Your files stay in this browser.</strong>
+        <p>No upload, analytics, agent execution, live endpoint probing, prompts, or traces. Browser storage is not encrypted—never import credentials or sensitive production content.</p>
+      </aside>
+    </section>
+
+    <section class="workspace-header" aria-labelledby="workspace-title">
+      <div>
+        <p class="eyebrow">Current inventory</p>
+        <h2 id="workspace-title">Loading bundled inventory…</h2>
+        <p id="workspace-description" class="workspace-description"></p>
+      </div>
+      <div class="workspace-actions" aria-label="Registry actions">
+        <input id="registry-file" class="file-input" type="file" accept=".json,application/json" aria-label="Import Samsarix registry or A2A Agent Card JSON" disabled>
+        <a class="button" href="agent-registry-template.json" download>Starter template</a>
+        <a class="button" href="a2a-agent-card-example.json" download>A2A example</a>
+        <button class="button" id="export-json" type="button" disabled>Export JSON</button>
+        <button class="button" id="export-markdown" type="button" disabled>Export Markdown</button>
+        <button class="button button-danger" id="reset-registry" type="button" disabled>Reset sample</button>
+      </div>
+    </section>
+
+    <div class="workspace-message" id="workspace-message" role="status" aria-live="polite">Loading the local sample…</div>
+    <div class="workspace-error" id="workspace-error" role="alert" hidden></div>
+
+    <section class="metric-grid" aria-label="Inventory summary">
+      <article><span id="metric-total">—</span><strong>Total agents</strong></article>
+      <article><span id="metric-ready">—</span><strong>Ready</strong></article>
+      <article><span id="metric-blocked">—</span><strong>Blocked or concept</strong></article>
+      <article><span id="metric-stale">—</span><strong>Stale evidence</strong></article>
+    </section>
+
+    <section class="registry-filters" role="search" aria-label="Filter agent inventory">
+      <div class="field field-search">
+        <label for="agent-search">Search agents</label>
+        <input id="agent-search" type="search" autocomplete="off" placeholder="Name, purpose, owner, or skill" disabled>
+      </div>
+      <div class="field">
+        <label for="lifecycle-filter">Lifecycle</label>
+        <select id="lifecycle-filter" disabled>
+          <option value="all">All lifecycles</option>
+          <option value="concept">Concept</option>
+          <option value="development">Development</option>
+          <option value="review">Review</option>
+          <option value="production">Production</option>
+          <option value="paused">Paused</option>
+          <option value="retired">Retired</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="risk-filter">Risk</label>
+        <select id="risk-filter" disabled>
+          <option value="all">All risk tiers</option>
+          <option value="unassessed">Unassessed</option>
+          <option value="low">Low</option>
+          <option value="moderate">Moderate</option>
+          <option value="high">High</option>
+          <option value="critical">Critical</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="readiness-filter">Readiness</label>
+        <select id="readiness-filter" disabled>
+          <option value="all">All readiness states</option>
+          <option value="ready">Ready for governed use</option>
+          <option value="review">Needs review</option>
+          <option value="blocked">Blocked</option>
+          <option value="concept">Concept only</option>
+          <option value="inactive">Inactive</option>
+          <option value="stale">Stale evidence</option>
+        </select>
+      </div>
+    </section>
+
+    <div class="registry-result-bar" aria-live="polite">
+      <span id="agent-result-count">Preparing inventory…</span>
+      <span>Scores explain workflow gaps; they do not certify safety or compliance.</span>
+    </div>
+
+    <section class="registry-layout" aria-label="Agent readiness results">
+      <div class="agent-list" id="agent-list" aria-label="Agents"></div>
+      <article class="agent-detail" id="agent-detail" aria-live="polite" aria-label="Selected agent details">
+        <div class="detail-placeholder">
+          <p class="eyebrow">Readiness detail</p>
+          <h2>Select an agent</h2>
+          <p>The evidence gates, blockers, interface metadata, and next review questions will appear here.</p>
+        </div>
+      </article>
+    </section>
+    <p class="empty-state" id="agent-empty" hidden>No agents match those filters. Clear search or choose another readiness state.</p>
+    <noscript><p class="workspace-error">JavaScript is required for local import and assessment. You can still inspect the <a href="agents.json">bundled registry JSON</a> or download the <a href="agent-registry-template.json">starter template</a>.</p></noscript>
+
+    <section class="method-section" id="method" aria-labelledby="method-title">
+      <div>
+        <p class="eyebrow">Readiness method</p>
+        <h2 id="method-title">Visible evidence, explicit blockers.</h2>
+      </div>
+      <div class="method-copy">
+        <p>The registry scores purpose, ownership, interface, authentication, data handling, evaluation, security, human oversight, and operations. Missing critical evidence overrides a numerical score. Concept, paused, and retired records cannot be labeled ready.</p>
+        <p>A2A import carries identity, skills, interface, provider, and security-declaration metadata into a review record. It deliberately leaves organization-specific governance evidence missing.</p>
+        <p><a href="AGENT_REGISTRY_PRODUCT.md">Read the product and policy brief</a> or <a href="mailto:support@samsarix.com">contact support</a>.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Samsarix Agent Readiness Registry · v1.1 release candidate · © 2026 Samsarix LLC</p>
+    <p><a href="legal.html">License</a> · <a href="mailto:contact@samsarix.com">Contact</a> · <a href="mailto:support@samsarix.com">Support</a></p>
+  </footer>
+</body>
+</html>

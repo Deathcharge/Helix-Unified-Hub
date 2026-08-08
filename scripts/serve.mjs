@@ -40,11 +40,11 @@ const server = http.createServer(async (request, response) => {
 
 server.on('error', (error) => {
   console.error(error.code === 'EADDRINUSE'
-    ? `Cannot start Samsarix Hub: 127.0.0.1:${port} is already in use. Set SAMSARIX_HUB_PORT to another local port.`
-    : `Cannot start Samsarix Hub: ${error.message}`);
+    ? `Cannot start Samsarix Agent Registry: 127.0.0.1:${port} is already in use. Set SAMSARIX_HUB_PORT to another local port.`
+    : `Cannot start Samsarix Agent Registry: ${error.message}`);
   process.exitCode = 1;
 });
 
 server.listen(port, '127.0.0.1', () => {
-  console.log(`Samsarix Hub available at http://127.0.0.1:${port}/`);
+  console.log(`Samsarix Agent Registry available at http://127.0.0.1:${port}/`);
 });
