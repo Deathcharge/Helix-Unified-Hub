@@ -11,7 +11,7 @@ Readiness Registry**: a local-first, vendor-neutral inventory and pre-deployment
 evidence workspace for AI agents.
 
 The accepted product brief, market evidence, initial user, non-goals, readiness
-model, and v0.2 acceptance criteria are in
+model, and v1.1 acceptance criteria are in
 [`docs/AGENT_REGISTRY_PRODUCT.md`](docs/AGENT_REGISTRY_PRODUCT.md).
 
 Release sequence:
@@ -19,9 +19,16 @@ Release sequence:
 1. **Implemented for v1.1 RC:** static registry workspace, portable prose and JSON
    Schema contracts, A2A Agent Card import, explainable readiness assessment, and
    deterministic review-packet export.
-2. Add a CLI/GitHub check only after the browser workflow and schema stabilize.
+2. **Implemented for v1.2 RC:** dependency-free validate/check/report CLI, exact
+   policy exit codes, escaped GitHub annotations, and a read-only JavaScript Action
+   using the shared bounded parser and evaluator.
 3. Validate demand before any multi-user service, live discovery, or runtime
    observability integration.
+
+The next evidence gate is external use: collect real registry fixtures, policy-gap
+reports, workflow adoption, and requests for collaboration or signed approval
+history. Do not infer demand from repository traffic alone or add a hosted control
+plane before that signal exists.
 
 The earlier consolidation guidance below remains historical context and a constraint
 against generic portfolio duplication; it no longer freezes differentiated product

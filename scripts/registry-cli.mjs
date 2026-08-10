@@ -16,6 +16,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const packageMetadata = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'));
 const DEFAULT_LIFECYCLES = Object.freeze(['review', 'production']);
 const ALL_LIFECYCLES = Object.freeze(['concept', 'development', 'review', 'production', 'paused', 'retired']);
+const MAX_GITHUB_ANNOTATIONS_PER_LEVEL = 10;
 
 export const EXIT_CODES = Object.freeze({
   success: 0,
@@ -93,6 +94,10 @@ function parseNow(value) {
   }
   const result = new Date(value.length === 10 ? `${value}T00:00:00Z` : value);
   if (Number.isNaN(result.getTime())) throw new CliUsageError('--now is not a valid date.');
+  const expectedSecond = value.length === 10 ? `${value}T00:00:00` : value.slice(0, 19);
+  if (result.toISOString().slice(0, 19) !== expectedSecond) {
+    throw new CliUsageError('--now is not a valid calendar date.');
+  }
   return result;
 }
 
@@ -279,15 +284,34 @@ function githubProperty(value) {
 
 function renderGithubCheck(result) {
   const lines = [];
+  let errors = 0;
+  let notices = 0;
+  let suppressedErrors = 0;
+  let suppressedNotices = 0;
   if (result.summary.noCandidates) {
     lines.push(`::error title=${githubProperty('Agent readiness check')}::${githubMessage('No deployment candidates matched the selected lifecycles.')}`);
+    errors += 1;
   }
   for (const agent of result.agents) {
+    lines.push(`${agent.readiness === 'ready' ? 'READY' : 'BLOCKED'} ${agent.id} — ${agent.score}/100 — ${readinessLabel(agent.readiness)}${agent.blockers.length ? ` — ${agent.blockers.join('; ')}` : ''}`);
     if (agent.readiness === 'ready') {
-      lines.push(`::notice title=${githubProperty(`${agent.name} ready`)}::${githubMessage(`${agent.id} passed at ${agent.score}/100.`)}`);
+      if (notices < MAX_GITHUB_ANNOTATIONS_PER_LEVEL) {
+        lines.push(`::notice title=${githubProperty(`${agent.name} ready`)}::${githubMessage(`${agent.id} passed at ${agent.score}/100.`)}`);
+        notices += 1;
+      } else {
+        suppressedNotices += 1;
+      }
     } else {
-      lines.push(`::error title=${githubProperty(`${agent.name} readiness blocked`)}::${githubMessage(`${agent.id} scored ${agent.score}/100: ${agent.blockers.join('; ')}`)}`);
+      if (errors < MAX_GITHUB_ANNOTATIONS_PER_LEVEL) {
+        lines.push(`::error title=${githubProperty(`${agent.name} readiness blocked`)}::${githubMessage(`${agent.id} scored ${agent.score}/100: ${agent.blockers.join('; ')}`)}`);
+        errors += 1;
+      } else {
+        suppressedErrors += 1;
+      }
     }
+  }
+  if (suppressedErrors || suppressedNotices) {
+    lines.push(`Annotation limit reached: ${suppressedErrors} error and ${suppressedNotices} notice annotations remain available in the ordinary log lines above.`);
   }
   lines.push(`Samsarix readiness check: ${result.passed ? 'PASS' : 'FAIL'} — ${result.summary.ready}/${result.summary.candidates} candidates ready.`);
   return `${lines.join('\n')}\n`;

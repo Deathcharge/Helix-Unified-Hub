@@ -12,7 +12,7 @@ const action = path.join(root, 'bin', 'samsarix-action.mjs');
 
 test('GitHub Action metadata declares its dependency-free Node entry point', async () => {
   const metadata = await readFile(path.join(root, 'action.yml'), 'utf8');
-  assert.match(metadata, /using: node20/);
+  assert.match(metadata, /using: node24/);
   assert.match(metadata, /main: bin\/samsarix-action\.mjs/);
 });
 
@@ -38,6 +38,14 @@ test('GitHub Action wrapper preserves policy and configuration exit codes', () =
   });
   assert.equal(blocked.status, EXIT_CODES.readiness);
   assert.match(blocked.stdout, /::error/);
+
+  const invalidRegistry = spawnSync(process.execPath, [action], {
+    cwd: root,
+    encoding: 'utf8',
+    env: { ...baseEnvironment, INPUT_REGISTRY: 'docs/portals.json' }
+  });
+  assert.equal(invalidRegistry.status, EXIT_CODES.data);
+  assert.match(invalidRegistry.stderr, /::error title=Agent readiness action::Invalid registry/);
 
   const missing = spawnSync(process.execPath, [action], {
     cwd: root,

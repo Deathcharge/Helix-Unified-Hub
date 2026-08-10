@@ -94,17 +94,17 @@ Samsarix wins the first use case through the combination of:
 Each record has identity and governance metadata plus evidence references. The first
 version evaluates nine gates:
 
-| Gate | Minimum evidence |
-| --- | --- |
-| Purpose | Bounded purpose and declared skills or capabilities |
-| Ownership | Named accountable owner and support contact |
-| Interface | Versioned interface or explicit concept-only status |
-| Authentication | Declared scheme for a deployed interface |
-| Data | Data classification and data-source/retention notes |
-| Evaluation | Dated evaluation summary and evidence reference |
-| Security | Risk tier, security-review date, and evidence reference |
-| Oversight | Human-oversight and stop/escalation behavior |
-| Operations | Environment, monitoring owner, incident route, and runbook |
+| Gate           | Minimum evidence                                           |
+| -------------- | ---------------------------------------------------------- |
+| Purpose        | Bounded purpose and declared skills or capabilities        |
+| Ownership      | Named accountable owner and support contact                |
+| Interface      | Versioned interface or explicit concept-only status        |
+| Authentication | Declared scheme for a deployed interface                   |
+| Data           | Data classification and data-source/retention notes        |
+| Evaluation     | Dated evaluation summary and evidence reference            |
+| Security       | Risk tier, security-review date, and evidence reference    |
+| Oversight      | Human-oversight and stop/escalation behavior               |
+| Operations     | Environment, monitoring owner, incident route, and runbook |
 
 Every missing gate is shown. Critical blockers override the numerical score. A
 production claim is blocked when ownership, purpose, risk, authentication, security,
@@ -115,9 +115,9 @@ substitute for testing.
 
 ## First registry release increment: v1.1
 
-Implementation status on 2026-08-08: complete on `agent/competitive-offering` with
-the local acceptance gate passing; GitHub PR/check/merge evidence remains the release
-step.
+Implementation status on 2026-08-08: merged to `main`, published through GitHub
+Pages, and verified at the merge commit after repository and deployment checks
+passed.
 
 The release includes:
 
@@ -132,6 +132,26 @@ The release includes:
 - explainable scores, blockers, stale-review warnings, and evidence detail;
 - deterministic JSON and Markdown export; and
 - automated unit, integration, artifact, accessibility-contract, and security checks.
+
+## Repository enforcement increment: v1.2
+
+The second release increment makes the same readiness decision usable at the point
+where teams review and merge agent metadata. It includes:
+
+- a dependency-free CLI for supported Node.js releases (22 LTS or newer) with `validate`, `check`, and deterministic `report`
+  commands;
+- bounded file and standard-input parsing through the browser workspace's existing
+  parser, normalization, and evaluator;
+- conservative default gating of `review` and `production` records, with explicit
+  lifecycle overrides and an empty-candidate failure option;
+- stable success, policy, usage, data, input, and internal-error exit codes;
+- text, JSON, Markdown, and escaped GitHub annotation output;
+- a zero-dependency JavaScript Action that requires no token or network access; and
+- a fictional fully evidenced review fixture plus command/action integration tests.
+
+This increment still evaluates declared metadata and evidence. It does not verify
+evidence references, observe an agent, prove an endpoint is owned or healthy, or
+turn a passing status into certification.
 
 ## Non-goals for v1.1
 
@@ -165,7 +185,7 @@ be demand-led and separable:
 
 - managed private registry hosting;
 - organization policy packs and signed approval history;
-- GitHub checks that enforce registry gates;
+- organization-specific policy packs layered on the open readiness check;
 - migration/import services for existing agent inventories;
 - security and readiness review engagements; and
 - support with agreed response terms.

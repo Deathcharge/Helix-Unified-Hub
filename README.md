@@ -11,9 +11,9 @@ the current browser unless the user explicitly exports it.
 
 The initial audience is an individual builder or a team of roughly 2–50 people that
 needs an ownership and pre-deployment review workflow before an enterprise control
-plane is justified. The product is a v1.1 release candidate: the complete local
-review journey is implemented, while production promotion remains subject to the
-owner gates below.
+plane is justified. The product is a v1.2 release candidate: the complete local
+review journey and repository-enforced readiness gate are implemented, while
+production promotion remains subject to the owner gates below.
 
 The earlier Hub Directory remains available as a secondary repository map. The
 [Samsarix Field Guide](https://github.com/Deathcharge/samsarix-field-guide) remains
@@ -25,7 +25,7 @@ and [`CONSOLIDATION.md`](CONSOLIDATION.md).
 
 Prerequisites:
 
-- Node.js 20 or newer
+- Node.js 22 LTS or newer
 - npm 10 or newer
 
 ```bash
@@ -84,15 +84,38 @@ ready.
 
 The application never fetches an Agent Card URL or calls an imported interface.
 
+## CLI and GitHub enforcement
+
+The v1.2 CLI applies the browser workspace's parser and readiness policy without a
+browser or network request:
+
+```bash
+node bin/samsarix-registry.mjs validate docs/agents.json
+node bin/samsarix-registry.mjs check docs/review-ready-registry-example.json \
+  --require-candidates --now 2026-08-09
+node bin/samsarix-registry.mjs report docs/agents.json --format markdown
+```
+
+`check` selects `review` and `production` records by default, returns exit code `2`
+for policy failures, and offers JSON or escaped GitHub annotations for automation.
+Concepts therefore remain honest inventory without breaking deployment CI, while
+`--require-candidates` detects an accidentally empty gate.
+
+See [`docs/CI_INTEGRATION.md`](docs/CI_INTEGRATION.md) for exact exit codes, stdin
+usage, lifecycle controls, the fictional passing fixture, and a least-privilege
+GitHub Actions workflow. This repository is the current distribution path; no npm
+package or stable action tag is claimed.
+
 ## Development commands
 
-| Command | Purpose |
-| --- | --- |
-| `npm run serve` | Serve `docs/` locally on `127.0.0.1:4173`. |
-| `npm run lint` | Validate both registries, safe links, local destinations, CSP, deterministic serialization, legal mirrors, and primary HTML contracts. |
-| `npm test` | Run dependency-free catalog, readiness-policy, security-boundary, export, and site-contract tests. |
-| `npm run build` | Recreate the complete static release in `dist/`. |
-| `npm run check` | Run lint, tests, and build in the same order as CI. |
+| Command                      | Purpose                                                                                                                                |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run serve`              | Serve `docs/` locally on `127.0.0.1:4173`.                                                                                             |
+| `npm run lint`               | Validate both registries, safe links, local destinations, CSP, deterministic serialization, legal mirrors, and primary HTML contracts. |
+| `npm run registry -- --help` | Inspect the local registry CLI and its policy/exit contract.                                                                           |
+| `npm test`                   | Run dependency-free catalog, readiness-policy, security-boundary, export, and site-contract tests.                                     |
+| `npm run build`              | Recreate the complete static release in `dist/`.                                                                                       |
+| `npm run check`              | Run lint, tests, and build in the same order as CI.                                                                                    |
 
 There are no npm runtime or development dependencies. `package-lock.json` records
 the package identity and Node compatibility for deterministic installation.
@@ -107,6 +130,9 @@ the package identity and Node compatibility for deterministic installation.
   safe DOM rendering
 - `docs/agents.json` — bundled concept inventory
 - `docs/agent-registry-template.json` — portable starter registry
+- `docs/CI_INTEGRATION.md` — CLI, GitHub Action, lifecycle, and exit-code contract
+- `action.yml`, `bin/`, and `scripts/registry-cli.mjs` — dependency-free CI and
+  command-line enforcement using the shared policy module
 - `docs/assets/catalog.mjs`, `docs/assets/app.mjs`, and `docs/portals.json` — retained
   secondary directory journey
 - `scripts/` — dependency-free validation, build, and local serving
@@ -115,8 +141,10 @@ the package identity and Node compatibility for deterministic installation.
 - `docs/THREAT_MODEL.md` — maintained and legacy trust boundaries
 
 GitHub Actions validates the project and publishes only the generated `dist/`
-directory to GitHub Pages on pushes to `main`. The site has no hosted backend or
-ongoing API, database, AI-token, telemetry, or per-user infrastructure cost.
+directory to GitHub Pages on pushes to `main`. The root `action.yml` also exposes
+the bounded readiness check to caller repositories without write permissions. The
+site and action have no hosted backend or ongoing API, database, AI-token,
+telemetry, or per-user infrastructure cost.
 
 ## Security and privacy
 
@@ -131,6 +159,8 @@ access to the browser profile and is subject to device/browser controls. Do not
 import secrets, prompts, traces, production conversations, personal data, or
 sensitive architecture metadata that is inappropriate for that device. Export is an
 explicit download; resetting clears only this application's saved registry.
+CLI and action output may expose the same metadata in local terminals or CI logs;
+use appropriate repository access and log-retention controls.
 
 Report vulnerabilities privately to `support@samsarix.com`; do not open a public
 issue containing exploit details. See [`SECURITY.md`](SECURITY.md) and

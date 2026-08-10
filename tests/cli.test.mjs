@@ -49,6 +49,7 @@ test('argument parser defines conservative deployment candidates and reproducibl
   assert.deepEqual(parsed.lifecycles, ['development', 'review', 'production']);
   assert.equal(parsed.requireCandidates, true);
   assert.equal(parsed.now.toISOString(), '2026-08-09T00:00:00.000Z');
+  assert.throws(() => parseCliArguments(['check', 'registry.json', '--now', '2026-02-30']), /valid calendar date/);
   assert.throws(() => parseCliArguments(['report', 'registry.json']), /requires --format/);
   assert.throws(() => parseCliArguments(['check', 'registry.json', '--lifecycle', 'imaginary']), /Unsupported lifecycle/);
 });
@@ -113,6 +114,14 @@ test('GitHub format escapes annotation properties and reports blockers', async (
   assert.equal(result.code, EXIT_CODES.readiness);
   assert.match(result.stdout, /title=Research%3A Helper%2C CI readiness blocked/);
   assert.match(result.stdout, /::error/);
+
+  const capped = await invoke([
+    'check', 'docs/agents.json', '--lifecycle', 'all', '--format', 'github', '--now', '2026-08-09'
+  ]);
+  assert.equal(capped.code, EXIT_CODES.readiness);
+  assert.equal((capped.stdout.match(/::error/g) || []).length, 10);
+  assert.match(capped.stdout, /Annotation limit reached: 2 error and 0 notice/);
+  assert.equal((capped.stdout.match(/^BLOCKED /gm) || []).length, 12);
 });
 
 test('report output is deterministic for normalized JSON and Markdown', async () => {

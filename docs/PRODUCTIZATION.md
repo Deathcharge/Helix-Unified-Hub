@@ -47,24 +47,24 @@ The 2026-08-08 registry decision used official A2A discovery/specification mater
 
 Recorded on 2026-07-28 at commit `52a7375b614aca8b3b88843e8e5ab3798239e938` before implementation:
 
-| Command/check | Result |
-| --- | --- |
-| `git status --short --branch --untracked-files=all` | Clean `main`, tracking `origin/main`. |
-| `python -m pytest tests/ -v --cov=src` | Failed: `tests/` did not exist; zero tests collected. |
-| `npm test --prefix zapier-integration -- --runInBand` | Failed: `jest` was not installed and no lockfile was present. |
-| Documented paths | `src/`, `tests/`, `examples/`, `requirements-dev.txt`, and `.github/workflows/ci.yml` were absent. |
-| Docker readiness | Docker was unavailable locally; the root Dockerfile also referenced absent `backend/`, `Shadow/`, and `scripts/` paths. |
-| Android readiness | Gradle and project wrapper/settings files were absent; the checked-in APK cannot be reproduced from documented steps. |
+| Command/check                                         | Result                                                                                                                  |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `git status --short --branch --untracked-files=all`   | Clean `main`, tracking `origin/main`.                                                                                   |
+| `python -m pytest tests/ -v --cov=src`                | Failed: `tests/` did not exist; zero tests collected.                                                                   |
+| `npm test --prefix zapier-integration -- --runInBand` | Failed: `jest` was not installed and no lockfile was present.                                                           |
+| Documented paths                                      | `src/`, `tests/`, `examples/`, `requirements-dev.txt`, and `.github/workflows/ci.yml` were absent.                      |
+| Docker readiness                                      | Docker was unavailable locally; the root Dockerfile also referenced absent `backend/`, `Shadow/`, and `scripts/` paths. |
+| Android readiness                                     | Gradle and project wrapper/settings files were absent; the checked-in APK cannot be reproduced from documented steps.   |
 
 Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86ac90748816815e5` before implementation:
 
-| Command/check | Result |
-| --- | --- |
-| `git status --short --branch --untracked-files=all` | Clean updated `main` before branching; work continues on `agent/competitive-offering`. |
-| `npm ci` | The first attempt did not complete in the local Windows environment despite a dependency-free lockfile; the exact stalled `npm ci` process was stopped without touching unrelated Node processes. A later bounded clean-install command passed; see current verification evidence below. |
-| `npm run check` | Pending at baseline; completed successfully after implementation as recorded below. |
-| Existing maintained surface | Dependency-free static site under `docs/`, Node standard-library checks/tests/build, and GitHub Pages deployment from generated `dist/`. |
-| Product overlap | The generic directory overlaps the canonical Field Guide, so the new work must remain a distinct agent-readiness workflow rather than another portfolio homepage. |
+| Command/check                                       | Result                                                                                                                                                                                                                                                                                   |
+| --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `git status --short --branch --untracked-files=all` | Clean updated `main` before branching; work continues on `agent/competitive-offering`.                                                                                                                                                                                                   |
+| `npm ci`                                            | The first attempt did not complete in the local Windows environment despite a dependency-free lockfile; the exact stalled `npm ci` process was stopped without touching unrelated Node processes. A later bounded clean-install command passed; see current verification evidence below. |
+| `npm run check`                                     | Pending at baseline; completed successfully after implementation as recorded below.                                                                                                                                                                                                      |
+| Existing maintained surface                         | Dependency-free static site under `docs/`, Node standard-library checks/tests/build, and GitHub Pages deployment from generated `dist/`.                                                                                                                                                 |
+| Product overlap                                     | The generic directory overlaps the canonical Field Guide, so the new work must remain a distinct agent-readiness workflow rather than another portfolio homepage.                                                                                                                        |
 
 ## Findings and implementation checklist
 
@@ -135,10 +135,11 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 - Added deterministic normalized JSON and human-readable Markdown review packets, including control-syntax neutralization and visible score/blocker disclaimers.
 - Published a prose schema, Draft 2020-12 JSON Schema, starter manifest, fictional current-format A2A example, and citation metadata for adoption and attribution.
 - Updated the first viewport, product metadata, package/legal identity, security policy, threat model, supporting directory, and generated social card to Samsarix Agent Readiness Registry v1.1.0-rc.1.
+- Added the v1.2 dependency-free registry CLI and JavaScript Action with bounded file/stdin import, stable policy and error exits, deterministic reports, escaped workflow annotations, a fictional passing fixture, and command-level tests using the shared readiness implementation.
 
 ## Deferred and owner-blocked work
 
-- The owner authorized pushing this work and merging validated changes to `main`; the existing Pages workflow will deploy the allowlisted `dist/` artifact after that merge. No custom domain, environment rule, live service, credential, or external account setting is created or changed here.
+- The owner authorized pushing and merging validated v1.2 changes to `main`; the existing Pages workflow will deploy the allowlisted `dist/` documentation artifact after that merge. No custom domain, environment rule, live service, credential, or external account setting is created or changed here.
 - Counsel review remains recommended for the BSL scope, Additional Use Grant, Change License, trademark policy, and future commercial agreement; the obsolete pricing domains and unsupported click-through proprietary terms were removed.
 - The provenance and release status of the checked-in APK, PDFs, archives, exported conversations, and logs require owner review before removal or redistribution decisions.
 - Credentials and external account configuration for Railway, Discord, Zapier, Manus, domains, and app signing are intentionally not fabricated.
@@ -153,37 +154,54 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 - Production promotion remains blocked on credential rotation, personal-data disposition, Pages settings, and legal review even though the generated `dist/` artifact passes its local acceptance checks.
 - Readiness policy can create false confidence if scores are detached from evidence. The registry must keep blockers and evidence references primary and must not describe a score as certification.
 - Browser persistence reduces service-side exposure but is not encrypted storage; users must be told not to import secrets, prompts, traces, or sensitive production content.
+- On 2026-08-10 GitHub reported 130 open Dependabot alerts: 31 high, 61 medium, and 38 low. All mapped to four preserved pip manifests under `assets/` and `legacy/backend-prototype/`, not to the dependency-free root registry package. They still represent repository supply-chain debt and require a separate quarantine, upgrade, or retention decision; the v1.2 release does not describe them as remediated.
 
 ## Final verification evidence
 
+CLI/action release-candidate evidence recorded on 2026-08-10 on
+`agent/registry-cli-v1-2`:
+
+| Verification                                   | Result                                                                                                                                                                                                                          |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm ci --ignore-scripts --no-audit --no-fund` | Passed; the dependency-free root lockfile was current and declared supported Node.js 22+.                                                                                                                                       |
+| Node syntax and action/CLI command tests       | Passed; the executable modules parsed and success, policy, usage, malformed/oversized data, unreadable input, stdin, deterministic report, calendar-date, GitHub escaping, and action-wrapper paths retained their exact exits. |
+| `npm run check`                                | Passed: 24 catalog entries and 12 agent records validated, 31/31 tests passed, and `dist/` rebuilt.                                                                                                                             |
+| Manual CLI/action smoke                        | Registry validation passed, the fictional review candidate passed at 100/100 with a fixed date, Markdown output rendered, and the Action emitted an escaped GitHub notice.                                                      |
+| Source/artifact parity                         | `docs/` and rebuilt `dist/` each contained 46 files with zero path or hash differences; the final ordered manifest digest is recorded in the pull request to avoid a self-referential artifact.                                 |
+| Changed-scope credential-pattern scan          | No GitHub token, AWS access-key, private-key header, or non-placeholder Zapier hook pattern was found.                                                                                                                          |
+| Remote dependency signal                       | GitHub reported 130 open alerts, all from four preserved pip manifests outside the dependency-free maintained root product; the counts and unresolved boundary are recorded under Known risks.                                  |
+
+GitHub pull-request checks, merge identity, and Pages deployment remain release gates
+and are recorded in the pull request rather than predicted in this file.
+
 Registry release-candidate evidence recorded on 2026-08-08 on `agent/competitive-offering`:
 
-| Verification | Result |
-| --- | --- |
-| `npm ci --ignore-scripts --no-audit --no-fund` | Passed in 5 seconds; dependency-free lockfile was current. |
-| `node --check docs/assets/readiness.mjs`, `node --check docs/assets/registry-app.mjs`, `node --check scripts/check.mjs` | Passed with no syntax errors. |
-| `npm run check` | Passed: 22 catalog entries and 12 agent records validated, 20/20 tests passed, and `dist/` rebuilt. |
-| Readiness/adversarial fixtures | Passed for valid and stale ready records, bundled concepts, current A2A normalization, concrete authentication/data/operations requirements, published schema/example, duplicate IDs, HTTP/credential URLs, credential-bearing fields, malformed/oversized input, deterministic JSON/Markdown, Markdown control syntax, and composed filters. |
-| Built-artifact HTTP smoke | Eight contracts passed: landing page, registry, bundled registry, template, policy module, and social card returned 200 with expected content/types; missing and traversal-shaped paths returned 404. |
-| Source/artifact parity | `docs/` and rebuilt `dist/` each contained 44 files with zero missing or hash-mismatched paths. |
-| Social image | One image-generation edit produced `docs/assets/og-agent-registry.png`; text, spelling, safe margins, palette, and project metadata reference were visually inspected. |
-| Browser visual automation | Not run for this increment because the applicable Sites workflow requires explicit user request before browser QA. Responsive, keyboard-focus, reduced-motion, semantic/fallback, and live-region behavior is covered by implementation review and static contracts, not a new rendered-browser claim. |
-| Formal Codex Security diff scan | Not run: the desktop scan launcher returned `Transport closed` before issuing a scan ID. It was not retried or represented as completed; local threat-model review, bounded-input tests, syntax checks, CSP contracts, and the adversarial fixtures above remain the available evidence. |
+| Verification                                                                                                            | Result                                                                                                                                                                                                                                                                                                                                        |
+| ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm ci --ignore-scripts --no-audit --no-fund`                                                                          | Passed in 5 seconds; dependency-free lockfile was current.                                                                                                                                                                                                                                                                                    |
+| `node --check docs/assets/readiness.mjs`, `node --check docs/assets/registry-app.mjs`, `node --check scripts/check.mjs` | Passed with no syntax errors.                                                                                                                                                                                                                                                                                                                 |
+| `npm run check`                                                                                                         | Passed: 22 catalog entries and 12 agent records validated, 20/20 tests passed, and `dist/` rebuilt.                                                                                                                                                                                                                                           |
+| Readiness/adversarial fixtures                                                                                          | Passed for valid and stale ready records, bundled concepts, current A2A normalization, concrete authentication/data/operations requirements, published schema/example, duplicate IDs, HTTP/credential URLs, credential-bearing fields, malformed/oversized input, deterministic JSON/Markdown, Markdown control syntax, and composed filters. |
+| Built-artifact HTTP smoke                                                                                               | Eight contracts passed: landing page, registry, bundled registry, template, policy module, and social card returned 200 with expected content/types; missing and traversal-shaped paths returned 404.                                                                                                                                         |
+| Source/artifact parity                                                                                                  | `docs/` and rebuilt `dist/` each contained 44 files with zero missing or hash-mismatched paths.                                                                                                                                                                                                                                               |
+| Social image                                                                                                            | One image-generation edit produced `docs/assets/og-agent-registry.png`; text, spelling, safe margins, palette, and project metadata reference were visually inspected.                                                                                                                                                                        |
+| Browser visual automation                                                                                               | Not run for this increment because the applicable Sites workflow requires explicit user request before browser QA. Responsive, keyboard-focus, reduced-motion, semantic/fallback, and live-region behavior is covered by implementation review and static contracts, not a new rendered-browser claim.                                        |
+| Formal Codex Security diff scan                                                                                         | Not run: the desktop scan launcher returned `Transport closed` before issuing a scan ID. It was not retried or represented as completed; local threat-model review, bounded-input tests, syntax checks, CSP contracts, and the adversarial fixtures above remain the available evidence.                                                      |
 
 Earlier directory-release evidence is retained below for historical traceability.
 
 Recorded against the release-candidate working tree on 2026-07-28:
 
-| Verification | Result |
-| --- | --- |
-| `npm ci` | Passed; one root package audited, zero vulnerabilities. |
-| `npm run check` | Passed: repository checks, 7/7 tests, and deterministic `dist/` build. |
-| Secondary Node syntax checks | Passed for the portal generator, MCP adapter, Discord voice commander, and Zapier prototype. |
-| Local HTTP smoke test | `index.html` and catalog returned 200; missing and traversal-shaped paths returned 404. |
-| Browser journey | Search returned Phoenix for “resilience”; archive filter returned two destinations; bundled gallery navigation succeeded; final console had zero errors and warnings. |
-| Mobile layout | 390×844 viewport visually inspected with readable hierarchy and controls; no visible horizontal overflow. |
-| Credential-shape scan | No GitHub-token patterns or non-placeholder Zapier-hook patterns remain in current text or archived text entries. |
+| Verification                 | Result                                                                                                                                                                |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm ci`                     | Passed; one root package audited, zero vulnerabilities.                                                                                                               |
+| `npm run check`              | Passed: repository checks, 7/7 tests, and deterministic `dist/` build.                                                                                                |
+| Secondary Node syntax checks | Passed for the portal generator, MCP adapter, Discord voice commander, and Zapier prototype.                                                                          |
+| Local HTTP smoke test        | `index.html` and catalog returned 200; missing and traversal-shaped paths returned 404.                                                                               |
+| Browser journey              | Search returned Phoenix for “resilience”; archive filter returned two destinations; bundled gallery navigation succeeded; final console had zero errors and warnings. |
+| Mobile layout                | 390×844 viewport visually inspected with readable hierarchy and controls; no visible horizontal overflow.                                                             |
+| Credential-shape scan        | No GitHub-token patterns or non-placeholder Zapier-hook patterns remain in current text or archived text entries.                                                     |
 
 ## Distribution and sustainability
 
-Distribute as a static GitHub Pages artifact built from `docs/`. Hosting cost is effectively the repository/Pages plan plus normal maintainer time; the core product has no API, database, AI-token, or telemetry cost. The local registry is the free adoption surface. Plausible later revenue comes from managed private registries, policy packs, signed approval history, GitHub enforcement, migration/review services, and contracted support—but only after real demand and a separately approved security/operating model. No market demand or product-market fit is claimed.
+Distribute the workspace as a static GitHub Pages artifact built from `docs/` and the enforcement layer as source in the same repository. Hosting cost is effectively the repository/Pages plan plus normal maintainer time; the core product has no API, database, AI-token, or telemetry cost. The local registry and baseline GitHub check are the free adoption surface. Plausible later revenue comes from managed private registries, organization policy packs, signed approval history, migration/review services, and contracted support—but only after real demand and a separately approved security/operating model. No market demand or product-market fit is claimed.

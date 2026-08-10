@@ -31,21 +31,21 @@ JSON Schema alone cannot fully express.
 
 ## Agent record
 
-| Field | Constraint |
-| --- | --- |
-| `id` | Required lowercase kebab-case identifier, at most 64 characters. |
-| `name` | Required display name, at most 120 characters. |
-| `summary` | Required bounded purpose, at most 600 characters. |
-| `version` | Optional declared version, at most 80 characters. |
-| `lifecycle` | `concept`, `development`, `review`, `production`, `paused`, or `retired`. |
-| `risk` | `unassessed`, `low`, `moderate`, `high`, or `critical`. |
-| `owner` | Object with `name` and `contact`. Both are needed for readiness. |
-| `authentication` | Optional `schemes` array plus inert `notes`. Review and production records need at least one declared scheme. A2A scheme names are preserved here. |
-| `interfaces` | At most 20 `{ "protocol", "version", "url" }` objects. Protocol is required; a URL, when present, must use HTTPS and contain no embedded username or password. |
-| `skills` | At most 50 short strings. Objects with a `name` or `id` are also normalized on import. |
-| `data` | `classification`, `sources`, and `retention`; classification is `unassessed`, `public`, `internal`, `confidential`, or `restricted`. |
-| `deployment` | Optional `environment`, `monitoringOwner`, `incidentContact`, and `runbook` metadata. |
-| `evidence` | One object per readiness gate as described below. Missing gate objects normalize to `missing`. |
+| Field            | Constraint                                                                                                                                                     |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`             | Required lowercase kebab-case identifier, at most 64 characters.                                                                                               |
+| `name`           | Required display name, at most 120 characters.                                                                                                                 |
+| `summary`        | Required bounded purpose, at most 600 characters.                                                                                                              |
+| `version`        | Optional declared version, at most 80 characters.                                                                                                              |
+| `lifecycle`      | `concept`, `development`, `review`, `production`, `paused`, or `retired`.                                                                                      |
+| `risk`           | `unassessed`, `low`, `moderate`, `high`, or `critical`.                                                                                                        |
+| `owner`          | Object with `name` and `contact`. Both are needed for readiness.                                                                                               |
+| `authentication` | Optional `schemes` array plus inert `notes`. Review and production records need at least one declared scheme. A2A scheme names are preserved here.             |
+| `interfaces`     | At most 20 `{ "protocol", "version", "url" }` objects. Protocol is required; a URL, when present, must use HTTPS and contain no embedded username or password. |
+| `skills`         | At most 50 short strings. Objects with a `name` or `id` are also normalized on import.                                                                         |
+| `data`           | `classification`, `sources`, and `retention`; classification is `unassessed`, `public`, `internal`, `confidential`, or `restricted`.                           |
+| `deployment`     | Optional `environment`, `monitoringOwner`, `incidentContact`, and `runbook` metadata.                                                                          |
+| `evidence`       | One object per readiness gate as described below. Missing gate objects normalize to `missing`.                                                                 |
 
 Unknown metadata is ignored during normalization and is not included in deterministic
 exports. Do not use this registry as the only copy of framework-specific metadata.
@@ -80,8 +80,7 @@ render them as HTML. Reviews older than 180 days are shown as stale and block a
 ready result until refreshed.
 
 The weighted score is deterministic: purpose 12, ownership 12, interface 11,
-authentication 10, data 12, evaluation 12, security 12, oversight 10, and operations
-9. `missing` earns no weight, `declared` earns half, and `verified` earns full weight.
+authentication 10, data 12, evaluation 12, security 12, oversight 10, and operations 9. `missing` earns no weight, `declared` earns half, and `verified` earns full weight.
 
 The score never overrides blockers. Concept, paused, or retired lifecycle; an
 unassessed or critical risk tier; missing owner/contact; missing bounded purpose or
@@ -135,3 +134,17 @@ so unchanged input and policy produce unchanged output.
 
 Start with [`agent-registry-template.json`](agent-registry-template.json). It is
 valid but intentionally incomplete, so its missing evidence remains visible.
+
+## CLI and CI policy
+
+The supported-LTS Node CLI and root GitHub Action use this same parser, normalization order,
+and readiness evaluator. `validate` accepts this registry or one A2A Agent Card;
+`report` produces deterministic normalized JSON or Markdown; and `check` returns a
+nonzero policy result when a selected agent is not ready.
+
+By default, `check` gates only `review` and `production` records. Use an explicit
+lifecycle selection for another policy and `--require-candidates` to fail an empty
+selection. See [`CI_INTEGRATION.md`](CI_INTEGRATION.md) for command syntax, GitHub
+annotations, inputs, and the stable exit-code contract. The fictional
+[`review-ready-registry-example.json`](review-ready-registry-example.json) provides
+a reproducible passing fixture without claiming a live agent.
