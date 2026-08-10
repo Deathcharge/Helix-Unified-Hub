@@ -57,17 +57,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: Deathcharge/Helix-Unified-Hub@main
+      - uses: Deathcharge/Helix-Unified-Hub@31443ec65c108174fe13b26194ac9f31b1f37ac3
         with:
           registry: path/to/agents.json
           lifecycle: review,production
           require-candidates: "true"
 ```
 
-The repository has not published a stable action tag. Evaluate `main`, then pin the
-Samsarix action to the exact reviewed commit SHA in production workflows so a later
-branch update cannot silently change policy. Do not pass credentials in the registry
-file or action inputs.
+The example pins the reviewed v1.2 runtime-fix commit. The repository has not
+published a stable action tag; production workflows should use an exact commit they
+have reviewed so a later branch update cannot silently change policy. Do not pass
+credentials in the registry file or action inputs.
 
 Action inputs:
 
