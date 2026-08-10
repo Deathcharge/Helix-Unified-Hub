@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { access, readFile, readdir } from "node:fs/promises";
+import { access, lstat, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
@@ -37,6 +37,24 @@ const dependencySnapshots = [
     original: "assets/requirements.txt",
     snapshot: "legacy/dependency-snapshots/helix-community-hub.snapshot",
     sha256: "54a91cbdc8e3151a65ce5c1090e8b7b3ad7192aaa74233b6e7a302b8fd0cbab5",
+  },
+];
+const archivedBuildSnapshots = [
+  {
+    original: "assets/Dockerfile",
+    snapshot: "assets/helix-v14.5-backend.container-snapshot",
+  },
+  {
+    original: "assets/Dockerfile.streamlit",
+    snapshot: "assets/helix-v14.5-streamlit.container-snapshot",
+  },
+  {
+    original: "assets/docker-compose.yml",
+    snapshot: "assets/helix-v15.3.compose-snapshot",
+  },
+  {
+    original: "legacy/backend-prototype/Dockerfile",
+    snapshot: "legacy/backend-prototype/helix-v14.5-backend.container-snapshot",
   },
 ];
 
@@ -357,7 +375,7 @@ for (const relativePath of [
 
 for (const entry of dependencySnapshots) {
   try {
-    await access(path.join(root, entry.original));
+    await lstat(path.join(root, entry.original));
     fail(
       `${entry.original}: unsupported pip manifest must remain quarantined.`,
     );
@@ -377,6 +395,28 @@ for (const entry of dependencySnapshots) {
   } catch (error) {
     fail(
       `${entry.snapshot}: preserved dependency snapshot is unavailable: ${error.message}`,
+    );
+  }
+}
+
+for (const entry of archivedBuildSnapshots) {
+  try {
+    await lstat(path.join(root, entry.original));
+    fail(
+      `${entry.original}: archived build entry point must remain quarantined.`,
+    );
+  } catch (error) {
+    if (error.code !== "ENOENT") {
+      fail(
+        `${entry.original}: quarantine absence check failed: ${error.message}`,
+      );
+    }
+  }
+  try {
+    await readFile(path.join(root, entry.snapshot));
+  } catch (error) {
+    fail(
+      `${entry.snapshot}: archived build snapshot is unavailable: ${error.message}`,
     );
   }
 }

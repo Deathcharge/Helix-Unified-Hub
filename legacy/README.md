@@ -5,7 +5,8 @@ The maintained product in this repository is the static site under `docs/`. Othe
 Do not deploy these surfaces based on historical “production ready,” “live,” or “complete” language inside archived files. Re-evaluate credentials, permissions, dependencies, authorization, data retention, external endpoints, tests, and licensing before reuse.
 
 Historical Python dependency text is preserved under
-[`dependency-snapshots/`](dependency-snapshots/README.md) with non-installable
-`.snapshot` extensions and recorded hashes. The original `requirements*.txt` paths
-were quarantined after GitHub associated 130 open alerts with them. Reconstruct and
-lock dependencies from current authoritative sources before reviving any prototype.
+[`dependency-snapshots/`](dependency-snapshots/README.md) with quarantined
+`.snapshot` names and recorded hashes, outside supported dependency discovery and
+build inputs. The original `requirements*.txt` paths were quarantined after GitHub
+associated 130 open alerts with them. Reconstruct and lock dependencies from current
+authoritative sources before reviving any prototype.

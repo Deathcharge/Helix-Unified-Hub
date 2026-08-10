@@ -136,7 +136,7 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 - Published a prose schema, Draft 2020-12 JSON Schema, starter manifest, fictional current-format A2A example, and citation metadata for adoption and attribution.
 - Updated the first viewport, product metadata, package/legal identity, security policy, threat model, supporting directory, and generated social card to Samsarix Agent Readiness Registry v1.1.0-rc.1.
 - Added the v1.2 dependency-free registry CLI and JavaScript Action with bounded file/stdin import, stable policy and error exits, deterministic reports, escaped workflow annotations, a fictional passing fixture, and command-level tests using the shared readiness implementation.
-- Preserved four unsupported Helix-era pip manifests as hash-recorded, non-installable `.snapshot` files and removed their active `requirements*.txt` paths so legacy dependency text no longer masquerades as a supported runtime surface.
+- Preserved four unsupported Helix-era pip manifests as hash-recorded, quarantined `.snapshot` files outside supported build inputs and removed their active `requirements*.txt` paths so legacy dependency text no longer masquerades as a supported runtime surface.
 
 ## Deferred and owner-blocked work
 

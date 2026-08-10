@@ -1,9 +1,11 @@
 # Quarantined Python dependency snapshots
 
 These files preserve the exact dependency text from four unsupported Helix-era
-prototype manifests. Their `.snapshot` extension is deliberate: they are historical
-evidence, not installable Samsarix requirements, lockfiles, deployment inputs, or a
-claim that the listed versions are secure or mutually compatible.
+prototype manifests. Their `.snapshot` extension is a repository convention that
+places them outside supported dependency discovery and build inputs. They remain
+valid requirements text if explicitly passed to pip, but are historical evidence—not
+supported Samsarix requirements, lockfiles, or a claim that the listed versions are
+secure or mutually compatible.
 
 GitHub reported 130 open Dependabot alerts against the four original pip-manifest
 paths on 2026-08-10. None belonged to the dependency-free Samsarix Agent Readiness
