@@ -1,5 +1,10 @@
 # 🚀 Helix v15.3 - Post-PR#15 Deployment Status
 
+> **Archived and unsupported.** This 2025 status report describes a different
+> Helix repository and is not a Samsarix deployment guide. Its referenced Python
+> dependency manifest is quarantined under `legacy/dependency-snapshots/` and must
+> not be installed.
+
 **Date**: October 28, 2025
 **Session**: Continued after context archive
 **Status**: ✅ PR #15 MERGED | Railway Auto-Deploy Triggered

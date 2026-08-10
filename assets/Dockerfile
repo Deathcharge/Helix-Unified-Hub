@@ -1,4 +1,7 @@
-# Helix Collective v14.5 - Backend Dockerfile (FIXED)
+# ARCHIVED AND INTENTIONALLY NON-BUILDABLE.
+# Its former requirements.txt is preserved as a non-installable, hash-recorded
+# snapshot in ../legacy/dependency-snapshots/. This is not a supported Samsarix image.
+# Helix Collective v14.5 - Backend Dockerfile (historical)
 FROM python:3.11-slim
 
 WORKDIR /app

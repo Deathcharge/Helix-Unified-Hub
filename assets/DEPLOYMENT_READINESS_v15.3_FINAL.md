@@ -1,5 +1,10 @@
 # 🌀 Helix Collective v15.3 — Deployment Readiness Report
 
+> **Archived and unsupported.** This 2025 report records a historical claim, not the
+> current Samsarix release state. On 2026-08-10 its pip manifests were moved to
+> `legacy/dependency-snapshots/` after GitHub reported 130 open alerts. The snapshots
+> are preserved for provenance and must not be installed or used for deployment.
+
 **Date**: October 30, 2025  
 **Status**: ✅ READY FOR RAILWAY DEPLOYMENT  
 **Build Fix**: Dockerfile corrected (test_discord_commands.py reference removed)  
@@ -34,8 +39,8 @@ All Dockerfile COPY references have been verified:
 
 | File/Directory | Status | Purpose |
 |---|---|---|
-| `requirements-backend.txt` | ✅ Present | Railway backend dependencies |
-| `requirements.txt` | ✅ Present | Streamlit frontend dependencies |
+| `requirements-backend.txt` | ⚠️ Quarantined | Historical text preserved as `legacy/dependency-snapshots/helix-v15.3-backend-assets.snapshot` |
+| `requirements.txt` | ⚠️ Quarantined | Historical text preserved as `legacy/dependency-snapshots/helix-community-hub.snapshot` |
 | `backend/` | ✅ Present | FastAPI application code |
 | `bot/` | ✅ Present | Discord bot implementation |
 | `dashboard/` | ✅ Present | Streamlit dashboard |
@@ -78,12 +83,9 @@ All Dockerfile COPY references have been verified:
 ## Dependency Verification
 
 ### Critical Dependencies
-- **pycryptodome**: ✅ Specified in requirements-backend.txt (fixes mega.py conflicts)
-- **discord.py**: ✅ v2.4.0
-- **fastapi**: ✅ v0.115.0
-- **uvicorn**: ✅ v0.32.0
-- **mega.py**: ✅ Specified (requires pycryptodome)
-- **streamlit**: ✅ v1.40.0
+- **Historical declarations only**: pycryptodome, discord.py, FastAPI, Uvicorn,
+  mega.py, and Streamlit appeared in the quarantined snapshots. Their versions and
+  compatibility have not been approved for current use.
 
 ### Cryptodome Import Compatibility
 - **Layer**: Activated in `backend/main.py` (lines 12-22)

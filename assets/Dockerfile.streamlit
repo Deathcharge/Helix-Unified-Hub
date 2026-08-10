@@ -1,4 +1,7 @@
-# Helix Collective v14.5 - Streamlit Frontend Dockerfile
+# ARCHIVED AND INTENTIONALLY NON-BUILDABLE.
+# Its former requirements.txt is preserved as a non-installable, hash-recorded
+# snapshot in ../legacy/dependency-snapshots/. This is not a supported Samsarix image.
+# Helix Collective v14.5 - Streamlit Frontend Dockerfile (historical)
 FROM python:3.11-slim
 
 WORKDIR /app
@@ -34,4 +37,3 @@ enableXsrfProtection = false" > ~/.streamlit/config.toml
 
 # Run Streamlit app
 CMD ["streamlit", "run", "frontend/streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
-

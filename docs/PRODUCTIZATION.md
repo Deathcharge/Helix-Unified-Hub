@@ -95,7 +95,7 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 - [ ] Add an owner-maintained process for reviewing external link freshness.
 - [ ] Normalize or archive duplicate historical HTML and documentation after owner review.
 - [ ] Decide whether the Android, Discord, webhook, and generator prototypes should be extracted into separate repositories or removed.
-- [ ] Add a dependency-free CLI and GitHub check only after the browser schema and readiness policy stabilize with real inventories.
+- [x] Add a dependency-free CLI and GitHub check after the browser schema and readiness policy stabilize.
 - [ ] Validate demand before considering team history, signed approvals, managed hosting, or enterprise imports.
 
 ## Release acceptance criteria
@@ -136,6 +136,7 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 - Published a prose schema, Draft 2020-12 JSON Schema, starter manifest, fictional current-format A2A example, and citation metadata for adoption and attribution.
 - Updated the first viewport, product metadata, package/legal identity, security policy, threat model, supporting directory, and generated social card to Samsarix Agent Readiness Registry v1.1.0-rc.1.
 - Added the v1.2 dependency-free registry CLI and JavaScript Action with bounded file/stdin import, stable policy and error exits, deterministic reports, escaped workflow annotations, a fictional passing fixture, and command-level tests using the shared readiness implementation.
+- Preserved four unsupported Helix-era pip manifests as hash-recorded, non-installable `.snapshot` files and removed their active `requirements*.txt` paths so legacy dependency text no longer masquerades as a supported runtime surface.
 
 ## Deferred and owner-blocked work
 
@@ -154,7 +155,7 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 - Production promotion remains blocked on credential rotation, personal-data disposition, Pages settings, and legal review even though the generated `dist/` artifact passes its local acceptance checks.
 - Readiness policy can create false confidence if scores are detached from evidence. The registry must keep blockers and evidence references primary and must not describe a score as certification.
 - Browser persistence reduces service-side exposure but is not encrypted storage; users must be told not to import secrets, prompts, traces, or sensitive production content.
-- On 2026-08-10 GitHub reported 130 open Dependabot alerts: 31 high, 61 medium, and 38 low. All mapped to four preserved pip manifests under `assets/` and `legacy/backend-prototype/`, not to the dependency-free root registry package. They still represent repository supply-chain debt and require a separate quarantine, upgrade, or retention decision; the v1.2 release does not describe them as remediated.
+- On 2026-08-10 GitHub reported 130 open Dependabot alerts: 31 high, 61 medium, and 38 low. All mapped to four unsupported pip manifests, not to the dependency-free root registry package. Their exact text is now preserved under `legacy/dependency-snapshots/` while the recognized manifest paths are absent. This quarantines the false active-runtime signal; it does not make those dependency versions safe, and the remote alert count remains unverified until GitHub reconciles a merged default branch.
 
 ## Final verification evidence
 
@@ -171,8 +172,10 @@ CLI/action release-candidate evidence recorded on 2026-08-10 on
 | Changed-scope credential-pattern scan          | No GitHub token, AWS access-key, private-key header, or non-placeholder Zapier hook pattern was found.                                                                                                                          |
 | Remote dependency signal                       | GitHub reported 130 open alerts, all from four preserved pip manifests outside the dependency-free maintained root product; the counts and unresolved boundary are recorded under Known risks.                                  |
 
-GitHub pull-request checks, merge identity, and Pages deployment remain release gates
-and are recorded in the pull request rather than predicted in this file.
+GitHub PR #13 merged the exact reviewed head as `5431913fc3d45b48d934913ad2c8e66344679e07`.
+Main run `31424526531` passed validation, the real local Action step, artifact upload,
+and Pages deployment; the landing page, registry, CI guide, and ready fixture then
+returned HTTP 200 with expected v1.2 content.
 
 Registry release-candidate evidence recorded on 2026-08-08 on `agent/competitive-offering`:
 

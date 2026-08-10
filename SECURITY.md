@@ -19,3 +19,8 @@ services. See `docs/THREAT_MODEL.md` for the trust boundaries and known owner ga
 
 Historical credential-shaped values were redacted from the current tree, but
 redaction does not revoke credentials or remove them from earlier Git history.
+
+Unsupported Helix-era Python dependency lists are retained only as hash-recorded
+files under `legacy/dependency-snapshots/`; they are not supported manifests and
+must not be installed. Reconstruct, lock, scan, and review any dependencies in a
+separate maintained project before reusing legacy prototype code.
