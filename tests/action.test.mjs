@@ -42,6 +42,19 @@ test("GitHub Action wrapper preserves policy and configuration exit codes", () =
   assert.equal(blocked.status, EXIT_CODES.readiness);
   assert.match(blocked.stdout, /::error/);
 
+  const mcp = spawnSync(process.execPath, [action], {
+    cwd: root,
+    encoding: "utf8",
+    env: {
+      ...baseEnvironment,
+      INPUT_REGISTRY: "docs/mcp-server-example.json",
+      INPUT_LIFECYCLE: "development",
+    },
+  });
+  assert.equal(mcp.status, EXIT_CODES.readiness);
+  assert.match(mcp.stdout, /mcp-com-example-release-evidence/);
+  assert.match(mcp.stdout, /::error/);
+
   const invalidRegistry = spawnSync(process.execPath, [action], {
     cwd: root,
     encoding: "utf8",

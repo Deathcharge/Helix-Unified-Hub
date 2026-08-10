@@ -39,7 +39,7 @@
       <div>
         <p class="eyebrow">Local-first readiness workspace</p>
         <h1 id="registry-title">Know what is ready before it acts.</h1>
-        <p class="hero-copy">Import an agent inventory or A2A Agent Card, inspect nine visible evidence gates, and take a deterministic review packet to the next decision.</p>
+        <p class="hero-copy">Import an agent inventory, A2A Agent Card, or MCP Registry server.json, inspect nine visible evidence gates, and take a deterministic review packet to the next decision.</p>
       </div>
       <aside class="privacy-note" aria-label="Privacy boundary">
         <strong>Your files stay in this browser.</strong>
@@ -54,9 +54,10 @@
         <p id="workspace-description" class="workspace-description"></p>
       </div>
       <div class="workspace-actions" aria-label="Registry actions">
-        <input id="registry-file" class="file-input" type="file" accept=".json,application/json" aria-label="Import Samsarix registry or A2A Agent Card JSON" disabled>
+        <input id="registry-file" class="file-input" type="file" accept=".json,application/json" aria-label="Import Samsarix registry, A2A Agent Card, or MCP server JSON" disabled>
         <a class="button" href="agent-registry-template.json" download>Starter template</a>
         <a class="button" href="a2a-agent-card-example.json" download>A2A example</a>
+        <a class="button" href="mcp-server-example.json" download>MCP example</a>
         <a class="button" href="review-ready-registry-example.json" download>Ready example</a>
         <a class="button" href="CI_INTEGRATION.md">CI guide</a>
         <button class="button" id="export-json" type="button" disabled>Export JSON</button>
@@ -142,14 +143,14 @@
       </div>
       <div class="method-copy">
         <p>The registry scores purpose, ownership, interface, authentication, data handling, evaluation, security, human oversight, and operations. Missing critical evidence overrides a numerical score. Concept, paused, and retired records cannot be labeled ready.</p>
-        <p>A2A import carries identity, skills, interface, provider, and security-declaration metadata into a review record. It deliberately leaves organization-specific governance evidence missing.</p>
+        <p>A2A import carries identity, skills, interface, provider, and security-declaration metadata into a review record. MCP Registry server.json import carries identity, package or remote transport, and secret-input names—but never values—into the same review workflow. Both deliberately leave organization-specific governance evidence missing.</p>
         <p><a href="AGENT_REGISTRY_PRODUCT.md">Read the product and policy brief</a>, <a href="CI_INTEGRATION.md">enforce the policy in CI</a>, or <a href="mailto:support@samsarix.com">contact support</a>.</p>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <p>Samsarix Agent Readiness Registry · v1.2 release candidate · © 2026 Samsarix LLC</p>
+    <p>Samsarix Agent Readiness Registry · v1.3 release candidate · © 2026 Samsarix LLC</p>
     <p><a href="legal.html">License</a> · <a href="mailto:contact@samsarix.com">Contact</a> · <a href="mailto:support@samsarix.com">Support</a></p>
   </footer>
 </body>

@@ -72,25 +72,33 @@ function normalizedKey(value) {
   return String(value).toLocaleLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
-export function assertNoCredentialFields(value) {
-  const pending = [{ value, path: '$' }];
+export function assertNoCredentialFields(value, { allowVariableNames = false } = {}) {
+  const pending = [{ value, path: '$', variableNameMap: false }];
   let visited = 0;
   while (pending.length) {
     const current = pending.pop();
     visited += 1;
     if (visited > 50_000) throw new RegistryValidationError(['The import is too structurally complex.']);
     if (Array.isArray(current.value)) {
-      current.value.forEach((entry, index) => pending.push({ value: entry, path: `${current.path}[${index}]` }));
+      current.value.forEach((entry, index) => pending.push({
+        value: entry,
+        path: `${current.path}[${index}]`,
+        variableNameMap: false
+      }));
       continue;
     }
     if (!isObject(current.value)) continue;
     for (const [key, entry] of Object.entries(current.value)) {
-      if (CREDENTIAL_KEYS.has(normalizedKey(key))) {
+      if (!current.variableNameMap && CREDENTIAL_KEYS.has(normalizedKey(key))) {
         throw new RegistryValidationError([
           `${current.path}.${key} looks like a credential-bearing field. Remove secrets and import only metadata.`
         ]);
       }
-      pending.push({ value: entry, path: `${current.path}.${key}` });
+      pending.push({
+        value: entry,
+        path: `${current.path}.${key}`,
+        variableNameMap: allowVariableNames && key === 'variables' && isObject(entry)
+      });
     }
   }
 }
@@ -259,6 +267,226 @@ function looksLikeA2ACard(value) {
     && (Array.isArray(value.supportedInterfaces) || typeof value.url === 'string' || Array.isArray(value.skills));
 }
 
+function mcpServerFromDocument(value) {
+  const candidate = isObject(value?.server) ? value.server : value;
+  if (!isObject(candidate) || typeof candidate.name !== 'string') return null;
+  const schema = typeof candidate.$schema === 'string' ? candidate.$schema : '';
+  return /\/server\.schema\.json$/.test(schema) ? candidate : null;
+}
+
+function normalizeMCPRemoteUrl(value, label, issues) {
+  const candidate = boundedString(value, label, issues, { max: 2048, required: true });
+  if (!candidate) return '';
+  const parseableCandidate = candidate.replace(
+    /^\{[A-Za-z_][A-Za-z0-9_]*\}/,
+    'https://template.invalid'
+  );
+  let parsed;
+  try {
+    parsed = new URL(parseableCandidate);
+  } catch {
+    parsed = null;
+  }
+  if (parsed && [...parsed.searchParams].some(([name, queryValue]) => (
+    credentialLikeInputName(name)
+    && !/^\{[A-Za-z_][A-Za-z0-9_]*\}$/.test(queryValue)
+  ))) {
+    issues.push(`${label} must not embed a credential-like query value.`);
+  }
+  if (candidate.includes('{') || candidate.includes('}')) {
+    const concrete = parseableCandidate.replace(/\{[A-Za-z_][A-Za-z0-9_]*\}/g, 'template-value');
+    if (concrete.includes('{') || concrete.includes('}') || !safeRemoteUrl(concrete)) {
+      issues.push(`${label} must be an HTTPS URL or a valid HTTPS variable template without embedded credentials.`);
+    }
+    return '';
+  }
+  const url = safeRemoteUrl(candidate);
+  if (!url) issues.push(`${label} must be an HTTPS URL without embedded credentials.`);
+  return url || '';
+}
+
+function hasDeclaredValue(value) {
+  if (value === undefined || value === null) return false;
+  if (typeof value !== 'string') return true;
+  const candidate = value.trim();
+  return Boolean(candidate) && !/^\{[A-Za-z_][A-Za-z0-9_]*\}$/.test(candidate);
+}
+
+function credentialLikeInputName(value) {
+  return /(?:^|[_-])(api[_-]?key|authorization|cookie|credential|password|private[_-]?key|secret|token)(?:$|[_-])/i
+    .test(String(value || ''));
+}
+
+function normalizeMCPInputDescriptors(packages, remotes, issues) {
+  const descriptors = [];
+  let descriptorLimitReported = false;
+  const addDescriptor = (descriptor) => {
+    if (descriptors.length < 2000) {
+      descriptors.push(descriptor);
+    } else if (!descriptorLimitReported) {
+      issues.push('MCP metadata must contain 2000 input descriptors or fewer.');
+      descriptorLimitReported = true;
+    }
+  };
+  const addArrayDescriptors = (value, label, kind, requireName = false) => {
+    boundedArray(value, label, issues, 100).forEach((input, inputIndex) => addDescriptor({
+      input,
+      label: `${label}[${inputIndex}]`,
+      kind,
+      requireName
+    }));
+  };
+  packages.forEach((entry, packageIndex) => {
+    if (!isObject(entry)) return;
+    addArrayDescriptors(
+      entry.environmentVariables,
+      `MCP packages[${packageIndex}].environmentVariables`,
+      'environment variable',
+      true
+    );
+    addArrayDescriptors(entry.packageArguments, `MCP packages[${packageIndex}].packageArguments`, 'package argument');
+    addArrayDescriptors(entry.runtimeArguments, `MCP packages[${packageIndex}].runtimeArguments`, 'runtime argument');
+  });
+  remotes.forEach((entry, remoteIndex) => {
+    if (!isObject(entry)) return;
+    addArrayDescriptors(entry.headers, `MCP remotes[${remoteIndex}].headers`, 'HTTP header', true);
+    if (entry.variables === undefined || entry.variables === null) return;
+    if (!isObject(entry.variables)) {
+      issues.push(`MCP remotes[${remoteIndex}].variables must be an object.`);
+      return;
+    }
+    const variables = Object.entries(entry.variables);
+    if (variables.length > 100) issues.push(`MCP remotes[${remoteIndex}].variables must contain 100 items or fewer.`);
+    variables.slice(0, 100).forEach(([name, input]) => addDescriptor({
+      input: isObject(input) ? { ...input, name } : input,
+      label: `MCP remotes[${remoteIndex}].variables.${name}`,
+      kind: 'URL variable',
+      requireName: true
+    }));
+  });
+
+  const secretInputs = [];
+  for (let descriptorIndex = 0; descriptorIndex < descriptors.length; descriptorIndex += 1) {
+    const { input, label, kind, requireName } = descriptors[descriptorIndex];
+    if (!isObject(input)) {
+      issues.push(`${label} must be an object.`);
+      continue;
+    }
+    const name = boundedString(input.name, `${label}.name`, issues, { max: 120, required: requireName });
+    const secret = input.isSecret === true || credentialLikeInputName(name);
+    if (secret && (hasDeclaredValue(input.value) || hasDeclaredValue(input.default))) {
+      issues.push(`${label} declares a secret value or default. Remove values and import metadata only.`);
+    }
+    if (secret) secretInputs.push(`${kind}: ${name || `input ${descriptorIndex + 1}`}`);
+    if (input.variables === undefined || input.variables === null) continue;
+    if (!isObject(input.variables)) {
+      issues.push(`${label}.variables must be an object.`);
+      continue;
+    }
+    const variables = Object.entries(input.variables);
+    if (variables.length > 100) issues.push(`${label}.variables must contain 100 items or fewer.`);
+    variables.slice(0, 100).forEach(([variableName, variable]) => addDescriptor({
+      input: isObject(variable) ? { ...variable, name: variableName } : variable,
+      label: `${label}.variables.${variableName}`,
+      kind: `${kind} variable`,
+      requireName: true
+    }));
+  }
+  return [...new Set(secretInputs)].slice(0, 20);
+}
+
+export function normalizeMCPServer(server) {
+  if (!isObject(server)) throw new RegistryValidationError(['MCP server.json must contain one JSON object.']);
+  assertNoCredentialFields(server, { allowVariableNames: true });
+  const issues = [];
+  const schema = boundedString(server.$schema, 'MCP $schema', issues, { max: 500, required: true });
+  const schemaMatch = /^https:\/\/static\.modelcontextprotocol\.io\/schemas\/(\d{4}-\d{2}-\d{2})\/server\.schema\.json$/.exec(schema);
+  if (!schemaMatch) issues.push('MCP $schema must identify an official dated server.schema.json over HTTPS.');
+  const registryName = boundedString(server.name, 'MCP name', issues, { max: 160, required: true });
+  const title = boundedString(server.title || registryName.split('/').at(-1), 'MCP title', issues, { max: 120, required: true });
+  const packageEntries = boundedArray(server.packages, 'MCP packages', issues, 20);
+  const remoteEntries = boundedArray(server.remotes, 'MCP remotes', issues, 20);
+  if (packageEntries.length + remoteEntries.length > 20) {
+    issues.push('MCP packages and remotes must contain 20 transports or fewer in total.');
+  }
+  const packages = packageEntries.slice(0, 20);
+  const remotes = remoteEntries.slice(0, Math.max(0, 20 - packages.length));
+  if (!packages.length && !remotes.length) issues.push('MCP server.json needs at least one package or remote transport.');
+  const secretInputs = normalizeMCPInputDescriptors(packages, remotes, issues);
+  const interfaces = [];
+  packages.forEach((entry, index) => {
+    if (!isObject(entry)) {
+      issues.push(`MCP packages[${index}] must be an object.`);
+      return;
+    }
+    const registryType = boundedString(entry.registryType, `MCP packages[${index}].registryType`, issues, { max: 40, required: true });
+    const transport = isObject(entry.transport) ? entry.transport : {};
+    if (!isObject(entry.transport)) issues.push(`MCP packages[${index}].transport must be an object.`);
+    const transportType = boundedString(transport.type, `MCP packages[${index}].transport.type`, issues, { max: 40, required: true });
+    interfaces.push({ protocol: `MCP ${transportType}${registryType ? ` (${registryType})` : ''}`, version: '', url: '' });
+  });
+  remotes.forEach((entry, index) => {
+    if (!isObject(entry)) {
+      issues.push(`MCP remotes[${index}] must be an object.`);
+      return;
+    }
+    const transportType = boundedString(entry.type, `MCP remotes[${index}].type`, issues, { max: 40, required: true });
+    interfaces.push({
+      protocol: `MCP ${transportType}`,
+      version: '',
+      url: normalizeMCPRemoteUrl(entry.url, `MCP remotes[${index}].url`, issues)
+    });
+  });
+  const repository = isObject(server.repository) ? server.repository : {};
+  if (server.repository !== undefined && !isObject(server.repository)) issues.push('MCP repository must be an object.');
+  const rawRepositoryUrl = boundedString(repository.url, 'MCP repository.url', issues, { max: 2048 });
+  const repositoryUrl = rawRepositoryUrl ? safeRemoteUrl(rawRepositoryUrl) : '';
+  if (rawRepositoryUrl && !repositoryUrl) issues.push('MCP repository.url must be an HTTPS URL without embedded credentials.');
+  const description = boundedString(server.description, 'MCP description', issues, { max: 600 });
+  const secretInputNote = secretInputs.length
+    ? `Declared secret configuration inputs (not authentication proof): ${secretInputs.join(', ')}.`.slice(0, 500)
+    : '';
+  const rawAgent = {
+    id: `mcp-${slugify(registryName)}`,
+    name: title,
+    summary: description || 'Imported MCP server with no description.',
+    version: server.version || '',
+    lifecycle: 'development',
+    risk: 'unassessed',
+    owner: { name: '', contact: '' },
+    authentication: { schemes: [], notes: secretInputNote },
+    interfaces,
+    skills: [],
+    data: { classification: 'unassessed', sources: [], retention: '' },
+    deployment: { environment: '', monitoringOwner: '', incidentContact: '', runbook: '' },
+    evidence: {
+      purpose: {
+        status: description ? 'declared' : 'missing',
+        reference: repositoryUrl || (description ? 'Imported MCP server.json description.' : '')
+      },
+      interface: {
+        status: interfaces.length ? 'declared' : 'missing',
+        reference: interfaces.length ? 'Imported MCP server.json package and remote transport metadata.' : ''
+      },
+      authentication: {
+        status: 'missing',
+        reference: secretInputs.length ? 'MCP secret-input declarations do not establish an authentication scheme.' : ''
+      }
+    }
+  };
+  const agent = normalizeAgent(rawAgent, 0, issues);
+  if (issues.length) throw new RegistryValidationError(issues);
+  return {
+    schemaVersion: REGISTRY_SCHEMA_VERSION,
+    workspace: {
+      name: `${title} readiness review`,
+      description: `Created locally from an MCP Registry server.json${schemaMatch ? ` (${schemaMatch[1]})` : ''}. Discovery and configuration metadata are declared evidence; governance evidence remains missing.`,
+      updatedAt: ''
+    },
+    agents: [agent]
+  };
+}
+
 export function normalizeA2AAgentCard(card) {
   assertNoCredentialFields(card);
   const issues = [];
@@ -321,6 +549,11 @@ export function normalizeA2AAgentCard(card) {
 }
 
 export function normalizeRegistryDocument(value) {
+  const mcpServer = mcpServerFromDocument(value);
+  if (mcpServer && !Array.isArray(value.agents)) {
+    assertNoCredentialFields(value, { allowVariableNames: true });
+    return normalizeMCPServer(mcpServer);
+  }
   assertNoCredentialFields(value);
   if (looksLikeA2ACard(value) && !Array.isArray(value.agents)) return normalizeA2AAgentCard(value);
   const issues = [];

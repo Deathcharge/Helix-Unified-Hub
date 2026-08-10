@@ -10,7 +10,7 @@ The owner authorized a differentiated next release on 2026-08-08. The maintained
 
 ## Target user and primary use case
 
-The initial target user is an individual builder or team of roughly 2–50 people prototyping agents across A2A, MCP, framework-specific, or custom interfaces without an enterprise control plane. The primary journey is: open a bundled inventory, understand why each agent is or is not ready, import a local Samsarix registry or A2A Agent Card, review explainable evidence gates and blockers, and export a deterministic JSON or Markdown review packet.
+The initial target user is an individual builder or team of roughly 2–50 people prototyping agents across A2A, MCP, framework-specific, or custom interfaces without an enterprise control plane. The primary journey is: open a bundled inventory, understand why each agent is or is not ready, import a local Samsarix registry, A2A Agent Card, or MCP Registry `server.json`, review explainable evidence gates and blockers, and export a deterministic JSON or Markdown review packet.
 
 The existing repository-directory journey remains available as a secondary path for Samsarix collaborators and evaluators.
 
@@ -18,7 +18,7 @@ The existing repository-directory journey remains available as a secondary path 
 
 - Keep GitHub Pages and `docs/` as the sole maintained runtime surface; do not introduce a second host or backend for the first registry release.
 - Use semantic HTML, CSS, ES modules, and a versioned JSON catalog with no runtime packages or third-party CDN assets.
-- Add a portable, versioned agent-registry schema, with bounded local-file import and deterministic export. Normalize A2A Agent Cards without making network requests or treating discovery metadata as governance proof.
+- Add a portable, versioned agent-registry schema, with bounded local-file import and deterministic export. Normalize A2A Agent Cards and official MCP Registry server metadata without making network requests or treating discovery metadata as governance proof.
 - Calculate readiness from visible evidence gates and critical blockers. Treat the numerical result as a workflow signal, not a compliance certification or safety warranty.
 - Persist imported records only in the current browser, provide an explicit reset path, and never accept credential-bearing fields, prompts, traces, or production conversation data.
 - Treat “included,” “external,” and “archive” as lifecycle facts rather than claiming that every link is live.
@@ -40,6 +40,7 @@ The 2026-08-08 registry decision used official A2A discovery/specification mater
 - GitHub Pages remains the intended distribution channel because the existing deployment publishes `docs/`.
 - Imported inventory data can be sensitive architecture metadata. The first release therefore keeps processing and persistence on-device and makes exports an explicit user action.
 - An A2A Agent Card establishes discoverable identity and interface metadata, but does not by itself establish internal ownership, data handling, evaluation, oversight, or operational readiness.
+- An MCP Registry `server.json` establishes discovery, distribution, transport, and configuration-input metadata, but does not establish tool behavior, accountable ownership, authentication, data handling, security review, oversight, or operational readiness.
 - Samsarix LLC is the owner-provided company identity, with `contact@samsarix.com` and `support@samsarix.com` as the confirmed contact routes. The repository implements the requested BSL/commercial direction, subject to counsel review before production promotion.
 - Existing legacy artifacts must be preserved unless a later owner-approved cleanup explicitly archives or removes them.
 
@@ -89,6 +90,7 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 - [x] Add unit and integration coverage for schema normalization, A2A import, critical blockers, stale evidence, secret-bearing input rejection, persistence boundaries, and exports.
 - [x] Add accessible, responsive loading, empty, validation-failure, reset, and recovery states for the workspace.
 - [x] Publish a starter registry manifest, machine-readable JSON Schema, A2A example, and precise trust-boundary documentation.
+- [x] Add a current official MCP Registry `server.json` adapter and fictional fixture with secret-value, URL-template, and no-execution boundaries.
 
 ### P2
 
@@ -110,7 +112,7 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 - No locally actionable P0 issue remains.
 - The README and UI make limitations, source-available licensing, privacy behavior, ownership, and legacy scope explicit.
 - A first-time visitor can understand the agent-readiness job from the first viewport and identify why a bundled concept is not deployable.
-- A valid Samsarix registry and a current A2A Agent Card import locally; malformed, oversized, duplicate-ID, unsafe-URL, and credential-bearing input fail safely with an actionable message.
+- A valid Samsarix registry, current A2A Agent Card, and current MCP Registry `server.json` import locally; malformed, oversized, duplicate-ID, unsafe-URL, credential-bearing, and secret-default input fail safely with an actionable message.
 - Every record exposes its readiness gates, score rationale, blockers, and stale-review state; concept lifecycle records cannot be labeled ready.
 - Search plus lifecycle, risk, and readiness filters work locally, and JSON/Markdown exports are deterministic and useful without this application.
 - Browser storage behavior, reset semantics, import limits, non-goals, and the absence of telemetry/network execution are visible to the user.
@@ -137,10 +139,11 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 - Updated the first viewport, product metadata, package/legal identity, security policy, threat model, supporting directory, and generated social card to Samsarix Agent Readiness Registry v1.1.0-rc.1.
 - Added the v1.2 dependency-free registry CLI and JavaScript Action with bounded file/stdin import, stable policy and error exits, deterministic reports, escaped workflow annotations, a fictional passing fixture, and command-level tests using the shared readiness implementation.
 - Preserved four unsupported Helix-era pip manifests as hash-recorded, quarantined `.snapshot` files outside supported build inputs and removed their active `requirements*.txt` paths so legacy dependency text no longer masquerades as a supported runtime surface.
+- Added the v1.3 MCP metadata adapter for one official dated `server.json` or API response wrapper, with conservative interface mapping, unresolved URL-template handling, secret-input-name summaries, actual secret-value rejection, and no network/package/runtime access.
 
 ## Deferred and owner-blocked work
 
-- The owner authorized pushing and merging validated v1.2 changes to `main`; the existing Pages workflow will deploy the allowlisted `dist/` documentation artifact after that merge. No custom domain, environment rule, live service, credential, or external account setting is created or changed here.
+- The owner authorized pushing and merging validated release increments to `main`; the existing Pages workflow deploys only the allowlisted `dist/` documentation artifact after each merge. No custom domain, environment rule, live service, credential, or external account setting is created or changed here.
 - Counsel review remains recommended for the BSL scope, Additional Use Grant, Change License, trademark policy, and future commercial agreement; the obsolete pricing domains and unsupported click-through proprietary terms were removed.
 - The provenance and release status of the checked-in APK, PDFs, archives, exported conversations, and logs require owner review before removal or redistribution decisions.
 - Credentials and external account configuration for Railway, Discord, Zapier, Manus, domains, and app signing are intentionally not fabricated.
@@ -155,7 +158,7 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 - Production promotion remains blocked on credential rotation, personal-data disposition, Pages settings, and legal review even though the generated `dist/` artifact passes its local acceptance checks.
 - Readiness policy can create false confidence if scores are detached from evidence. The registry must keep blockers and evidence references primary and must not describe a score as certification.
 - Browser persistence reduces service-side exposure but is not encrypted storage; users must be told not to import secrets, prompts, traces, or sensitive production content.
-- On 2026-08-10 GitHub reported 130 open Dependabot alerts: 31 high, 61 medium, and 38 low. All mapped to four unsupported pip manifests, not to the dependency-free root registry package. Their exact text is now preserved under `legacy/dependency-snapshots/` while the recognized manifest paths are absent. This quarantines the false active-runtime signal; it does not make those dependency versions safe, and the remote alert count remains unverified until GitHub reconciles a merged default branch.
+- On 2026-08-10 GitHub reported 130 open Dependabot alerts: 31 high, 61 medium, and 38 low. All mapped to four unsupported pip manifests, not to the dependency-free root registry package. PR #14 preserved their exact text under `legacy/dependency-snapshots/`, removed the recognized manifest/build paths, and added hash/absence checks. After merge `65b674792b5995ead6226f7ac4328090d9f0a92e`, the dependency graph workflow passed and GitHub reported 0 open alerts without manual dismissal. The snapshots remain unsafe to install merely because their alert records closed.
 
 ## Final verification evidence
 
@@ -170,12 +173,23 @@ CLI/action release-candidate evidence recorded on 2026-08-10 on
 | Manual CLI/action smoke                        | Registry validation passed, the fictional review candidate passed at 100/100 with a fixed date, Markdown output rendered, and the Action emitted an escaped GitHub notice.                                                      |
 | Source/artifact parity                         | `docs/` and rebuilt `dist/` each contained 46 files with zero path or hash differences; the final ordered manifest digest is recorded in the pull request to avoid a self-referential artifact.                                 |
 | Changed-scope credential-pattern scan          | No GitHub token, AWS access-key, private-key header, or non-placeholder Zapier hook pattern was found.                                                                                                                          |
-| Remote dependency signal                       | GitHub reported 130 open alerts, all from four preserved pip manifests outside the dependency-free maintained root product; the counts and unresolved boundary are recorded under Known risks.                                  |
+| Remote dependency signal                       | After quarantine merge `65b6747`, GitHub reported 0 open alerts, down from the 130-alert pre-quarantine baseline; no alerts were manually dismissed.                                                                           |
 
 GitHub PR #13 merged the exact reviewed head as `5431913fc3d45b48d934913ad2c8e66344679e07`.
 Main run `31424526531` passed validation, the real local Action step, artifact upload,
 and Pages deployment; the landing page, registry, CI guide, and ready fixture then
 returned HTTP 200 with expected v1.2 content.
+
+Legacy dependency quarantine evidence recorded on 2026-08-10:
+
+- PR #14 merged reviewed head `adaa5f32ac71d73230268812cadcb3eadf5ed564` as
+  `65b674792b5995ead6226f7ac4328090d9f0a92e`.
+- Main Pages run `31428429232` and dependency-graph run `31428429471` both passed.
+- Exact-content renames preserved all four dependency manifests with recorded
+  SHA-256 values; the checker enforces their hashes plus absence of all eight former
+  dependency/Docker/Compose entry-point paths, including dangling symlinks.
+- The GitHub Dependabot API returned 0 open alerts after the default-branch graph
+  refresh, down from 130 without manual alert dismissal.
 
 Registry release-candidate evidence recorded on 2026-08-08 on `agent/competitive-offering`:
 

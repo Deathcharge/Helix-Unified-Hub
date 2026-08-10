@@ -103,6 +103,7 @@ let agentRegistry;
 let registryTemplate;
 let registrySchema;
 let a2aExample;
+let mcpExample;
 let readyExample;
 try {
   agentRegistry = normalizeRegistryDocument(
@@ -114,6 +115,9 @@ try {
   registrySchema = JSON.parse(await read("docs/agent-registry.schema.json"));
   a2aExample = normalizeRegistryDocument(
     JSON.parse(await read("docs/a2a-agent-card-example.json")),
+  );
+  mcpExample = normalizeRegistryDocument(
+    JSON.parse(await read("docs/mcp-server-example.json")),
   );
   readyExample = normalizeRegistryDocument(
     JSON.parse(await read("docs/review-ready-registry-example.json")),
@@ -208,11 +212,13 @@ if (!landingPage.includes('href="CI_INTEGRATION.md"'))
   fail("docs/index.html: CI guide is not discoverable.");
 if (!registryPage.includes('href="review-ready-registry-example.json"'))
   fail("docs/registry.html: ready example is not discoverable.");
+if (!registryPage.includes('href="mcp-server-example.json"'))
+  fail("docs/registry.html: MCP server example is not discoverable.");
 if (
-  !landingPage.includes("v1.2 release candidate") ||
-  !registryPage.includes("v1.2 release candidate")
+  !landingPage.includes("v1.3 release candidate") ||
+  !registryPage.includes("v1.3 release candidate")
 ) {
-  fail("Primary product pages must display the v1.2 release identity.");
+  fail("Primary product pages must display the v1.3 release identity.");
 }
 if (!ciGuide.includes("contents: read") || !ciGuide.includes("Exit contract"))
   fail(
@@ -275,7 +281,7 @@ for (const match of pagesWorkflow.matchAll(/^\s*uses:\s*([^\s#]+)/gm)) {
 const packageMetadata = JSON.parse(packageText);
 const packageLock = JSON.parse(lockText);
 if (
-  packageMetadata.version !== "1.2.0-rc.1" ||
+  packageMetadata.version !== "1.3.0-rc.1" ||
   packageLock.version !== packageMetadata.version
 )
   fail("Package and lockfile release versions are inconsistent.");
@@ -319,6 +325,17 @@ if (a2aExample) {
     fail("The A2A example must normalize to one A2A-derived record.");
   if (evaluateAgent(a2aExample.agents[0]).status !== "blocked")
     fail("The A2A example must honestly retain governance blockers.");
+}
+if (mcpExample) {
+  if (
+    mcpExample.agents.length !== 1 ||
+    !mcpExample.agents[0].id.startsWith("mcp-")
+  )
+    fail("The MCP example must normalize to one MCP-derived record.");
+  if (evaluateAgent(mcpExample.agents[0]).status !== "blocked")
+    fail("The MCP example must honestly retain governance blockers.");
+  if (mcpExample.agents[0].authentication.schemes.length)
+    fail("MCP secret-input declarations must not become authentication proof.");
 }
 if (readyExample) {
   if (
@@ -435,14 +452,14 @@ if (!license.includes("Licensor:             Samsarix LLC"))
   fail("LICENSE: Samsarix LLC is not the named licensor.");
 if (!license.includes("contact@samsarix.com"))
   fail("LICENSE: commercial contact is missing.");
-if (!license.includes("Version 1.2.0-rc.1"))
+if (!license.includes("Version 1.3.0-rc.1"))
   fail("LICENSE: release version is inconsistent.");
-if (!publishedLicense.includes("Version 1.2.0-rc.1"))
+if (!publishedLicense.includes("Version 1.3.0-rc.1"))
   fail("docs/LICENSE.txt: release version is inconsistent.");
 const citation = await read("CITATION.cff");
 if (!citation.includes('title: "Samsarix Agent Readiness Registry"'))
   fail("CITATION.cff: product title is inconsistent.");
-if (!citation.includes('version: "1.2.0-rc.1"'))
+if (!citation.includes('version: "1.3.0-rc.1"'))
   fail("CITATION.cff: release version is inconsistent.");
 
 if (failures.length) {

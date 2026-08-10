@@ -1,10 +1,10 @@
 name: Samsarix Agent Readiness Check
-description: Validate an agent registry and fail when selected deployment candidates are not ready.
+description: Validate Samsarix, A2A, or MCP registry metadata and fail when selected deployment candidates are not ready.
 author: Samsarix LLC
 
 inputs:
   registry:
-    description: Path to a Samsarix registry JSON file or one A2A Agent Card in the caller workspace.
+    description: Path to a Samsarix registry, A2A Agent Card, or MCP server.json in the caller workspace.
     required: true
   lifecycle:
     description: Comma-separated lifecycles to gate, or all.

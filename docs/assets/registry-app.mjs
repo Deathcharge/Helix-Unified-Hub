@@ -330,7 +330,7 @@ async function loadBundledRegistry() {
     render();
     showMessage(storageNotice || (restored
       ? `Restored ${restored.agents.length} locally saved ${restored.agents.length === 1 ? 'agent' : 'agents'}. No data was uploaded.`
-      : 'Loaded the bundled concept inventory. Import a local registry or A2A Agent Card to assess your own metadata.'), storageNotice ? '' : 'success');
+      : 'Loaded the bundled concept inventory. Import a local registry, A2A Agent Card, or MCP server.json to assess your own metadata.'), storageNotice ? '' : 'success');
   } catch (error) {
     showError(error.name === 'AbortError'
       ? new Error('The bundled inventory took too long to load. Reload the page to try again.')

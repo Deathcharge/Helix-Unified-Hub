@@ -1,6 +1,6 @@
 {
   "name": "samsarix-agent-readiness-registry",
-  "version": "1.2.0-rc.1",
+  "version": "1.3.0-rc.1",
   "private": true,
   "type": "module",
   "description": "A local-first, dependency-free readiness registry for AI agent inventories and evidence review.",

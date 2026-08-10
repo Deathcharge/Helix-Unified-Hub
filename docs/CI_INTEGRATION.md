@@ -1,6 +1,6 @@
 # Enforce agent readiness in CI
 
-Samsarix Agent Readiness Registry v1.2 includes a dependency-free command-line
+Samsarix Agent Readiness Registry v1.3 includes a dependency-free command-line
 interface and GitHub Action. Both use the same bounded parser and deterministic
 readiness policy as the browser workspace. They validate metadata and evidence;
 they do not call agents, fetch URLs, inspect runtime traffic, or certify safety or
@@ -20,7 +20,12 @@ Use `-` for bounded UTF-8 JSON on standard input:
 
 ```bash
 node bin/samsarix-registry.mjs validate - --format json < path/to/agents.json
+node bin/samsarix-registry.mjs validate - --format json < path/to/server.json
 ```
+
+The second command normalizes one official MCP Registry `server.json` into the same
+bounded Samsarix readiness record used by the browser. It does not publish, fetch,
+install, or execute the server.
 
 `check` gates `review` and `production` records by default. Concepts remain visible
 in the inventory but do not break deployment CI. Use `--include-development` to add
@@ -57,23 +62,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: Deathcharge/Helix-Unified-Hub@31443ec65c108174fe13b26194ac9f31b1f37ac3
+      - uses: Deathcharge/Helix-Unified-Hub@be41c3b86b3e573e089c6d43c70a24806001460a
         with:
           registry: path/to/agents.json
           lifecycle: review,production
           require-candidates: "true"
 ```
 
-The example pins the reviewed v1.2 runtime-fix commit. The repository has not
-published a stable action tag; production workflows should use an exact commit they
-have reviewed so a later branch update cannot silently change policy. Do not pass
-credentials in the registry file or action inputs.
+The example pins the reviewed v1.3 MCP-import implementation and review-fix commit.
+The repository has not published a stable action tag; production workflows should
+use an exact commit they have reviewed so a later branch update cannot silently
+change policy. Do not pass credentials in the registry file or action inputs.
 
 Action inputs:
 
 | Input                | Default             | Behavior                                                                       |
 | -------------------- | ------------------- | ------------------------------------------------------------------------------ |
-| `registry`           | required            | Repository-relative path to a Samsarix registry or one A2A Agent Card.         |
+| `registry`           | required            | Repository-relative Samsarix registry, A2A Agent Card, or MCP `server.json`.   |
 | `lifecycle`          | `review,production` | Comma-separated lifecycles or `all`.                                           |
 | `require-candidates` | `true`              | Fails an accidentally empty deployment gate.                                   |
 | `now`                | current time        | Optional `YYYY-MM-DD` or UTC timestamp for reproducible stale-evidence checks. |
@@ -97,8 +102,9 @@ every selected result remains present in ordinary log lines.
 
 ## Automation boundary
 
-The CLI resolves only the file path supplied by the caller, or reads standard
-input. It performs no network requests, shell execution, agent invocation, secret
-lookup, repository mutation, or telemetry. Output may still reveal agent names,
-owners, risk labels, evidence gaps, and architecture metadata in CI logs; apply the
-repository's normal access and retention controls to those logs.
+The CLI resolves only the file path supplied by the caller, or reads standard input.
+It performs no network requests, shell execution, package installation, agent/MCP
+invocation, secret lookup, repository mutation, or telemetry. Output may still
+reveal agent names, owners, MCP input names, risk labels, evidence gaps, and
+architecture metadata in CI logs; apply the repository's normal access and retention
+controls to those logs.

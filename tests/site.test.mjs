@@ -39,6 +39,8 @@ test('registry page exposes the complete local-first workflow and fallback conte
   assert.match(html, /<noscript>/);
   assert.match(html, /Your files stay in this browser/);
   assert.match(html, /never import credentials or sensitive production content/);
+  assert.match(html, /href="mcp-server-example\.json"/);
+  assert.match(html, /MCP Registry server\.json/);
 });
 
 test('registry browser controller preserves the local-only storage and rendering boundary', async () => {

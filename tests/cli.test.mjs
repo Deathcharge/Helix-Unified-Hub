@@ -107,6 +107,20 @@ test("stdin accepts bounded A2A metadata without network access", async () => {
   assert.equal(JSON.parse(result.stdout).agents, 1);
 });
 
+test("CLI accepts bounded MCP Registry metadata without network access", async () => {
+  const server = await readFile(
+    path.join(root, "docs", "mcp-server-example.json"),
+    "utf8",
+  );
+  const result = await invoke(["validate", "-", "--format", "json"], {
+    stdin: Readable.from([server]),
+  });
+  assert.equal(result.code, EXIT_CODES.success);
+  const parsed = JSON.parse(result.stdout);
+  assert.equal(parsed.agents, 1);
+  assert.equal(parsed.workspace, "Release Evidence MCP readiness review");
+});
+
 test("check passes a complete review candidate and fails a blocked development candidate", async () => {
   const passing = await invoke([
     "check",
