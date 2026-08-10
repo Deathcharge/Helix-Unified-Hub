@@ -4,8 +4,8 @@ title: "Samsarix Agent Readiness Registry"
 type: software
 authors:
   - name: "Samsarix LLC"
-version: "1.1.0-rc.1"
-abstract: "A local-first registry for AI agent inventory, portable manifest import, explainable readiness evidence, and deterministic review-packet export."
+version: "1.2.0-rc.1"
+abstract: "A local-first registry for AI agent inventory, portable manifest import, explainable readiness evidence, deterministic review packets, and repository policy enforcement."
 repository-code: "https://github.com/Deathcharge/Helix-Unified-Hub"
 url: "https://deathcharge.github.io/Helix-Unified-Hub/"
 license: BUSL-1.1

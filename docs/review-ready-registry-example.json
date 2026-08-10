@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "workspace": {
+    "name": "Fictional release review inventory",
+    "description": "A reproducible example only. Endpoints, owners, and evidence references use example.com or illustrative local paths and do not describe a live agent.",
+    "updatedAt": "2026-08-08"
+  },
+  "agents": [
+    {
+      "id": "release-review-assistant",
+      "name": "Release Review Assistant",
+      "summary": "Reviews a bounded release checklist and prepares evidence for a human approval decision.",
+      "version": "1.0.0",
+      "lifecycle": "review",
+      "risk": "moderate",
+      "owner": {
+        "name": "Example Platform Team",
+        "contact": "platform@example.com"
+      },
+      "authentication": {
+        "schemes": ["oauth2-client-credentials"],
+        "notes": "Illustrative service identity with a release-read scope."
+      },
+      "interfaces": [
+        {
+          "protocol": "A2A",
+          "version": "1.0",
+          "url": "https://agents.example.com/release-review"
+        }
+      ],
+      "skills": ["release checklist review"],
+      "data": {
+        "classification": "internal",
+        "sources": ["release metadata", "test summaries"],
+        "retention": "Illustrative 30-day retention period."
+      },
+      "deployment": {
+        "environment": "review",
+        "monitoringOwner": "Example Platform On-call",
+        "incidentContact": "oncall@example.com",
+        "runbook": "examples/runbooks/release-review-assistant.md"
+      },
+      "evidence": {
+        "purpose": { "status": "verified", "reference": "examples/reviews/purpose.md", "reviewedAt": "2026-08-08" },
+        "ownership": { "status": "verified", "reference": "examples/reviews/ownership.md", "reviewedAt": "2026-08-08" },
+        "interface": { "status": "verified", "reference": "examples/reviews/interface.md", "reviewedAt": "2026-08-08" },
+        "authentication": { "status": "verified", "reference": "examples/reviews/authentication.md", "reviewedAt": "2026-08-08" },
+        "data": { "status": "verified", "reference": "examples/reviews/data.md", "reviewedAt": "2026-08-08" },
+        "evaluation": { "status": "verified", "reference": "examples/reviews/evaluation.md", "reviewedAt": "2026-08-08" },
+        "security": { "status": "verified", "reference": "examples/reviews/security.md", "reviewedAt": "2026-08-08" },
+        "oversight": { "status": "verified", "reference": "examples/reviews/oversight.md", "reviewedAt": "2026-08-08" },
+        "operations": { "status": "verified", "reference": "examples/reviews/operations.md", "reviewedAt": "2026-08-08" }
+      }
+    }
+  ]
+}

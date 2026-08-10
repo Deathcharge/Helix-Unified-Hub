@@ -12,9 +12,15 @@ The maintained product files are:
   filtering, and deterministic exports;
 - `agents.json` for the honest bundled concepts;
 - `agent-registry-template.json` for a valid starter inventory; and
+- `review-ready-registry-example.json` for a fictional passing CI fixture;
+- `CI_INTEGRATION.md` for the CLI, GitHub Action, lifecycle, and exit-code contract;
 - `AGENT_REGISTRY_SCHEMA.md` plus `agent-registry.schema.json` for the prose and
   machine-readable portable contract; and
 - `a2a-agent-card-example.json` for a reproducible fictional A2A import.
+
+The repository root additionally contains `action.yml`, `bin/`, and
+`scripts/registry-cli.mjs`. Those supported-LTS Node entry points reuse `assets/readiness.mjs`
+without adding a runtime package, network call, or second policy implementation.
 
 Run the root checks after changing product data, policy, UI, legal files, or release
 assets:
