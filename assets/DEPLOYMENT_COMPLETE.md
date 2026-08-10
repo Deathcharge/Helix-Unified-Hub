@@ -1,5 +1,9 @@
 # 🎉 Helix Collective v14.5 — Production Deployment Complete ✅
 
+> **Archived and unsupported.** This 2025 completion report is historical evidence,
+> not a current Samsarix deployment path. Its Python dependency manifest is
+> quarantined under `legacy/dependency-snapshots/` and must not be installed.
+
 **Status:** READY FOR RAILWAY DEPLOYMENT  
 **Version:** 14.5 (Quantum Handshake Edition)  
 **Date:** October 21, 2025  
@@ -476,4 +480,3 @@ The **Helix Collective v14.5 - Quantum Handshake Edition** is now a fully integr
 **Status:** DEPLOYMENT READY  
 **Last Updated:** October 21, 2025  
 **Version:** 14.5 (Quantum Handshake Edition)
-

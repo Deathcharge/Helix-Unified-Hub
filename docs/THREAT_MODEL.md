@@ -54,7 +54,7 @@ Relevant threats include cleartext or untrusted endpoints, exported component ab
 
 ### Legacy and generated artifacts
 
-Relevant threats include accidentally publishing personal conversation data, logs, internal URLs, credentials, unsafe archives, binaries of unknown provenance, or runnable prototype code that bypasses maintained controls. Preferred controls are an explicit publication allowlist, secret scanning, provenance/checksum documentation for shipped binaries, quarantine from build inputs, and staged removal or archival after owner review.
+Relevant threats include accidentally publishing personal conversation data, logs, internal URLs, credentials, unsafe archives, binaries of unknown provenance, active-looking vulnerable dependency manifests, or runnable prototype code that bypasses maintained controls. Preferred controls are an explicit publication allowlist, secret scanning, provenance/checksum documentation for shipped binaries, hash-recorded dependency snapshots outside supported build inputs, and staged removal or archival after owner review.
 
 Realistic attacker stories include a public visitor following a compromised link, a contributor changing portal metadata or a workflow, an unauthenticated user triggering an exposed webhook/bot action, and a crafted generator configuration escaping its output directory. Operator-controlled configuration mistakes remain reliability concerns, while attacks requiring an already-compromised owner workstation or GitHub administrator are generally out of scope unless the code increases that privilege.
 

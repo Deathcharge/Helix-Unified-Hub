@@ -194,6 +194,9 @@ Current-tree redaction does not revoke credentials or erase earlier commits.
 - External directory-link availability is not represented as live health.
 - Archived pages and the Android, Discord, Zapier, orchestration, and deployment
   folders are preserved prototypes, not supported product runtime.
+- Historical Python dependency text is retained only as hash-recorded, quarantined
+  snapshots under `legacy/dependency-snapshots/`; the files are excluded from
+  supported build inputs and are not safe environment specifications.
 - Legacy logs, exports, PDFs, binaries, and conversation archives remain pending an
   owner-controlled provenance and retention decision.
 

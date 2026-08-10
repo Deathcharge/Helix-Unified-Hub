@@ -1,5 +1,9 @@
 # 🚀 Helix v15.3 Deployment Readiness Report
 
+> **Archived and unsupported.** This 2025 report describes a historical Helix
+> deployment, not the maintained Samsarix product. Its Python dependency manifest
+> is quarantined under `legacy/dependency-snapshots/` and must not be installed.
+
 **Date**: October 28, 2025
 **Status**: ✅ MEGA Fix Complete | Ready for Railway Deployment
 **Pull Request**: https://github.com/Deathcharge/helix-unified/pull/new/claude/fix-mega-aes-import-011CUNUCTNywBRQRhLqfXvJ2

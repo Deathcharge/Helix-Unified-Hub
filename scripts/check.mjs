@@ -1,4 +1,5 @@
-import { access, readFile, readdir } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { access, lstat, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
@@ -15,6 +16,47 @@ const failures = [];
 const fail = (message) => failures.push(message);
 const read = (relativePath) => readFile(path.join(root, relativePath), "utf8");
 const registry = JSON.parse(await read("docs/portals.json"));
+const dependencySnapshots = [
+  {
+    original: "assets/requirements-backend.txt",
+    snapshot: "legacy/dependency-snapshots/helix-v15.3-backend-assets.snapshot",
+    sha256: "1c996f487498bf4b9fa96b849176577ebd032eee16abc453046e48cec2696b9e",
+  },
+  {
+    original: "legacy/backend-prototype/requirements.txt",
+    snapshot:
+      "legacy/dependency-snapshots/helix-v15.3-backend-prototype.snapshot",
+    sha256: "3b62c4f47d707e05f6b22c16eb098502970105742f7cc8419afa04968a4b85e3",
+  },
+  {
+    original: "assets/requirements-frontend.txt",
+    snapshot: "legacy/dependency-snapshots/helix-v14.5-frontend.snapshot",
+    sha256: "2ee9c4cc7c4c2b828b8c9582f24d520df18fdd67e5ab93f45790a90d70acd960",
+  },
+  {
+    original: "assets/requirements.txt",
+    snapshot: "legacy/dependency-snapshots/helix-community-hub.snapshot",
+    sha256: "54a91cbdc8e3151a65ce5c1090e8b7b3ad7192aaa74233b6e7a302b8fd0cbab5",
+  },
+];
+const archivedBuildSnapshots = [
+  {
+    original: "assets/Dockerfile",
+    snapshot: "assets/helix-v14.5-backend.container-snapshot",
+  },
+  {
+    original: "assets/Dockerfile.streamlit",
+    snapshot: "assets/helix-v14.5-streamlit.container-snapshot",
+  },
+  {
+    original: "assets/docker-compose.yml",
+    snapshot: "assets/helix-v15.3.compose-snapshot",
+  },
+  {
+    original: "legacy/backend-prototype/Dockerfile",
+    snapshot: "legacy/backend-prototype/helix-v14.5-backend.container-snapshot",
+  },
+];
 
 function yamlBlock(source, key, indent) {
   const lines = source.split(/\r?\n/);
@@ -328,6 +370,54 @@ for (const relativePath of [
     await access(path.join(root, relativePath));
   } catch {
     fail(`${relativePath}: required release legal file is missing.`);
+  }
+}
+
+for (const entry of dependencySnapshots) {
+  try {
+    await lstat(path.join(root, entry.original));
+    fail(
+      `${entry.original}: unsupported pip manifest must remain quarantined.`,
+    );
+  } catch (error) {
+    if (error.code !== "ENOENT") {
+      fail(
+        `${entry.original}: quarantine absence check failed: ${error.message}`,
+      );
+    }
+  }
+  try {
+    const snapshot = await readFile(path.join(root, entry.snapshot));
+    const digest = createHash("sha256").update(snapshot).digest("hex");
+    if (digest !== entry.sha256) {
+      fail(`${entry.snapshot}: preserved dependency snapshot digest changed.`);
+    }
+  } catch (error) {
+    fail(
+      `${entry.snapshot}: preserved dependency snapshot is unavailable: ${error.message}`,
+    );
+  }
+}
+
+for (const entry of archivedBuildSnapshots) {
+  try {
+    await lstat(path.join(root, entry.original));
+    fail(
+      `${entry.original}: archived build entry point must remain quarantined.`,
+    );
+  } catch (error) {
+    if (error.code !== "ENOENT") {
+      fail(
+        `${entry.original}: quarantine absence check failed: ${error.message}`,
+      );
+    }
+  }
+  try {
+    await readFile(path.join(root, entry.snapshot));
+  } catch (error) {
+    fail(
+      `${entry.snapshot}: archived build snapshot is unavailable: ${error.message}`,
+    );
   }
 }
 
