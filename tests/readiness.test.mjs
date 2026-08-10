@@ -148,6 +148,16 @@ test('MCP Registry server.json normalizes discovery metadata but preserves gover
   assert.ok(assessment.blockers.some((blocker) => blocker.includes('owner')));
   assert.ok(assessment.blockers.some((blocker) => blocker.includes('skill')));
   assert.deepEqual(normalizeRegistryDocument({ server, _meta: { official: true } }), registry);
+  const credentialNamedVariable = normalizeMCPServer({
+    ...server,
+    remotes: [{
+      type: 'streamable-http',
+      url: 'https://example.com/{token}/mcp',
+      variables: { token: { isRequired: true, isSecret: true } }
+    }],
+    packages: []
+  });
+  assert.match(credentialNamedVariable.agents[0].authentication.notes, /token/);
 });
 
 test('MCP imports reject secret defaults and unsafe remotes while accepting safe URL templates', () => {
@@ -159,6 +169,15 @@ test('MCP imports reject secret defaults and unsafe remotes while accepting safe
   const templated = normalizeMCPServer(base).agents[0];
   assert.equal(templated.interfaces[0].url, '');
   assert.equal(templated.evidence.interface.status, 'declared');
+  const leadingTemplate = normalizeMCPServer({
+    ...base,
+    remotes: [{
+      type: 'streamable-http',
+      url: '{baseUrl}/mcp',
+      variables: { baseUrl: { isRequired: true } }
+    }]
+  }).agents[0];
+  assert.equal(leadingTemplate.interfaces[0].url, '');
   assert.throws(
     () => normalizeMCPServer({ ...base, remotes: [{ type: 'streamable-http', url: 'http://example.com/mcp' }] }),
     (error) => error instanceof RegistryValidationError && error.message.includes('HTTPS URL')
@@ -192,6 +211,26 @@ test('MCP imports reject secret defaults and unsafe remotes while accepting safe
       }]
     }),
     (error) => error instanceof RegistryValidationError && error.message.includes('secret value or default')
+  );
+  assert.throws(
+    () => normalizeRegistryDocument({
+      $schema: base.$schema,
+      name: base.name,
+      description: 'No transport is declared.'
+    }),
+    (error) => error instanceof RegistryValidationError && error.message.includes('at least one package or remote transport')
+  );
+  assert.throws(
+    () => normalizeMCPServer({
+      ...base,
+      packages: Array.from({ length: 20 }, (_, index) => ({
+        registryType: 'npm',
+        identifier: `@example/server-${index}`,
+        transport: { type: 'stdio' }
+      })),
+      remotes: [{ type: 'streamable-http', url: 'https://example.com/mcp' }]
+    }),
+    (error) => error instanceof RegistryValidationError && error.message.includes('20 transports or fewer in total')
   );
 });
 

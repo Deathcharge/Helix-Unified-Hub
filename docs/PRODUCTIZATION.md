@@ -173,7 +173,7 @@ CLI/action release-candidate evidence recorded on 2026-08-10 on
 | Manual CLI/action smoke                        | Registry validation passed, the fictional review candidate passed at 100/100 with a fixed date, Markdown output rendered, and the Action emitted an escaped GitHub notice.                                                      |
 | Source/artifact parity                         | `docs/` and rebuilt `dist/` each contained 46 files with zero path or hash differences; the final ordered manifest digest is recorded in the pull request to avoid a self-referential artifact.                                 |
 | Changed-scope credential-pattern scan          | No GitHub token, AWS access-key, private-key header, or non-placeholder Zapier hook pattern was found.                                                                                                                          |
-| Remote dependency signal                       | GitHub reported 130 open alerts, all from four preserved pip manifests outside the dependency-free maintained root product; the counts and unresolved boundary are recorded under Known risks.                                  |
+| Remote dependency signal                       | After quarantine merge `65b6747`, GitHub reported 0 open alerts, down from the 130-alert pre-quarantine baseline; no alerts were manually dismissed.                                                                           |
 
 GitHub PR #13 merged the exact reviewed head as `5431913fc3d45b48d934913ad2c8e66344679e07`.
 Main run `31424526531` passed validation, the real local Action step, artifact upload,

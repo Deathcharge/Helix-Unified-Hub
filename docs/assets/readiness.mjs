@@ -72,25 +72,33 @@ function normalizedKey(value) {
   return String(value).toLocaleLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
-export function assertNoCredentialFields(value) {
-  const pending = [{ value, path: '$' }];
+export function assertNoCredentialFields(value, { allowVariableNames = false } = {}) {
+  const pending = [{ value, path: '$', variableNameMap: false }];
   let visited = 0;
   while (pending.length) {
     const current = pending.pop();
     visited += 1;
     if (visited > 50_000) throw new RegistryValidationError(['The import is too structurally complex.']);
     if (Array.isArray(current.value)) {
-      current.value.forEach((entry, index) => pending.push({ value: entry, path: `${current.path}[${index}]` }));
+      current.value.forEach((entry, index) => pending.push({
+        value: entry,
+        path: `${current.path}[${index}]`,
+        variableNameMap: false
+      }));
       continue;
     }
     if (!isObject(current.value)) continue;
     for (const [key, entry] of Object.entries(current.value)) {
-      if (CREDENTIAL_KEYS.has(normalizedKey(key))) {
+      if (!current.variableNameMap && CREDENTIAL_KEYS.has(normalizedKey(key))) {
         throw new RegistryValidationError([
           `${current.path}.${key} looks like a credential-bearing field. Remove secrets and import only metadata.`
         ]);
       }
-      pending.push({ value: entry, path: `${current.path}.${key}` });
+      pending.push({
+        value: entry,
+        path: `${current.path}.${key}`,
+        variableNameMap: allowVariableNames && key === 'variables' && isObject(entry)
+      });
     }
   }
 }
@@ -263,27 +271,30 @@ function mcpServerFromDocument(value) {
   const candidate = isObject(value?.server) ? value.server : value;
   if (!isObject(candidate) || typeof candidate.name !== 'string') return null;
   const schema = typeof candidate.$schema === 'string' ? candidate.$schema : '';
-  const hasDistribution = Array.isArray(candidate.packages) || Array.isArray(candidate.remotes);
-  return hasDistribution && /\/server\.schema\.json$/.test(schema) ? candidate : null;
+  return /\/server\.schema\.json$/.test(schema) ? candidate : null;
 }
 
 function normalizeMCPRemoteUrl(value, label, issues) {
   const candidate = boundedString(value, label, issues, { max: 2048, required: true });
   if (!candidate) return '';
+  const parseableCandidate = candidate.replace(
+    /^\{[A-Za-z_][A-Za-z0-9_]*\}/,
+    'https://template.invalid'
+  );
   let parsed;
   try {
-    parsed = new URL(candidate);
+    parsed = new URL(parseableCandidate);
   } catch {
     parsed = null;
   }
   if (parsed && [...parsed.searchParams].some(([name, queryValue]) => (
     credentialLikeInputName(name)
-    && !/^\{[A-Za-z][A-Za-z0-9_]*\}$/.test(queryValue)
+    && !/^\{[A-Za-z_][A-Za-z0-9_]*\}$/.test(queryValue)
   ))) {
     issues.push(`${label} must not embed a credential-like query value.`);
   }
   if (candidate.includes('{') || candidate.includes('}')) {
-    const concrete = candidate.replace(/\{[A-Za-z][A-Za-z0-9_]*\}/g, 'template-value');
+    const concrete = parseableCandidate.replace(/\{[A-Za-z_][A-Za-z0-9_]*\}/g, 'template-value');
     if (concrete.includes('{') || concrete.includes('}') || !safeRemoteUrl(concrete)) {
       issues.push(`${label} must be an HTTPS URL or a valid HTTPS variable template without embedded credentials.`);
     }
@@ -298,7 +309,7 @@ function hasDeclaredValue(value) {
   if (value === undefined || value === null) return false;
   if (typeof value !== 'string') return true;
   const candidate = value.trim();
-  return Boolean(candidate) && !/^\{[A-Za-z][A-Za-z0-9_]*\}$/.test(candidate);
+  return Boolean(candidate) && !/^\{[A-Za-z_][A-Za-z0-9_]*\}$/.test(candidate);
 }
 
 function credentialLikeInputName(value) {
@@ -386,15 +397,20 @@ function normalizeMCPInputDescriptors(packages, remotes, issues) {
 
 export function normalizeMCPServer(server) {
   if (!isObject(server)) throw new RegistryValidationError(['MCP server.json must contain one JSON object.']);
-  assertNoCredentialFields(server);
+  assertNoCredentialFields(server, { allowVariableNames: true });
   const issues = [];
   const schema = boundedString(server.$schema, 'MCP $schema', issues, { max: 500, required: true });
   const schemaMatch = /^https:\/\/static\.modelcontextprotocol\.io\/schemas\/(\d{4}-\d{2}-\d{2})\/server\.schema\.json$/.exec(schema);
   if (!schemaMatch) issues.push('MCP $schema must identify an official dated server.schema.json over HTTPS.');
   const registryName = boundedString(server.name, 'MCP name', issues, { max: 160, required: true });
   const title = boundedString(server.title || registryName.split('/').at(-1), 'MCP title', issues, { max: 120, required: true });
-  const packages = boundedArray(server.packages, 'MCP packages', issues, 20);
-  const remotes = boundedArray(server.remotes, 'MCP remotes', issues, 20);
+  const packageEntries = boundedArray(server.packages, 'MCP packages', issues, 20);
+  const remoteEntries = boundedArray(server.remotes, 'MCP remotes', issues, 20);
+  if (packageEntries.length + remoteEntries.length > 20) {
+    issues.push('MCP packages and remotes must contain 20 transports or fewer in total.');
+  }
+  const packages = packageEntries.slice(0, 20);
+  const remotes = remoteEntries.slice(0, Math.max(0, 20 - packages.length));
   if (!packages.length && !remotes.length) issues.push('MCP server.json needs at least one package or remote transport.');
   const secretInputs = normalizeMCPInputDescriptors(packages, remotes, issues);
   const interfaces = [];
@@ -533,9 +549,12 @@ export function normalizeA2AAgentCard(card) {
 }
 
 export function normalizeRegistryDocument(value) {
-  assertNoCredentialFields(value);
   const mcpServer = mcpServerFromDocument(value);
-  if (mcpServer && !Array.isArray(value.agents)) return normalizeMCPServer(mcpServer);
+  if (mcpServer && !Array.isArray(value.agents)) {
+    assertNoCredentialFields(value, { allowVariableNames: true });
+    return normalizeMCPServer(mcpServer);
+  }
+  assertNoCredentialFields(value);
   if (looksLikeA2ACard(value) && !Array.isArray(value.agents)) return normalizeA2AAgentCard(value);
   const issues = [];
   if (!isObject(value)) throw new RegistryValidationError(['The import must contain one JSON object.']);

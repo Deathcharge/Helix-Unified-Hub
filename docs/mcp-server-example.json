@@ -4,7 +4,7 @@
   "title": "Release Evidence MCP",
   "description": "A fictional MCP server that exposes bounded release-evidence tools for a human reviewer.",
   "repository": {
-    "url": "https://example.com/release-evidence",
+    "url": "https://github.com/samsarix-examples/release-evidence",
     "source": "github"
   },
   "version": "1.0.0",
