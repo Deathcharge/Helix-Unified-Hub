@@ -49,7 +49,7 @@ Usage:
   samsarix-registry --version
 
 Commands:
-  validate  Parse and normalize a Samsarix registry or one A2A Agent Card.
+  validate  Parse a Samsarix registry, A2A Agent Card, or MCP server.json.
   check     Fail when selected deployment candidates are not ready.
   report    Write a deterministic normalized JSON or Markdown review packet.
 

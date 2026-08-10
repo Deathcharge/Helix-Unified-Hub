@@ -22,7 +22,9 @@ Release sequence:
 2. **Implemented for v1.2 RC:** dependency-free validate/check/report CLI, exact
    policy exit codes, escaped GitHub annotations, and a read-only JavaScript Action
    using the shared bounded parser and evaluator.
-3. Validate demand before any multi-user service, live discovery, or runtime
+3. **Implemented for v1.3 RC:** bounded official MCP Registry `server.json` import,
+   conservative secret-input handling, and shared browser/CLI/Action readiness gaps.
+4. Validate demand before any multi-user service, live discovery, or runtime
    observability integration.
 
 The next evidence gate is external use: collect real registry fixtures, policy-gap

@@ -13,7 +13,8 @@ promise a response or remediation service level.
 
 ## Supported scope
 
-The maintained static agent-readiness registry and secondary directory on the latest `main` branch are in scope. Historical
+The maintained static agent-readiness registry, A2A/MCP metadata adapters, CLI,
+Action, and secondary directory on the latest `main` branch are in scope. Historical
 exports and prototypes are retained for reference and are not supported production
 services. See `docs/THREAT_MODEL.md` for the trust boundaries and known owner gates.
 

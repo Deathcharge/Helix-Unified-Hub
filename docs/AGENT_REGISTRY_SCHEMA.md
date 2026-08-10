@@ -120,6 +120,44 @@ Download [`a2a-agent-card-example.json`](a2a-agent-card-example.json) for a fict
 current-format card that demonstrates this normalization without claiming a live
 agent or endpoint.
 
+## MCP Registry server.json import
+
+A single official MCP Registry `server.json` object—or one official API response
+wrapper with that object under `server`—can be imported instead of a Samsarix
+document. The adapter recognizes an official dated schema URL plus `name`, `title`,
+`description`, `version`, `repository`, `packages`, and `remotes`. The registry's
+current publishing format is documented by the MCP project at
+<https://modelcontextprotocol.io/registry/quickstart>.
+
+The resulting record is `development` and `unassessed`. Package and remote transport
+metadata becomes declared interface evidence. The description and safe HTTPS
+repository URL become declared purpose/provenance metadata. The MCP format does not
+identify an accountable internal owner, enumerate tools in `server.json`, prove an
+authentication scheme, classify data, or supply internal evaluation, security,
+oversight, and operations evidence, so those gaps remain visible and blocking.
+
+The adapter accepts concrete HTTPS remote URLs without embedded credentials. A valid
+HTTPS URL template is recognized as a declared interface but exported with an empty
+concrete URL because its variables have not been resolved. Package commands,
+arguments, packages, and endpoints are never fetched, installed, or executed.
+
+Secret environment-variable, header, package/runtime-argument, and URL-variable
+**names**—including one-level template variables—may be summarized as inert
+authentication notes, but they do not become authentication proof. Any secret
+descriptor containing an actual `value` or `default`, rather than a pure `{variable}`
+reference, rejects the import before the current workspace changes. Unknown MCP and
+Registry extension fields are ignored and do not appear in deterministic exports.
+
+This bounded adapter does not claim full `server.json` schema conformance or MCP
+server behavior. The MCP Registry remains in preview and its official publisher and
+validation API remain authoritative for publication correctness. Samsarix answers a
+different question: what organization-specific readiness evidence is still absent
+after discovery metadata is available.
+
+Download [`mcp-server-example.json`](mcp-server-example.json) for a fictional
+current-format server definition that demonstrates this normalization without
+claiming a live server, endpoint, or package.
+
 ## Persistence and export
 
 The normalized registry is stored under the browser key
@@ -137,10 +175,11 @@ valid but intentionally incomplete, so its missing evidence remains visible.
 
 ## CLI and CI policy
 
-The supported-LTS Node CLI and root GitHub Action use this same parser, normalization order,
-and readiness evaluator. `validate` accepts this registry or one A2A Agent Card;
-`report` produces deterministic normalized JSON or Markdown; and `check` returns a
-nonzero policy result when a selected agent is not ready.
+The supported-LTS Node CLI and root GitHub Action use this same parser, normalization
+order, and readiness evaluator. `validate` accepts this registry, one A2A Agent Card,
+or one MCP Registry `server.json`; `report` produces deterministic normalized JSON
+or Markdown; and `check` returns a nonzero policy result when a selected agent is not
+ready.
 
 By default, `check` gates only `review` and `production` records. Use an explicit
 lifecycle selection for another policy and `--require-candidates` to fail an empty

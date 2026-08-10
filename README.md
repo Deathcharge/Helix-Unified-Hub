@@ -4,16 +4,17 @@ Samsarix Agent Readiness Registry is a dependency-free, local-first web workspac
 from Samsarix LLC for answering a practical question: **which AI agents do we have,
 and what evidence is still missing before we deploy or integrate them?**
 
-It imports a versioned Samsarix registry or a current A2A Agent Card, normalizes the
-metadata without making network requests, evaluates nine visible readiness gates,
-and exports deterministic JSON or Markdown review packets. Imported data stays in
-the current browser unless the user explicitly exports it.
+It imports a versioned Samsarix registry, a current A2A Agent Card, or an official
+MCP Registry `server.json`, normalizes the metadata without making network requests,
+evaluates nine visible readiness gates, and exports deterministic JSON or Markdown
+review packets. Imported data stays in the current browser unless the user explicitly
+exports it.
 
 The initial audience is an individual builder or a team of roughly 2–50 people that
 needs an ownership and pre-deployment review workflow before an enterprise control
-plane is justified. The product is a v1.2 release candidate: the complete local
-review journey and repository-enforced readiness gate are implemented, while
-production promotion remains subject to the owner gates below.
+plane is justified. The product is a v1.3 release candidate: the complete local
+review journey, repository-enforced readiness gate, and A2A/MCP metadata adapters are
+implemented, while production promotion remains subject to the owner gates below.
 
 The earlier Hub Directory remains available as a secondary repository map. The
 [Samsarix Field Guide](https://github.com/Deathcharge/samsarix-field-guide) remains
@@ -38,9 +39,10 @@ npm run serve
 
 Open `http://127.0.0.1:4173/`, choose **Open readiness workspace**, and select a
 bundled concept to see its blockers. Import
-[`docs/agent-registry-template.json`](docs/agent-registry-template.json) or a local
-A2A Agent Card to review your own metadata. No environment variables, credentials,
-database, account, AI provider, or private Samsarix service is required.
+[`docs/agent-registry-template.json`](docs/agent-registry-template.json), a local
+A2A Agent Card, or an MCP Registry `server.json` to review your own metadata. No
+environment variables, credentials, database, account, AI provider, or private
+Samsarix service is required.
 
 If that port is occupied, set `SAMSARIX_HUB_PORT` to another local port before
 running `npm run serve`.
@@ -48,7 +50,8 @@ running `npm run serve`.
 ## Core workflow
 
 1. Start with the honest bundled inventory or download the starter manifest.
-2. Import one Samsarix registry JSON document or one A2A Agent Card JSON file.
+2. Import one Samsarix registry, one A2A Agent Card, or one MCP Registry
+   `server.json` document.
 3. Review purpose, ownership, interface, authentication, data, evaluation,
    security, oversight, and operations evidence.
 4. Search and filter by lifecycle, risk, readiness, or stale evidence.
@@ -57,16 +60,17 @@ running `npm run serve`.
    restore the bundled concepts.
 
 Files are limited to 1 MiB and 500 agents. Duplicate identifiers, malformed JSON,
-non-HTTPS interface URLs, embedded URL credentials, unsupported schema values, and
-credential-bearing fields are rejected before the current workspace changes. The
-browser renders imported values as text, never imported HTML.
+non-HTTPS interface URLs, embedded URL credentials, unsupported schema values,
+credential-bearing fields, and secret MCP values/defaults are rejected before the
+current workspace changes. The browser renders imported values as text, never
+imported HTML.
 
 The readiness score is an explainable workflow signal. It is not a compliance
 certification, a safety warranty, live health, or a substitute for evaluation and
 human approval. Concepts, paused records, and retired records cannot be labeled
 ready.
 
-## Registry format and A2A support
+## Registry, A2A, and MCP support
 
 - [`docs/AGENT_REGISTRY_SCHEMA.md`](docs/AGENT_REGISTRY_SCHEMA.md) defines the
   versioned registry shape, constraints, evidence statuses, and import behavior.
@@ -81,12 +85,21 @@ ready.
   into the registry but leaves organization-specific governance evidence missing.
 - [`docs/a2a-agent-card-example.json`](docs/a2a-agent-card-example.json) is a
   fictional current-format card that reproduces that import journey.
+- MCP import recognizes the official dated `server.json` contract and one official
+  Registry API `{ "server": ... }` wrapper. It carries registry identity, package,
+  concrete HTTPS remote, and bounded environment/header/argument/variable input
+  declarations into a review record without treating them as ownership,
+  authentication, tool inventory, or governance proof.
+- [`docs/mcp-server-example.json`](docs/mcp-server-example.json) is a fictional
+  current-format MCP server that reproduces the adapter and its conservative gaps.
 
-The application never fetches an Agent Card URL or calls an imported interface.
+The application never fetches an Agent Card, MCP endpoint, package, or imported
+interface. It rejects declared secret values/defaults and retains only bounded
+secret-input names as inert notes.
 
 ## CLI and GitHub enforcement
 
-The v1.2 CLI applies the browser workspace's parser and readiness policy without a
+The v1.3 CLI applies the browser workspace's parser and readiness policy without a
 browser or network request:
 
 ```bash
@@ -130,6 +143,8 @@ the package identity and Node compatibility for deterministic installation.
   safe DOM rendering
 - `docs/agents.json` — bundled concept inventory
 - `docs/agent-registry-template.json` — portable starter registry
+- `docs/a2a-agent-card-example.json` and `docs/mcp-server-example.json` — fictional
+  portable metadata adapter fixtures
 - `docs/CI_INTEGRATION.md` — CLI, GitHub Action, lifecycle, and exit-code contract
 - `action.yml`, `bin/`, and `scripts/registry-cli.mjs` — dependency-free CI and
   command-line enforcement using the shared policy module
@@ -183,10 +198,14 @@ Current-tree redaction does not revoke credentials or erase earlier commits.
 
 ## Limitations and project status
 
-- The registry does not run agents, fetch Agent Cards, probe endpoints, monitor
-  production behavior, or replace an evaluation/observability system.
+- The registry does not run agents or MCP servers, fetch discovery metadata, install
+  packages, probe endpoints, monitor production behavior, or replace an
+  evaluation/observability system.
 - A2A discovery metadata cannot prove internal ownership, data handling, evaluation,
   human oversight, incident response, or approval.
+- MCP Registry metadata cannot prove tool behavior, accountable ownership,
+  authentication, data handling, security review, oversight, or operational
+  readiness. This adapter is not a substitute for official schema validation.
 - Readiness policy is deterministic and intentionally conservative, but teams must
   review whether its gates and evidence are sufficient for their own risk context.
 - Browser storage is single-device, has no collaboration history or signed approval,

@@ -9,6 +9,7 @@ import {
   RegistryValidationError,
   evaluateAgent,
   filterAgents,
+  normalizeMCPServer,
   normalizeRegistryDocument,
   parseRegistryText,
   renderMarkdownPacket,
@@ -101,6 +102,99 @@ test('A2A Agent Cards normalize interface metadata but preserve governance gaps'
   assert.ok(assessment.blockers.some((blocker) => blocker.includes('Data handling')));
 });
 
+test('MCP Registry server.json normalizes discovery metadata but preserves governance gaps', () => {
+  const server = {
+    $schema: 'https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json',
+    name: 'com.example/release-evidence',
+    title: 'Release Evidence MCP',
+    description: 'Exposes bounded release evidence for a human reviewer.',
+    repository: { url: 'https://example.com/release-evidence', source: 'github' },
+    version: '1.0.0',
+    packages: [{
+      registryType: 'npm',
+      identifier: '@example/release-evidence',
+      version: '1.0.0',
+      transport: { type: 'stdio' },
+      environmentVariables: [{ name: 'RELEASE_TOKEN', isRequired: true, isSecret: true }],
+      packageArguments: [{
+        type: 'named',
+        name: '--tenant',
+        value: '{tenant}',
+        variables: { tenant: { isRequired: true } }
+      }]
+    }],
+    remotes: [{
+      type: 'streamable-http',
+      url: 'https://agents.example.com/release-evidence/mcp',
+      headers: [{ name: 'Authorization', isRequired: true, isSecret: true }]
+    }]
+  };
+  const registry = normalizeMCPServer(server);
+  const agent = registry.agents[0];
+  const assessment = evaluateAgent(agent);
+  assert.equal(agent.id, 'mcp-com-example-release-evidence');
+  assert.equal(agent.name, 'Release Evidence MCP');
+  assert.equal(agent.version, '1.0.0');
+  assert.equal(agent.interfaces.length, 2);
+  assert.equal(agent.interfaces[0].protocol, 'MCP stdio (npm)');
+  assert.equal(agent.interfaces[1].url, 'https://agents.example.com/release-evidence/mcp');
+  assert.deepEqual(agent.authentication.schemes, []);
+  assert.match(agent.authentication.notes, /RELEASE_TOKEN/);
+  assert.match(agent.authentication.notes, /Authorization/);
+  assert.equal(agent.evidence.purpose.status, 'declared');
+  assert.equal(agent.evidence.interface.status, 'declared');
+  assert.equal(agent.evidence.authentication.status, 'missing');
+  assert.equal(assessment.status, 'blocked');
+  assert.ok(assessment.blockers.some((blocker) => blocker.includes('owner')));
+  assert.ok(assessment.blockers.some((blocker) => blocker.includes('skill')));
+  assert.deepEqual(normalizeRegistryDocument({ server, _meta: { official: true } }), registry);
+});
+
+test('MCP imports reject secret defaults and unsafe remotes while accepting safe URL templates', () => {
+  const base = {
+    $schema: 'https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json',
+    name: 'com.example/template-server',
+    remotes: [{ type: 'streamable-http', url: 'https://{tenant}.example.com/mcp' }]
+  };
+  const templated = normalizeMCPServer(base).agents[0];
+  assert.equal(templated.interfaces[0].url, '');
+  assert.equal(templated.evidence.interface.status, 'declared');
+  assert.throws(
+    () => normalizeMCPServer({ ...base, remotes: [{ type: 'streamable-http', url: 'http://example.com/mcp' }] }),
+    (error) => error instanceof RegistryValidationError && error.message.includes('HTTPS URL')
+  );
+  assert.throws(
+    () => normalizeMCPServer({ ...base, remotes: [{ type: 'streamable-http', url: 'https://example.com/mcp?api_key=do-not-import-this' }] }),
+    (error) => error instanceof RegistryValidationError && error.message.includes('credential-like query value')
+  );
+  assert.throws(
+    () => normalizeMCPServer({
+      ...base,
+      packages: [{
+        registryType: 'npm',
+        transport: { type: 'stdio' },
+        environmentVariables: [{ name: 'API_KEY', isSecret: true, default: 'do-not-import-this' }]
+      }]
+    }),
+    (error) => error instanceof RegistryValidationError && error.message.includes('secret value or default')
+  );
+  assert.throws(
+    () => normalizeMCPServer({
+      ...base,
+      packages: [{
+        registryType: 'npm',
+        transport: { type: 'stdio' },
+        runtimeArguments: [{
+          type: 'positional',
+          value: '{runtime_token}',
+          variables: { runtime_token: { isSecret: true, default: 'do-not-import-this' } }
+        }]
+      }]
+    }),
+    (error) => error instanceof RegistryValidationError && error.message.includes('secret value or default')
+  );
+});
+
 test('verified evidence cannot hide missing authentication, data, or operations metadata', () => {
   const normalized = normalizeRegistryDocument(documentWith([readyAgent({
     authentication: { schemes: [], notes: '' },
@@ -115,19 +209,23 @@ test('verified evidence cannot hide missing authentication, data, or operations 
   assert.ok(assessment.blockers.some((blocker) => blocker.includes('runbook metadata')));
 });
 
-test('published JSON Schema and A2A example describe the supported import contract', async () => {
-  const [schemaText, cardText] = await Promise.all([
+test('published JSON Schema, A2A example, and MCP example describe the supported import contract', async () => {
+  const [schemaText, cardText, mcpText] = await Promise.all([
     readFile(path.join(root, 'docs', 'agent-registry.schema.json'), 'utf8'),
-    readFile(path.join(root, 'docs', 'a2a-agent-card-example.json'), 'utf8')
+    readFile(path.join(root, 'docs', 'a2a-agent-card-example.json'), 'utf8'),
+    readFile(path.join(root, 'docs', 'mcp-server-example.json'), 'utf8')
   ]);
   const schema = JSON.parse(schemaText);
   const registry = parseRegistryText(cardText);
+  const mcpRegistry = parseRegistryText(mcpText);
   assert.equal(schema.$schema, 'https://json-schema.org/draft/2020-12/schema');
   assert.equal(schema.properties.schemaVersion.const, 1);
   assert.equal(schema.properties.agents.maxItems, 500);
   assert.equal(registry.agents.length, 1);
   assert.equal(registry.agents[0].id, 'a2a-public-research-helper');
   assert.equal(evaluateAgent(registry.agents[0]).status, 'blocked');
+  assert.equal(mcpRegistry.agents[0].id, 'mcp-com-example-release-evidence');
+  assert.equal(evaluateAgent(mcpRegistry.agents[0]).status, 'blocked');
 });
 
 test('unsafe URLs, duplicate identifiers, and credential-bearing fields are rejected', () => {

@@ -1,6 +1,6 @@
 # Enforce agent readiness in CI
 
-Samsarix Agent Readiness Registry v1.2 includes a dependency-free command-line
+Samsarix Agent Readiness Registry v1.3 includes a dependency-free command-line
 interface and GitHub Action. Both use the same bounded parser and deterministic
 readiness policy as the browser workspace. They validate metadata and evidence;
 they do not call agents, fetch URLs, inspect runtime traffic, or certify safety or
@@ -20,7 +20,12 @@ Use `-` for bounded UTF-8 JSON on standard input:
 
 ```bash
 node bin/samsarix-registry.mjs validate - --format json < path/to/agents.json
+node bin/samsarix-registry.mjs validate - --format json < path/to/server.json
 ```
+
+The second command normalizes one official MCP Registry `server.json` into the same
+bounded Samsarix readiness record used by the browser. It does not publish, fetch,
+install, or execute the server.
 
 `check` gates `review` and `production` records by default. Concepts remain visible
 in the inventory but do not break deployment CI. Use `--include-development` to add
@@ -69,11 +74,16 @@ published a stable action tag; production workflows should use an exact commit t
 have reviewed so a later branch update cannot silently change policy. Do not pass
 credentials in the registry file or action inputs.
 
+That pin predates the v1.3 MCP adapter and accepts Samsarix and A2A inputs only. Until
+a reviewed v1.3 commit is recorded after merge, MCP callers should invoke the checked
+out local CLI (`node bin/samsarix-registry.mjs`) or pin the exact v1.3 commit they
+review themselves.
+
 Action inputs:
 
 | Input                | Default             | Behavior                                                                       |
 | -------------------- | ------------------- | ------------------------------------------------------------------------------ |
-| `registry`           | required            | Repository-relative path to a Samsarix registry or one A2A Agent Card.         |
+| `registry`           | required            | Repository-relative Samsarix registry, A2A Agent Card, or MCP `server.json`.   |
 | `lifecycle`          | `review,production` | Comma-separated lifecycles or `all`.                                           |
 | `require-candidates` | `true`              | Fails an accidentally empty deployment gate.                                   |
 | `now`                | current time        | Optional `YYYY-MM-DD` or UTC timestamp for reproducible stale-evidence checks. |
@@ -97,8 +107,9 @@ every selected result remains present in ordinary log lines.
 
 ## Automation boundary
 
-The CLI resolves only the file path supplied by the caller, or reads standard
-input. It performs no network requests, shell execution, agent invocation, secret
-lookup, repository mutation, or telemetry. Output may still reveal agent names,
-owners, risk labels, evidence gaps, and architecture metadata in CI logs; apply the
-repository's normal access and retention controls to those logs.
+The CLI resolves only the file path supplied by the caller, or reads standard input.
+It performs no network requests, shell execution, package installation, agent/MCP
+invocation, secret lookup, repository mutation, or telemetry. Output may still
+reveal agent names, owners, MCP input names, risk labels, evidence gaps, and
+architecture metadata in CI logs; apply the repository's normal access and retention
+controls to those logs.

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://deathcharge.github.io/Helix-Unified-Hub/agent-registry.schema.json",
   "title": "Samsarix Agent Registry",
-  "description": "Portable metadata and readiness-evidence records for Samsarix Agent Readiness Registry schema v1.",
+  "description": "Portable metadata and readiness-evidence records for Samsarix Agent Readiness Registry schema v1, including normalized local imports from A2A Agent Cards and MCP Registry server.json metadata.",
   "type": "object",
   "required": ["schemaVersion", "workspace", "agents"],
   "properties": {

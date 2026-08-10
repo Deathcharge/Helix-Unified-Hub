@@ -33,7 +33,8 @@ Primary job:
 
 Secondary jobs:
 
-- normalize an A2A Agent Card into an internal review record;
+- normalize an A2A Agent Card or official MCP Registry `server.json` into an
+  internal review record;
 - identify ownerless, unassessed, unauthenticated, or stale agent definitions;
 - share a deterministic JSON or Markdown review packet with another person; and
 - keep concept-stage profiles visibly separate from deployable agents.
@@ -48,6 +49,12 @@ real agent-management problems:
   centralized registries as useful for governance and capability search, while also
   stating that A2A does not prescribe a standard curated-registry API:
   <https://github.com/a2aproject/A2A/blob/main/docs/topics/agent-discovery.md>.
+- The official MCP Registry now provides a preview discovery catalog and a dated
+  `server.json` publishing format for package, remote, transport, and secret-input
+  metadata. Its registry API supports downstream synchronization, but discovery
+  metadata does not supply organization-specific deployment approval:
+  <https://modelcontextprotocol.io/registry/quickstart> and
+  <https://github.com/modelcontextprotocol/registry/blob/main/docs/reference/api/official-registry-api.md>.
 - Microsoft Agent Registry exposes status, publisher, channel, platform, data-source,
   ownerless-agent, risk, import, and export workflows. It is a strong enterprise
   control plane, but it is tied to Microsoft 365 administration and licensed tenant
@@ -69,6 +76,11 @@ real agent-management problems:
   reference, but a registry still needs to turn risk awareness into concrete,
   reviewable agent records:
   <https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/>.
+- OWASP's 2026 State of Agentic AI Security and Governance calls for a formal,
+  authoritative inventory of AI and agentic components, explicitly including MCP
+  servers. That reinforces the gap between protocol discovery and internal
+  governance inventory:
+  <https://genai.owasp.org/download/50592/?tmstv=1754459367>.
 
 ## Defensible wedge
 
@@ -78,7 +90,8 @@ Samsarix wins the first use case through the combination of:
    the browser unless the user explicitly exports them. There is no account,
    analytics SDK, remote fetch, or agent execution.
 2. **Portable input.** Accept the Samsarix registry schema and normalize public A2A
-   Agent Cards without pretending the card alone proves governance readiness.
+   Agent Cards plus official MCP Registry server metadata without pretending either
+   discovery format proves governance readiness.
 3. **Explainable readiness.** Scores come from visible gates and blockers, not a
    proprietary model or unexplained “AI risk score.”
 4. **Honest lifecycle.** Concept, development, review, production, paused, and retired
@@ -153,6 +166,26 @@ This increment still evaluates declared metadata and evidence. It does not verif
 evidence references, observe an agent, prove an endpoint is owned or healthy, or
 turn a passing status into certification.
 
+## MCP interoperability increment: v1.3
+
+The third release increment bridges the official MCP discovery catalog into the
+same local readiness workflow. It includes:
+
+- bounded import of one official dated MCP Registry `server.json` or one official
+  API response wrapper containing a server object;
+- conservative normalization of registry identity, description, version, repository
+  provenance, package transports, concrete HTTPS remotes, and secret-input names;
+- safe handling of URL templates as declared but unresolved interfaces;
+- rejection of unsafe/credential-bearing URLs and actual secret values or defaults;
+- explicit gaps for accountable ownership, tool inventory, authentication, data
+  handling, evaluation, security review, oversight, and operations; and
+- one fictional current-format MCP fixture usable in the browser, CLI, and Action.
+
+This is not an MCP client, package installer, publisher, full schema validator,
+behavioral test, or hosted registry. It performs no discovery fetch and treats the
+official Registry's preview schema/API as external, versioned inputs rather than a
+Samsarix-controlled contract.
+
 ## Non-goals for v1.1
 
 - running or calling an agent;
@@ -169,7 +202,8 @@ The first release is successful when a new visitor can, without documentation:
 
 1. understand the product job from the first viewport;
 2. open the workspace and identify why a bundled concept is not deployable;
-3. import a valid A2A Agent Card and see governance gaps that the card cannot express;
+3. import a valid A2A Agent Card or MCP server definition and see governance gaps
+   that discovery metadata cannot express;
 4. reject a malformed, oversized, duplicate, or secret-bearing manifest safely;
 5. filter to blocked/high-risk/stale records; and
 6. export a review packet that another person can inspect without Samsarix.
