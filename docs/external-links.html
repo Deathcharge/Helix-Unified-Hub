@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="External-link maintenance policy for the Samsarix Agent Readiness Registry.">
+  <meta name="theme-color" content="#07100f">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>External link review · Samsarix Agent Registry</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#external-links">Skip to the link-review policy</a>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Samsarix Agent Registry home"><span class="brand-mark" aria-hidden="true">S</span><span>Samsarix Agent Registry</span></a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="registry.html">Registry</a>
+      <a href="./#catalog">Directory</a>
+      <a href="security-review.html">Security review</a>
+    </nav>
+  </header>
+  <main class="legal-content" id="external-links">
+    <p class="eyebrow">Release operations</p>
+    <h1>External destinations have an owner and a cadence.</h1>
+    <p>Samsarix LLC maintains the product-facing destinations in <code>docs/portals.json</code> and the authoritative research references in <code>.github/external-links.json</code>. A successful request shows reachability only; it does not prove service health, safety, or endorsement.</p>
+    <p><a href="EXTERNAL_LINKS.md">Download the canonical Markdown policy</a>.</p>
+
+    <h2>Cadence and ownership</h2>
+    <ul>
+      <li>A read-only GitHub Actions workflow checks the inventory each Monday at 09:17 UTC and supports manual runs.</li>
+      <li><a href="mailto:support@samsarix.com">support@samsarix.com</a> owns triage and reviews a failed scheduled run within seven days.</li>
+      <li>Maintainers run <code>npm run check:links</code> before a prerelease and after changing an external destination or research reference.</li>
+    </ul>
+
+    <h2>Result policy</h2>
+    <ul>
+      <li>HTTP 2xx and 3xx responses pass.</li>
+      <li>HTTP 401, 403, and 429 responses are recorded as reachable but restricted.</li>
+      <li>Other HTTP 4xx responses are broken and require correction, an archive label, or removal.</li>
+      <li>HTTP 5xx, timeout, DNS, and transport failures are indeterminate and require an owner retry.</li>
+      <li>Initial and redirect destinations must remain on public HTTPS; literal local, link-local, and private IP destinations are rejected before they are followed.</li>
+    </ul>
+
+    <h2>Operational boundary</h2>
+    <p>The workflow never edits catalog status or opens an issue automatically. Scheduled GitHub workflows run from the default branch and can be disabled after extended repository inactivity, so disappearance of the check requires an owner to re-enable and run it manually.</p>
+  </main>
+  <footer class="site-footer">
+    <p>Samsarix Agent Readiness Registry · v1.3 release candidate · © 2026 Samsarix LLC</p>
+    <p><a href="mailto:support@samsarix.com">Support</a> · <a href="./#catalog">Return to directory</a></p>
+  </footer>
+</body>
+</html>

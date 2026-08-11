@@ -68,6 +68,21 @@ test('published legal files match the controlling repository notices', async () 
   assert.match(legalPage, /Business Source License 1\.1/);
 });
 
+test('security and external-link records have styled public presentation pages', async () => {
+  const [securityPage, linksPage] = await Promise.all([
+    readFile(path.join(docs, 'security-review.html'), 'utf8'),
+    readFile(path.join(docs, 'external-links.html'), 'utf8')
+  ]);
+  for (const html of [securityPage, linksPage]) {
+    assert.match(html, /Content-Security-Policy/);
+    assert.match(html, /href="assets\/styles\.css"/);
+    assert.match(html, /Samsarix Agent Registry/);
+    assert.match(html, /support@samsarix\.com/);
+  }
+  assert.match(securityPage, /SECURITY_REVIEW\.md/);
+  assert.match(linksPage, /EXTERNAL_LINKS\.md/);
+});
+
 test('agent gallery links only to bundled profile pages and labels unavailable cards', async () => {
   const html = await readFile(path.join(docs, 'agent_gallery.html'), 'utf8');
   const destinations = [...html.matchAll(/href="([^"]+)"\s+class="agent-card(?:\s[^"]*)?"/g)].map((match) => match[1]);
