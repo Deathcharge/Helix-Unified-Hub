@@ -24,7 +24,10 @@ Release sequence:
    using the shared bounded parser and evaluator.
 3. **Implemented for v1.3 RC:** bounded official MCP Registry `server.json` import,
    conservative secret-input handling, and shared browser/CLI/Action readiness gaps.
-4. Validate demand before any multi-user service, live discovery, or runtime
+4. **Implemented for v1.3 RC hardening:** formal security review, current-tree
+   personal-export removal, semantic readiness fixes, inert Markdown export,
+   hardened legacy network/DOM paths, and scheduled external-link review.
+5. Validate demand before any multi-user service, live discovery, or runtime
    observability integration.
 
 The next evidence gate is external use: collect real registry fixtures, policy-gap
@@ -59,12 +62,15 @@ Current disposition: The truthful productization state is merged. General lifecy
 Current hardening backlog:
 
 - Near-total functional duplication with the flagship's gallery and the stronger portfolio Field Guide.
-- High repository burden: 396 tracked paths, ~64 MB, and ~46,000 code/markup lines, mostly outside the maintained product.
+- Significant legacy burden remains outside the maintained static product, including
+  duplicate prototypes, incomplete experiments, deployment scripts, and binaries.
 - Historical credentials require account-side revocation/rotation; Git history still contains sensitive categories.
-- Tracked conversations/context/logs may contain personal or non-public data; retention and history rewrite are unresolved.
+- Identified current-tree conversation/context/workspace/log exports are removed;
+  coordinated history and cache treatment remains unresolved.
 - APK/ZIP/PDF/data provenance and redistribution approval are unverified.
 - Source-available BSL plus excluded legacy/third-party material is difficult to communicate and maintain.
-- Remote description remains “Lol it's a H. U. B,” repository/product branding differs, and there is no release.
+- The historical remote name still differs from the product identity; renaming remains
+  a separate compatibility decision.
 
 ## Samsarix adoption
 

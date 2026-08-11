@@ -8,17 +8,47 @@ const crypto = require('crypto');
 
 const app = express();
 const server = require('http').createServer(app);
-const wss = new WebSocket.Server({ server });
+const wss = new WebSocket.Server({ noServer: true, maxPayload: 32 * 1024 });
 
 // Configuration
 const RAILWAY_API = process.env.RAILWAY_API || 'https://helix-unified-production.up.railway.app';
 const ZAPIER_WEBHOOK_BASE = process.env.ZAPIER_WEBHOOK_BASE || 'https://hooks.zapier.com/hooks/catch/1234567/';
 const WEBHOOK_SECRET = process.env.HELIX_WEBHOOK_SECRET;
+const WEBSOCKET_SECRET = process.env.HELIX_WEBSOCKET_SECRET;
 const ALLOWED_ORIGIN = process.env.HELIX_ALLOWED_ORIGIN;
 
 if (!WEBHOOK_SECRET || WEBHOOK_SECRET.length < 32) {
     throw new Error('HELIX_WEBHOOK_SECRET must be set to at least 32 characters.');
 }
+
+function authorizedBearer(request, secret) {
+    if (!secret || secret.length < 32) return false;
+    const prefix = 'Bearer ';
+    const authorization = request.headers.authorization || '';
+    if (!authorization.startsWith(prefix)) return false;
+    const supplied = Buffer.from(authorization.slice(prefix.length));
+    const expected = Buffer.from(secret);
+    return supplied.length === expected.length && crypto.timingSafeEqual(supplied, expected);
+}
+
+function rejectUpgrade(socket, status = '401 Unauthorized') {
+    socket.write(`HTTP/1.1 ${status}\r\nConnection: close\r\n\r\n`);
+    socket.destroy();
+}
+
+server.on('upgrade', (request, socket, head) => {
+    const origin = request.headers.origin || '';
+    if ((origin && (!ALLOWED_ORIGIN || origin !== ALLOWED_ORIGIN))
+        || !authorizedBearer(request, WEBSOCKET_SECRET)) {
+        rejectUpgrade(socket);
+        return;
+    }
+    if (wss.clients.size >= 100) {
+        rejectUpgrade(socket, '503 Service Unavailable');
+        return;
+    }
+    wss.handleUpgrade(request, socket, head, (ws) => wss.emit('connection', ws, request));
+});
 
 // Zapier Webhook Endpoints (Claude's 5 Power Zaps)
 const ZAPIER_ENDPOINTS = {
@@ -466,6 +496,10 @@ function broadcastToClients(data) {
 // WebSocket for real-time updates
 wss.on('connection', (ws) => {
     console.log('WebSocket client connected to Zapier Nervous System');
+    ws.isAlive = true;
+    ws.on('pong', () => { ws.isAlive = true; });
+    let messageWindowStarted = Date.now();
+    let messagesInWindow = 0;
     
     // Send current status on connection
     ws.send(JSON.stringify({
@@ -478,6 +512,16 @@ wss.on('connection', (ws) => {
     
     ws.on('message', async (message) => {
         try {
+            const now = Date.now();
+            if (now - messageWindowStarted >= 10_000) {
+                messageWindowStarted = now;
+                messagesInWindow = 0;
+            }
+            messagesInWindow += 1;
+            if (messagesInWindow > 30) {
+                ws.close(1008, 'Message rate exceeded');
+                return;
+            }
             const data = JSON.parse(message);
             
             if (data.type === 'request_ucf_update') {
@@ -498,6 +542,19 @@ wss.on('connection', (ws) => {
     });
 });
 
+const heartbeat = setInterval(() => {
+    wss.clients.forEach((client) => {
+        if (!client.isAlive) {
+            client.terminate();
+            return;
+        }
+        client.isAlive = false;
+        client.ping();
+    });
+}, 30_000);
+heartbeat.unref();
+server.on('close', () => clearInterval(heartbeat));
+
 // Health check endpoint
 app.get('/health', (req, res) => {
     res.json({
@@ -506,7 +563,7 @@ app.get('/health', (req, res) => {
         version: '1.0.0',
         zapier_endpoints_active: Object.keys(ZAPIER_ENDPOINTS).length,
         websocket_clients: wss.clients.size,
-        ucf_metrics_current: ucfMetrics,
+        ucf_last_update: ucfMetrics.last_update,
         agents_monitored: Object.keys(agentStatus).length,
         timestamp: new Date().toISOString()
     });

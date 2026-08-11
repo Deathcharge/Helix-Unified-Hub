@@ -1,6 +1,15 @@
 // 🌀 HELIX HUB UNIFIED NAVIGATION SYSTEM
 // Shared JavaScript Component for All Portal Sites
 
+function safeHttpsUrl(value, base = window.location.href) {
+    try {
+        const url = new URL(String(value || ''), base);
+        return url.protocol === 'https:' ? url.href : '';
+    } catch {
+        return '';
+    }
+}
+
 class HelixNavigation {
     constructor(config = {}) {
         // Configuration options
@@ -366,22 +375,25 @@ class HelixNavigation {
             document.querySelector('.helix-nav-search').appendChild(searchResults);
         }
         
-        const resultsHTML = results.map(result => `
-            <div class="search-result-item" data-url="${result.url}">
-                <div class="search-result-title">${result.title}</div>
-                <div class="search-result-description">${result.description}</div>
-            </div>
-        `).join('');
-        
-        searchResults.innerHTML = resultsHTML;
-        searchResults.style.display = 'block';
-        
-        // Bind click events to results
-        searchResults.querySelectorAll('.search-result-item').forEach(item => {
-            item.addEventListener('click', () => {
-                window.location.href = item.dataset.url;
-            });
+        searchResults.replaceChildren();
+        const safeResults = Array.isArray(results) ? results.slice(0, 20) : [];
+        safeResults.forEach(result => {
+            const destination = safeHttpsUrl(result?.url);
+            if (!destination) return;
+            const item = document.createElement('button');
+            item.type = 'button';
+            item.className = 'search-result-item';
+            const title = document.createElement('span');
+            title.className = 'search-result-title';
+            title.textContent = String(result?.title || 'Untitled result');
+            const description = document.createElement('span');
+            description.className = 'search-result-description';
+            description.textContent = String(result?.description || '');
+            item.append(title, description);
+            item.addEventListener('click', () => window.location.assign(destination));
+            searchResults.appendChild(item);
         });
+        searchResults.style.display = 'block';
     }
     
     hideSearchResults() {
@@ -538,28 +550,33 @@ class HelixNavigation {
     updateUserUI(session) {
         // Update navigation to show logged-in user
         const userActions = document.querySelector('.helix-nav-actions');
-        
-        // Add user menu if logged in
-        const userMenuHTML = `
-            <div class="helix-nav-user">
-                <button class="helix-nav-user-button">
-                    👤 ${session.username}
-                </button>
-                <div class="helix-nav-user-dropdown">
-                    <a href="${this.config.apiUrl}/profile" class="helix-nav-dropdown-item">
-                        👤 Profile
-                    </a>
-                    <a href="${this.config.apiUrl}/settings" class="helix-nav-dropdown-item">
-                        ⚙️ Settings
-                    </a>
-                    <a href="#" class="helix-nav-dropdown-item" onclick="helixNav.logout()">
-                        🚪 Logout
-                    </a>
-                </div>
-            </div>
-        `;
-        
-        userActions.insertAdjacentHTML('beforeend', userMenuHTML);
+        if (!userActions) return;
+        userActions.querySelector('.helix-nav-user')?.remove();
+        const apiUrl = safeHttpsUrl(this.config.apiUrl);
+        if (!apiUrl) return;
+        const userMenu = document.createElement('div');
+        userMenu.className = 'helix-nav-user';
+        const userButton = document.createElement('button');
+        userButton.type = 'button';
+        userButton.className = 'helix-nav-user-button';
+        userButton.textContent = `👤 ${String(session?.username || 'User')}`;
+        const dropdown = document.createElement('div');
+        dropdown.className = 'helix-nav-user-dropdown';
+        for (const [label, relativePath] of [['👤 Profile', 'profile'], ['⚙️ Settings', 'settings']]) {
+            const link = document.createElement('a');
+            link.href = new URL(relativePath, apiUrl.endsWith('/') ? apiUrl : `${apiUrl}/`).href;
+            link.className = 'helix-nav-dropdown-item';
+            link.textContent = label;
+            dropdown.appendChild(link);
+        }
+        const logout = document.createElement('button');
+        logout.type = 'button';
+        logout.className = 'helix-nav-dropdown-item';
+        logout.textContent = '🚪 Logout';
+        logout.addEventListener('click', () => this.logout());
+        dropdown.appendChild(logout);
+        userMenu.append(userButton, dropdown);
+        userActions.appendChild(userMenu);
     }
     
     clearUserSession() {
@@ -630,19 +647,6 @@ class HelixNavigation {
     
     // ===== NOTIFICATION SYSTEM =====
     showNotification(notification) {
-        // Create notification element
-        const notificationHTML = `
-            <div class="helix-notification ${notification.type || 'info'}">
-                <div class="helix-notification-content">
-                    <div class="helix-notification-title">${notification.title}</div>
-                    <div class="helix-notification-message">${notification.message}</div>
-                </div>
-                <button class="helix-notification-close" onclick="this.parentElement.remove()">
-                    ✕
-                </button>
-            </div>
-        `;
-        
         // Add to notifications container or create one
         let container = document.getElementById('helixNotifications');
         if (!container) {
@@ -651,15 +655,32 @@ class HelixNavigation {
             container.className = 'helix-notifications';
             document.body.appendChild(container);
         }
-        
-        container.insertAdjacentHTML('beforeend', notificationHTML);
+        const type = ['error', 'info', 'success', 'warning'].includes(notification?.type)
+            ? notification.type
+            : 'info';
+        const item = document.createElement('div');
+        item.className = `helix-notification ${type}`;
+        const content = document.createElement('div');
+        content.className = 'helix-notification-content';
+        const title = document.createElement('div');
+        title.className = 'helix-notification-title';
+        title.textContent = String(notification?.title || 'Notification');
+        const message = document.createElement('div');
+        message.className = 'helix-notification-message';
+        message.textContent = String(notification?.message || '');
+        const close = document.createElement('button');
+        close.type = 'button';
+        close.className = 'helix-notification-close';
+        close.setAttribute('aria-label', 'Dismiss notification');
+        close.textContent = '✕';
+        close.addEventListener('click', () => item.remove());
+        content.append(title, message);
+        item.append(content, close);
+        container.appendChild(item);
         
         // Auto-remove after 5 seconds
         setTimeout(() => {
-            const notification = container.lastElementChild;
-            if (notification) {
-                notification.remove();
-            }
+            item.remove();
         }, 5000);
     }
     

@@ -16,6 +16,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "check": "npm run lint && npm test && npm run build",
+    "check:links": "node scripts/check-links.mjs",
     "lint": "node scripts/check.mjs",
     "registry": "node bin/samsarix-registry.mjs",
     "serve": "node scripts/serve.mjs",

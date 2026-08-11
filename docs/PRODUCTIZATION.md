@@ -2,7 +2,7 @@
 
 ## Current repository assessment
 
-The repository originally described a large “portal constellation,” but the checked-in, deployable surface is a collection of static HTML pages under `docs/`. It also contains archived conversations and logs, duplicated portal prototypes, incomplete Android/Node/Python experiments, deployment scripts, and claims about services that are not implemented here. The previous README documented nonexistent `src/`, `tests/`, `examples/`, development requirements, CI, API documentation, and an MIT license.
+The repository originally described a large “portal constellation,” but the checked-in, deployable surface is a collection of static HTML pages under `docs/`. It originally contained archived conversations and logs and still retains duplicated portal prototypes, incomplete Android/Node/Python experiments, deployment scripts, binaries, and claims about services that are not implemented here. The previous README documented nonexistent `src/`, `tests/`, `examples/`, development requirements, CI, API documentation, and an MIT license.
 
 The first maintained product release was **Samsarix Hub Directory**: a dependency-free static catalog from Samsarix LLC that lets someone discover the pages actually bundled in this repository and distinguishes them from external or archived destinations. That release remains useful as a secondary repository directory, but a general portfolio navigator now overlaps the canonical Samsarix Field Guide.
 
@@ -30,7 +30,7 @@ The existing repository-directory journey remains available as a secondary path 
 
 The 2026-08-08 registry decision used official A2A discovery/specification material, Microsoft Agent Registry, Backstage, NIST AI RMF, LangSmith, and OWASP Agentic Top 10 sources. The concrete comparisons and citations are maintained in [`AGENT_REGISTRY_PRODUCT.md`](AGENT_REGISTRY_PRODUCT.md). The resulting wedge is pre-deployment inventory and evidence review for smaller teams, not runtime observability or an enterprise tenant control plane.
 
-- GitHub documents both branch-folder and Actions-based Pages publishing, and warns that published sites are public even when a repository may be private. Because this repository contains logs and archived conversations outside `docs/`, the release uses an explicit generated `dist/` artifact rather than publishing the repository root: <https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site>.
+- GitHub documents both branch-folder and Actions-based Pages publishing, and warns that published sites are public even when a repository may be private. Because this repository retains legacy, binary, and data artifacts outside `docs/`, the release uses an explicit generated `dist/` artifact rather than publishing the repository root: <https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site>.
 - LinkStack demonstrates that a multi-user, self-hosted link manager can offer themes and administration, but those capabilities bring a server, database, accounts, updates, and a separate license boundary. This repository only needs a curated owner-maintained catalog, so the static wedge is intentionally narrower: <https://github.com/LinkStackOrg/LinkStack>.
 - WCAG 2.2 target-size guidance informed the 44–48 CSS-pixel interactive controls and visible focus treatment: <https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html>.
 - Lychee is a credible later option for scheduled external-link checks across HTML/Markdown/text, but external availability is inherently flaky and no owner review cadence is configured yet: <https://github.com/lycheeverse/lychee-action>.
@@ -94,9 +94,9 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 
 ### P2
 
-- [ ] Add an owner-maintained process for reviewing external link freshness.
+- [x] Add an owner-maintained process for reviewing external link freshness.
 - [ ] Normalize or archive duplicate historical HTML and documentation after owner review.
-- [ ] Decide whether the Android, Discord, webhook, and generator prototypes should be extracted into separate repositories or removed.
+- [x] Decide whether the Android, Discord, webhook, and generator prototypes should be extracted into separate repositories or removed. They remain unsupported historical material; no extraction or revival is justified without a named owner and demand, while security-relevant runnable paths are hardened in place.
 - [x] Add a dependency-free CLI and GitHub check after the browser schema and readiness policy stabilize.
 - [ ] Validate demand before considering team history, signed approvals, managed hosting, or enterprise imports.
 
@@ -140,22 +140,28 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 - Added the v1.2 dependency-free registry CLI and JavaScript Action with bounded file/stdin import, stable policy and error exits, deterministic reports, escaped workflow annotations, a fictional passing fixture, and command-level tests using the shared readiness implementation.
 - Preserved four unsupported Helix-era pip manifests as hash-recorded, quarantined `.snapshot` files outside supported build inputs and removed their active `requirements*.txt` paths so legacy dependency text no longer masquerades as a supported runtime surface.
 - Added the v1.3 MCP metadata adapter for one official dated `server.json` or API response wrapper, with conservative interface mapping, unresolved URL-template handling, secret-input-name summaries, actual secret-value rejection, and no network/package/runtime access.
+- Completed a formal standard Codex Security scan against `a2d460e47f5ae2fa1897c6bb38b265a1676f38cb`, removed identified current-tree personal exports, blocked future-dated evidence and unversioned active interfaces, neutralized Markdown raw HTML, rejected credential-like URL values, and hardened the validated legacy WebSocket/DOM paths.
+- Added a dependency-free external-link checker, unit tests, a weekly/manual read-only workflow, a curated authoritative-source inventory, and a seven-day owner triage policy.
 
 ## Deferred and owner-blocked work
 
-- The owner authorized pushing and merging validated release increments to `main`; the existing Pages workflow deploys only the allowlisted `dist/` documentation artifact after each merge. No custom domain, environment rule, live service, credential, or external account setting is created or changed here.
+- The owner authorized pushing and merging validated release increments to `main`; the existing Pages workflow deploys only the allowlisted `dist/` documentation artifact after each merge. On 2026-08-11, `main` protection was enabled with the existing `validate` check, pull-request flow, resolved-conversation enforcement, force-push/deletion blocking, and administrator recovery bypass. The existing main-only Pages environment and HTTPS enforcement were verified; no custom domain, live service, or credential was created.
 - Counsel review remains recommended for the BSL scope, Additional Use Grant, Change License, trademark policy, and future commercial agreement; the obsolete pricing domains and unsupported click-through proprietary terms were removed.
-- The provenance and release status of the checked-in APK, PDFs, archives, exported conversations, and logs require owner review before removal or redistribution decisions.
+- The provenance and release status of the checked-in APK, PDFs, ZIP, audio, and remaining historical datasets require owner review before removal or redistribution decisions.
 - Credentials and external account configuration for Railway, Discord, Zapier, Manus, domains, and app signing are intentionally not fabricated.
 - A historical GitHub PAT and three Zapier bearer hooks must be revoked/rotated by the account owner; current-tree redaction cannot invalidate them or erase Git history.
-- Tracked conversation, context, ChatGPT, and ZIP exports contain personal or non-public material. Removal/redaction and any coordinated history rewrite require owner approval and a retention decision.
+- Identified current-tree conversation, context, ChatGPT, workspace-output, Notion-log,
+  and runtime-log exports were removed under the owner's repository wrap-up
+  authorization. Any coordinated history rewrite, cache request, or private archival
+  retention still requires an explicit retention plan.
 
 ## Known risks
 
 - The repository remains much larger and less coherent than the maintained static product because legacy material is preserved.
-- External URLs can change independently; the product labels them external and does not fabricate health.
+- External URLs can change independently. A weekly/manual check detects reachability
+  failures, while the product still does not fabricate service health or safety.
 - Secondary prototypes may contain security or reliability flaws and must not be deployed as supported services without separate hardening.
-- Production promotion remains blocked on credential rotation, personal-data disposition, Pages settings, and legal review even though the generated `dist/` artifact passes its local acceptance checks.
+- Production promotion remains blocked on credential rotation, Git-history/personal-data disposition, retained-artifact provenance, and legal review even though the generated `dist/` artifact passes its local acceptance checks.
 - Readiness policy can create false confidence if scores are detached from evidence. The registry must keep blockers and evidence references primary and must not describe a score as certification.
 - Browser persistence reduces service-side exposure but is not encrypted storage; users must be told not to import secrets, prompts, traces, or sensitive production content.
 - On 2026-08-10 GitHub reported 130 open Dependabot alerts: 31 high, 61 medium, and 38 low. All mapped to four unsupported pip manifests, not to the dependency-free root registry package. PR #14 preserved their exact text under `legacy/dependency-snapshots/`, removed the recognized manifest/build paths, and added hash/absence checks. After merge `65b674792b5995ead6226f7ac4328090d9f0a92e`, the dependency graph workflow passed and GitHub reported 0 open alerts without manual dismissal. The snapshots remain unsafe to install merely because their alert records closed.
@@ -203,7 +209,7 @@ Registry release-candidate evidence recorded on 2026-08-08 on `agent/competitive
 | Source/artifact parity                                                                                                  | `docs/` and rebuilt `dist/` each contained 44 files with zero missing or hash-mismatched paths.                                                                                                                                                                                                                                               |
 | Social image                                                                                                            | One image-generation edit produced `docs/assets/og-agent-registry.png`; text, spelling, safe margins, palette, and project metadata reference were visually inspected.                                                                                                                                                                        |
 | Browser visual automation                                                                                               | Not run for this increment because the applicable Sites workflow requires explicit user request before browser QA. Responsive, keyboard-focus, reduced-motion, semantic/fallback, and live-region behavior is covered by implementation review and static contracts, not a new rendered-browser claim.                                        |
-| Formal Codex Security diff scan                                                                                         | Not run: the desktop scan launcher returned `Transport closed` before issuing a scan ID. It was not retried or represented as completed; local threat-model review, bounded-input tests, syntax checks, CSP contracts, and the adversarial fixtures above remain the available evidence.                                                      |
+| Formal Codex Security scan                                                                                              | Superseded on 2026-08-11 by completed standard scan `a46ac943-add5-4c90-a081-dcbef68bb61e` against `a2d460e47f5ae2fa1897c6bb38b265a1676f38cb`; eight findings were validated and locally actionable remediations are recorded in `SECURITY_REVIEW.md`.                                                                                                 |
 
 Earlier directory-release evidence is retained below for historical traceability.
 

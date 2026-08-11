@@ -129,6 +129,7 @@ package or stable action tag is claimed.
 | `npm test`                   | Run dependency-free catalog, readiness-policy, security-boundary, export, and site-contract tests.                                     |
 | `npm run build`              | Recreate the complete static release in `dist/`.                                                                                       |
 | `npm run check`              | Run lint, tests, and build in the same order as CI.                                                                                    |
+| `npm run check:links`        | Probe the owner-maintained external-link inventory with bounded HTTPS requests.                                                        |
 
 There are no npm runtime or development dependencies. `package-lock.json` records
 the package identity and Node compatibility for deterministic installation.
@@ -150,7 +151,7 @@ the package identity and Node compatibility for deterministic installation.
   command-line enforcement using the shared policy module
 - `docs/assets/catalog.mjs`, `docs/assets/app.mjs`, and `docs/portals.json` — retained
   secondary directory journey
-- `scripts/` — dependency-free validation, build, and local serving
+- `scripts/` — dependency-free validation, build, local serving, and external-link review
 - `tests/` — unit and integration contracts for the product and release artifact
 - `docs/PRODUCTIZATION.md` — living assessment, priorities, evidence, and release gates
 - `docs/THREAT_MODEL.md` — maintained and legacy trust boundaries
@@ -165,7 +166,9 @@ telemetry, or per-user infrastructure cost.
 
 Imported JSON and restored browser state are untrusted. The product applies bounded
 parsing and schemas, rejects credential-shaped keys, permits only HTTPS interface
-URLs without embedded credentials, and renders values through text nodes. It uses a
+URLs without embedded credentials or credential-like query/fragment values, blocks
+future-dated evidence and unversioned active interfaces, and renders values through
+text nodes. Markdown export HTML-encodes tag openers. It uses a
 restrictive Content Security Policy and has no third-party runtime scripts, fonts,
 analytics, remote model calls, or live endpoint probes.
 
@@ -188,11 +191,17 @@ has:
 
 1. revoked the GitHub personal access token found in tracked history;
 2. rotated or disabled the three Zapier catch hooks found in tracked history;
-3. removed, redacted, or explicitly approved the tracked conversation/context
-   exports and decided whether Git history needs rewriting;
-4. confirmed GitHub Pages environment, domain, and branch-protection settings; and
+3. decided whether Git history containing the now-removed conversation/context
+   exports needs coordinated rewriting and cache-removal requests;
+4. established provenance and redistribution approval for retained binaries and
+   historical datasets; and
 5. obtained appropriate legal review of the Business Source License scope,
    trademark policy, and any commercial offering.
+
+The public Pages repository settings were verified on 2026-08-11: workflow-based
+publishing is HTTPS-enforced and limited to `main`, while `main` requires the
+`validate` check, pull-request flow, and resolved conversations and disallows force
+pushes and deletion. Repository administrators retain recovery bypass access.
 
 Current-tree redaction does not revoke credentials or erase earlier commits.
 
@@ -210,16 +219,20 @@ Current-tree redaction does not revoke credentials or erase earlier commits.
   review whether its gates and evidence are sufficient for their own risk context.
 - Browser storage is single-device, has no collaboration history or signed approval,
   and may be cleared by browser policy or the user.
-- External directory-link availability is not represented as live health.
+- External link availability is reviewed weekly and before prereleases, but a
+  successful request is not represented as service health, safety, or endorsement.
 - Archived pages and the Android, Discord, Zapier, orchestration, and deployment
   folders are preserved prototypes, not supported product runtime.
 - Historical Python dependency text is retained only as hash-recorded, quarantined
   snapshots under `legacy/dependency-snapshots/`; the files are excluded from
   supported build inputs and are not safe environment specifications.
-- Legacy logs, exports, PDFs, binaries, and conversation archives remain pending an
-  owner-controlled provenance and retention decision.
+- Identified current-tree conversation, context, workspace-output, and runtime-log
+  exports were removed. Git-history treatment plus remaining PDF, ZIP, APK, audio,
+  and dataset provenance still require an owner-controlled retention decision.
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) before proposing changes.
+See [`docs/EXTERNAL_LINKS.md`](docs/EXTERNAL_LINKS.md) for the owner review process,
+[`docs/SECURITY_REVIEW.md`](docs/SECURITY_REVIEW.md) for the prerelease audit, and
+[`CONTRIBUTING.md`](CONTRIBUTING.md) before proposing changes.
 
 ## Ownership and license
 

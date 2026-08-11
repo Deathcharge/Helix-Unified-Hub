@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "links": [
+    {
+      "id": "a2a-agent-discovery",
+      "label": "A2A agent discovery specification",
+      "url": "https://github.com/a2aproject/A2A/blob/main/docs/topics/agent-discovery.md"
+    },
+    {
+      "id": "mcp-registry-quickstart",
+      "label": "MCP Registry quickstart",
+      "url": "https://modelcontextprotocol.io/registry/quickstart"
+    },
+    {
+      "id": "nist-ai-rmf-security",
+      "label": "NIST AI RMF security guidance",
+      "url": "https://airc.nist.gov/airmf-resources/airmf/5-sec-core/"
+    },
+    {
+      "id": "owasp-agentic-top-ten",
+      "label": "OWASP Top 10 for Agentic Applications",
+      "url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/"
+    },
+    {
+      "id": "github-pages-source",
+      "label": "GitHub Pages publishing-source guidance",
+      "url": "https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site"
+    },
+    {
+      "id": "wcag-target-size",
+      "label": "WCAG 2.2 target-size guidance",
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html"
+    }
+  ]
+}

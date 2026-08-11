@@ -4,6 +4,7 @@ import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { SAFE_STATUSES, safeHref } from "../docs/assets/catalog.mjs";
+import { loadLinkTargets } from "./check-links.mjs";
 import {
   evaluateAgent,
   normalizeRegistryDocument,
@@ -136,6 +137,17 @@ async function htmlFiles(directory) {
   return found;
 }
 
+async function repositoryFiles(directory) {
+  const found = [];
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    if (entry.isDirectory() && ['.git', 'dist', 'node_modules'].includes(entry.name)) continue;
+    const absolute = path.join(directory, entry.name);
+    if (entry.isDirectory()) found.push(...(await repositoryFiles(absolute)));
+    else found.push(absolute);
+  }
+  return found;
+}
+
 if (registry.schemaVersion !== 1 || !Array.isArray(registry.entries)) {
   fail(
     "docs/portals.json must use schemaVersion 1 and contain an entries array.",
@@ -199,6 +211,8 @@ const [
   packageText,
   lockText,
   pagesWorkflow,
+  linkWorkflow,
+  gitignore,
 ] = await Promise.all([
   read("docs/index.html"),
   read("docs/registry.html"),
@@ -207,6 +221,8 @@ const [
   read("package.json"),
   read("package-lock.json"),
   read(".github/workflows/deploy-pages.yml"),
+  read(".github/workflows/link-health.yml"),
+  read(".gitignore"),
 ]);
 if (!landingPage.includes('href="CI_INTEGRATION.md"'))
   fail("docs/index.html: CI guide is not discoverable.");
@@ -277,6 +293,44 @@ for (const match of pagesWorkflow.matchAll(/^\s*uses:\s*([^\s#]+)/gm)) {
       `Pages workflow action is not pinned to an immutable revision: ${match[1]}.`,
     );
   }
+}
+const linkPermissions = yamlDirectEntries(yamlBlock(linkWorkflow, "permissions", 0), 2);
+if (!exactYamlMap(linkPermissions, { contents: "read" }))
+  fail("External-link workflow permissions must be exactly contents: read.");
+if (
+  !linkWorkflow.includes('cron: "17 9 * * 1"')
+  || !linkWorkflow.includes("workflow_dispatch:")
+  || !linkWorkflow.includes("timeout-minutes: 10")
+  || !linkWorkflow.includes("node scripts/check-links.mjs")
+  || !linkWorkflow.includes("node-version: 24")
+) {
+  fail("External-link workflow must keep the documented schedule, manual trigger, timeout, and Node command.");
+}
+for (const match of linkWorkflow.matchAll(/^\s*uses:\s*([^\s#]+)/gm)) {
+  if (!/^[^@\s]+@[0-9a-f]{40}$/.test(match[1])) {
+    fail(`External-link workflow action is not pinned to an immutable revision: ${match[1]}.`);
+  }
+}
+try {
+  const linkTargets = await loadLinkTargets({ rootDir: root });
+  if (!linkTargets.length) fail("External-link inventory must contain at least one target.");
+} catch (error) {
+  fail(`External-link inventory is invalid: ${error.message}`);
+}
+for (const requiredIgnore of [
+  "original_conversation_*.txt",
+  "assets/chat*.html",
+  "assets/context_dump*.txt",
+  "assets/workspace_output_*.txt",
+  "assets/logs-*.txt",
+  "outputs/workspace_output_*.txt",
+]) {
+  if (!gitignore.includes(requiredIgnore)) fail(`.gitignore: missing private-export guard ${requiredIgnore}.`);
+}
+const privateExportPattern = /(?:^|\/)(?:original_conversation_[^/]*\.txt|chat[^/]*\.html|context_dump[^/]*\.txt|workspace_output_[^/]*\.txt|logs-[^/]*\.txt)$/i;
+for (const absolute of await repositoryFiles(root)) {
+  const relativePath = path.relative(root, absolute).replaceAll(path.sep, "/");
+  if (privateExportPattern.test(relativePath)) fail(`${relativePath}: private conversation, context, or generated output export must not be tracked.`);
 }
 const packageMetadata = JSON.parse(packageText);
 const packageLock = JSON.parse(lockText);
@@ -373,12 +427,16 @@ for (const relativePath of [
   "LICENSE",
   "NOTICE",
   "CITATION.cff",
+  ".github/external-links.json",
+  ".github/workflows/link-health.yml",
   "action.yml",
   "bin/samsarix-action.mjs",
   "bin/samsarix-registry.mjs",
   "docs/CI_INTEGRATION.md",
+  "docs/EXTERNAL_LINKS.md",
   "docs/LICENSE.txt",
   "docs/NOTICE.txt",
+  "docs/SECURITY_REVIEW.md",
   "docs/assets/og-agent-registry.png",
   "docs/review-ready-registry-example.json",
   "scripts/registry-cli.mjs",

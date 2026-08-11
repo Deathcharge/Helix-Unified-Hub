@@ -41,7 +41,7 @@ JSON Schema alone cannot fully express.
 | `risk`           | `unassessed`, `low`, `moderate`, `high`, or `critical`.                                                                                                        |
 | `owner`          | Object with `name` and `contact`. Both are needed for readiness.                                                                                               |
 | `authentication` | Optional `schemes` array plus inert `notes`. Review and production records need at least one declared scheme. A2A scheme names are preserved here.             |
-| `interfaces`     | At most 20 `{ "protocol", "version", "url" }` objects. Protocol is required; a URL, when present, must use HTTPS and contain no embedded username or password. |
+| `interfaces`     | At most 20 `{ "protocol", "version", "url" }` objects. Protocol is required; an active record needs at least one nonempty interface version for readiness. A URL, when present, must use HTTPS and contain no embedded username/password or credential-like query/fragment value. |
 | `skills`         | At most 50 short strings. Objects with a `name` or `id` are also normalized on import.                                                                         |
 | `data`           | `classification`, `sources`, and `retention`; classification is `unassessed`, `public`, `internal`, `confidential`, or `restricted`.                           |
 | `deployment`     | Optional `environment`, `monitoringOwner`, `incidentContact`, and `runbook` metadata.                                                                          |
@@ -76,15 +76,16 @@ Each value has this shape:
 
 Statuses are `missing`, `declared`, or `verified`. `verified` requires both a
 reference and review date. References are inert text; the browser does not fetch or
-render them as HTML. Reviews older than 180 days are shown as stale and block a
-ready result until refreshed.
+render them as HTML. Calendar-invalid or non-UTC timestamp values are rejected.
+Reviews older than 180 days are stale, and reviews dated after the evaluation time
+are future-dated; both conditions block a ready result until corrected.
 
 The weighted score is deterministic: purpose 12, ownership 12, interface 11,
 authentication 10, data 12, evaluation 12, security 12, oversight 10, and operations 9. `missing` earns no weight, `declared` earns half, and `verified` earns full weight.
 
 The score never overrides blockers. Concept, paused, or retired lifecycle; an
 unassessed or critical risk tier; missing owner/contact; missing bounded purpose or
-skill; missing active interface; absent authentication schemes; unassessed or
+skill; missing versioned active interface; absent authentication schemes; unassessed or
 incomplete data handling; incomplete environment/monitoring/incident/runbook
 metadata; required missing evidence; and stale evidence can prevent a ready result.
 This policy is a workflow aid, not certification.
@@ -136,7 +137,8 @@ identify an accountable internal owner, enumerate tools in `server.json`, prove 
 authentication scheme, classify data, or supply internal evaluation, security,
 oversight, and operations evidence, so those gaps remain visible and blocking.
 
-The adapter accepts concrete HTTPS remote URLs without embedded credentials. A valid
+The adapter accepts concrete HTTPS remote URLs without embedded credentials or
+credential-like query/fragment values. A valid
 HTTPS URL template is recognized as a declared interface but exported with an empty
 concrete URL because its variables have not been resolved. Package commands,
 arguments, packages, and endpoints are never fetched, installed, or executed.
@@ -166,8 +168,9 @@ is not encrypted. **Reset sample** requires a second confirmation action, remove
 that key, and restores `agents.json`.
 
 JSON export sorts agents by ID and emits fields and evidence gates in a fixed order.
-Markdown export uses the same ordering and includes score, lifecycle, risk, owner,
-blockers, and the complete evidence table. Neither export adds a generated timestamp,
+Markdown export uses the same ordering, HTML-encodes imported tag openers, and
+includes score, lifecycle, risk, owner, blockers, and the complete evidence table.
+Neither export adds a generated timestamp,
 so unchanged input and policy produce unchanged output.
 
 Start with [`agent-registry-template.json`](agent-registry-template.json). It is
