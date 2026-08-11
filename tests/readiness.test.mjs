@@ -78,6 +78,41 @@ test('complete, current evidence can reach ready while stale evidence blocks it'
   assert.equal(stale.staleGates.length, 9);
 });
 
+test('future-dated evidence blocks readiness and invalid calendar dates are rejected', () => {
+  const futureEvidence = Object.fromEntries(EVIDENCE_GATES.map((gate) => [gate, {
+    status: 'verified',
+    reference: `reviews/${gate}.md`,
+    reviewedAt: '9999-12-31'
+  }]));
+  const agent = normalizeRegistryDocument(documentWith([readyAgent({ evidence: futureEvidence })])).agents[0];
+  const assessment = evaluateAgent(agent, { now: new Date('2026-08-09T00:00:00Z') });
+  assert.equal(assessment.status, 'blocked');
+  assert.equal(assessment.futureGates.length, EVIDENCE_GATES.length);
+  assert.match(assessment.blockers.join('\n'), /future review date/);
+  assert.throws(
+    () => normalizeRegistryDocument(documentWith([readyAgent({
+      evidence: {
+        ...verifiedEvidence(),
+        security: {
+          status: 'verified',
+          reference: 'reviews/security.md',
+          reviewedAt: '2026-02-31'
+        }
+      }
+    })])),
+    (error) => error instanceof RegistryValidationError && error.message.includes('ISO date')
+  );
+});
+
+test('active records require at least one versioned interface', () => {
+  const agent = normalizeRegistryDocument(documentWith([readyAgent({
+    interfaces: [{ protocol: 'A2A', url: 'https://agents.example.com/release' }]
+  })])).agents[0];
+  const assessment = evaluateAgent(agent, { now: new Date('2026-08-09T00:00:00Z') });
+  assert.equal(assessment.status, 'blocked');
+  assert.match(assessment.blockers.join('\n'), /versioned interface/);
+});
+
 test('A2A Agent Cards normalize interface metadata but preserve governance gaps', () => {
   const card = {
     name: 'Research Helper',
@@ -137,6 +172,8 @@ test('MCP Registry server.json normalizes discovery metadata but preserves gover
   assert.equal(agent.version, '1.0.0');
   assert.equal(agent.interfaces.length, 2);
   assert.equal(agent.interfaces[0].protocol, 'MCP stdio (npm)');
+  assert.equal(agent.interfaces[0].version, '1.0.0');
+  assert.equal(agent.interfaces[1].version, '1.0.0');
   assert.equal(agent.interfaces[1].url, 'https://agents.example.com/release-evidence/mcp');
   assert.deepEqual(agent.authentication.schemes, []);
   assert.match(agent.authentication.notes, /RELEASE_TOKEN/);
@@ -184,7 +221,7 @@ test('MCP imports reject secret defaults and unsafe remotes while accepting safe
   );
   assert.throws(
     () => normalizeMCPServer({ ...base, remotes: [{ type: 'streamable-http', url: 'https://example.com/mcp?api_key=do-not-import-this' }] }),
-    (error) => error instanceof RegistryValidationError && error.message.includes('credential-like query value')
+    (error) => error instanceof RegistryValidationError && error.message.includes('credential-like query or fragment value')
   );
   assert.throws(
     () => normalizeMCPServer({
@@ -271,6 +308,9 @@ test('unsafe URLs, duplicate identifiers, and credential-bearing fields are reje
   assert.equal(safeRemoteUrl('https://example.com/agent/'), 'https://example.com/agent');
   assert.equal(safeRemoteUrl('http://example.com/agent'), null);
   assert.equal(safeRemoteUrl('https://user:pass@example.com/agent'), null);
+  assert.equal(safeRemoteUrl('https://example.com/agent?access_token=do-not-retain'), null);
+  assert.equal(safeRemoteUrl('https://example.com/agent#signature=do-not-retain'), null);
+  assert.match(safeRemoteUrl('https://example.com/agent?token={TOKEN}'), /^https:\/\/example\.com\/agent\?token=/);
   assert.throws(
     () => normalizeRegistryDocument(documentWith([readyAgent(), readyAgent({ name: 'Duplicate' })])),
     (error) => error instanceof RegistryValidationError && error.message.includes('Duplicate agent id')
@@ -307,10 +347,15 @@ test('serialization and Markdown review packets are deterministic', () => {
 });
 
 test('Markdown export neutralizes imported line breaks and control syntax', () => {
-  const registry = documentWith([readyAgent({ summary: 'Bounded purpose\n## Spoofed section' })]);
+  const registry = documentWith([readyAgent({
+    summary: 'Bounded purpose\n## Spoofed section <iframe src=data:text/html,unsafe x=y> & raw'
+  })]);
   const markdown = renderMarkdownPacket(registry, { now: new Date('2026-08-09T00:00:00Z') });
   assert.doesNotMatch(markdown, /\n## Spoofed section/);
   assert.match(markdown, /Bounded purpose \\#\\# Spoofed section/);
+  assert.doesNotMatch(markdown, /<iframe/i);
+  assert.match(markdown, /&lt;iframe/);
+  assert.match(markdown, /&amp; raw/);
 });
 
 test('search and lifecycle, risk, readiness, and stale filters compose', () => {

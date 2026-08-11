@@ -48,6 +48,17 @@ temp/
 .playwright-cli/
 *.tmp
 
+# Private conversation, context, and generated workspace exports
+original_conversation_*.txt
+assets/chat*.html
+assets/context_dump*.txt
+assets/*conversation*.txt
+assets/workspace_output_*.txt
+assets/logs-*.txt
+assets/notion_*log*.json
+assets/notion_timeline*.json
+outputs/workspace_output_*.txt
+
 # Database files
 *.db
 *.sqlite

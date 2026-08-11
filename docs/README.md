@@ -17,7 +17,9 @@ The maintained product files are:
 - `AGENT_REGISTRY_SCHEMA.md` plus `agent-registry.schema.json` for the prose and
   machine-readable portable contract; and
 - `a2a-agent-card-example.json` and `mcp-server-example.json` for reproducible
-  fictional portable-metadata imports.
+  fictional portable-metadata imports;
+- `SECURITY_REVIEW.md` for the prerelease audit/remediation record; and
+- `EXTERNAL_LINKS.md` for the owner-maintained link-review process.
 
 The repository root additionally contains `action.yml`, `bin/`, and
 `scripts/registry-cli.mjs`. Those supported-LTS Node entry points reuse `assets/readiness.mjs`
@@ -28,6 +30,7 @@ assets:
 
 ```bash
 npm run check
+npm run check:links
 ```
 
 The secondary `portals.json` directory retains deliberately narrow lifecycle values:

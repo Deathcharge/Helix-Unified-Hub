@@ -1,7 +1,11 @@
-# Helix Ecosystem - Master Documentation
+# Helix Ecosystem - Archived Master Documentation
+
+> **Samsarix archive:** This pre-Samsarix planning document is preserved for
+> historical context. Its deployment, service, status, and access claims are not
+> current or supported. The maintained product is documented in [`README.md`](README.md).
 
 **Last Updated**: November 21, 2025  
-**Owner**: Andrew Ward (ward.andrew32@gmail.com)  
+**Owner**: Samsarix LLC (`contact@samsarix.com`)
 **GitHub**: [@Deathcharge](https://github.com/Deathcharge)
 
 ---
@@ -100,12 +104,12 @@ Helix-Unified-Hub (Orchestration)
 - ✅ Interactive Fractal Generator with UCF controls
 - ✅ Sacred Harmonic Audio (136.1 Hz + 432 Hz)
 - ✅ Fractal Gallery with cloud sync
-- ✅ Mobile Admin Panel (locked to ward.andrew32@gmail.com)
+- ✅ Mobile Admin Panel (legacy personal-account access; unsupported)
 - ✅ SMS/Voice Control via Zapier webhooks
 - ✅ Real portal generation service
 
 **Admin Access**:
-- Email: `ward.andrew32@gmail.com` (exclusive access)
+- Email: legacy personal Gmail account (redacted from the current tree)
 - Authentication: Gmail OAuth via Manus
 - Mobile: ✅ Fully functional on mobile devices
 
@@ -255,7 +259,7 @@ The following portals are configured and ready for deployment:
 
 ### Authentication
 
-**Primary Admin**: ward.andrew32@gmail.com  
+**Primary Admin**: legacy personal Gmail account (redacted; unsupported)
 **Method**: Gmail OAuth via Manus  
 **Scope**: Full admin access to portal orchestration
 
@@ -327,8 +331,8 @@ The following portals are configured and ready for deployment:
 
 ### Primary Contact
 
-**Name**: Andrew Ward  
-**Email**: ward.andrew32@gmail.com  
+**Organization**: Samsarix LLC
+**Email**: contact@samsarix.com
 **GitHub**: @Deathcharge  
 **Role**: Project Owner & Primary Developer
 

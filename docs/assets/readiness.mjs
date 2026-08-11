@@ -138,20 +138,33 @@ function validDate(value, label, issues) {
   const result = boundedString(value, label, issues, { max: 40 });
   if (!result) return '';
   if (!/^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z)?$/.test(result)
-    || Number.isNaN(Date.parse(result))) {
+    || Number.isNaN(Date.parse(result))
+    || new Date(result).toISOString().slice(0, 10) !== result.slice(0, 10)) {
     issues.push(`${label} must be an ISO date or UTC timestamp.`);
     return '';
   }
   return result;
 }
 
-export function safeRemoteUrl(value) {
+function credentialParams(url) {
+  const fragment = url.hash.startsWith('#') ? url.hash.slice(1) : url.hash;
+  return [...url.searchParams, ...new URLSearchParams(fragment)];
+}
+
+function hasCredentialUrlValue(url) {
+  return credentialParams(url).some(([name, value]) => (
+    credentialLikeInputName(name) && hasDeclaredValue(value)
+  ));
+}
+
+export function safeRemoteUrl(value, { allowCredentialValues = false } = {}) {
   const candidate = String(value || '').trim();
   if (!candidate) return '';
   if (candidate.length > 2048 || /[\u0000-\u001f\\]/.test(candidate)) return null;
   try {
     const url = new URL(candidate);
-    if (url.protocol !== 'https:' || url.username || url.password) return null;
+    if (url.protocol !== 'https:' || url.username || url.password
+      || (!allowCredentialValues && hasCredentialUrlValue(url))) return null;
     return url.href.replace(/\/$/, '');
   } catch {
     return null;
@@ -287,15 +300,13 @@ function normalizeMCPRemoteUrl(value, label, issues) {
   } catch {
     parsed = null;
   }
-  if (parsed && [...parsed.searchParams].some(([name, queryValue]) => (
-    credentialLikeInputName(name)
-    && !/^\{[A-Za-z_][A-Za-z0-9_]*\}$/.test(queryValue)
-  ))) {
-    issues.push(`${label} must not embed a credential-like query value.`);
+  if (parsed && hasCredentialUrlValue(parsed)) {
+    issues.push(`${label} must not embed a credential-like query or fragment value.`);
   }
   if (candidate.includes('{') || candidate.includes('}')) {
     const concrete = parseableCandidate.replace(/\{[A-Za-z_][A-Za-z0-9_]*\}/g, 'template-value');
-    if (concrete.includes('{') || concrete.includes('}') || !safeRemoteUrl(concrete)) {
+    if (concrete.includes('{') || concrete.includes('}')
+      || !safeRemoteUrl(concrete, { allowCredentialValues: true })) {
       issues.push(`${label} must be an HTTPS URL or a valid HTTPS variable template without embedded credentials.`);
     }
     return '';
@@ -313,7 +324,7 @@ function hasDeclaredValue(value) {
 }
 
 function credentialLikeInputName(value) {
-  return /(?:^|[_-])(api[_-]?key|authorization|cookie|credential|password|private[_-]?key|secret|token)(?:$|[_-])/i
+  return /(?:^|[_-])(api[_-]?key|auth|authorization|cookie|credential|key|password|private[_-]?key|secret|sig|signature|token)(?:$|[_-])/i
     .test(String(value || ''));
 }
 
@@ -404,6 +415,7 @@ export function normalizeMCPServer(server) {
   if (!schemaMatch) issues.push('MCP $schema must identify an official dated server.schema.json over HTTPS.');
   const registryName = boundedString(server.name, 'MCP name', issues, { max: 160, required: true });
   const title = boundedString(server.title || registryName.split('/').at(-1), 'MCP title', issues, { max: 120, required: true });
+  const serverVersion = boundedString(server.version, 'MCP version', issues, { max: 80 });
   const packageEntries = boundedArray(server.packages, 'MCP packages', issues, 20);
   const remoteEntries = boundedArray(server.remotes, 'MCP remotes', issues, 20);
   if (packageEntries.length + remoteEntries.length > 20) {
@@ -423,7 +435,8 @@ export function normalizeMCPServer(server) {
     const transport = isObject(entry.transport) ? entry.transport : {};
     if (!isObject(entry.transport)) issues.push(`MCP packages[${index}].transport must be an object.`);
     const transportType = boundedString(transport.type, `MCP packages[${index}].transport.type`, issues, { max: 40, required: true });
-    interfaces.push({ protocol: `MCP ${transportType}${registryType ? ` (${registryType})` : ''}`, version: '', url: '' });
+    const version = boundedString(entry.version || serverVersion, `MCP packages[${index}].version`, issues, { max: 80 });
+    interfaces.push({ protocol: `MCP ${transportType}${registryType ? ` (${registryType})` : ''}`, version, url: '' });
   });
   remotes.forEach((entry, index) => {
     if (!isObject(entry)) {
@@ -433,7 +446,7 @@ export function normalizeMCPServer(server) {
     const transportType = boundedString(entry.type, `MCP remotes[${index}].type`, issues, { max: 40, required: true });
     interfaces.push({
       protocol: `MCP ${transportType}`,
-      version: '',
+      version: serverVersion,
       url: normalizeMCPRemoteUrl(entry.url, `MCP remotes[${index}].url`, issues)
     });
   });
@@ -450,7 +463,7 @@ export function normalizeMCPServer(server) {
     id: `mcp-${slugify(registryName)}`,
     name: title,
     summary: description || 'Imported MCP server with no description.',
-    version: server.version || '',
+    version: serverVersion,
     lifecycle: 'development',
     risk: 'unassessed',
     owner: { name: '', contact: '' },
@@ -607,12 +620,17 @@ export function evaluateAgent(agent, { now = new Date(), staleAfterDays = 180 } 
   const gates = {};
   let score = 0;
   const staleGates = [];
+  const futureGates = [];
   for (const gate of EVIDENCE_GATES) {
     const evidence = agent.evidence[gate];
     score += GATE_WEIGHTS[gate] * EVIDENCE_VALUE[evidence.status];
-    const stale = Boolean(evidence.reviewedAt) && daysSince(evidence.reviewedAt, now) > staleAfterDays;
+    const reviewedAtTime = evidence.reviewedAt ? new Date(evidence.reviewedAt).getTime() : 0;
+    const future = Boolean(evidence.reviewedAt) && reviewedAtTime > now.getTime();
+    const stale = Boolean(evidence.reviewedAt) && !future
+      && daysSince(evidence.reviewedAt, now) > staleAfterDays;
     if (stale) staleGates.push(gate);
-    gates[gate] = { ...evidence, weight: GATE_WEIGHTS[gate], stale };
+    if (future) futureGates.push(gate);
+    gates[gate] = { ...evidence, weight: GATE_WEIGHTS[gate], stale, future };
   }
   score = Math.round(score);
   const blockers = [];
@@ -622,7 +640,10 @@ export function evaluateAgent(agent, { now = new Date(), staleAfterDays = 180 } 
   if (agent.risk === 'critical') blockers.push('Critical-risk agents require an explicit exception outside this registry.');
   if (!agent.owner.name || !agent.owner.contact) blockers.push('An accountable owner and contact are required.');
   if (!agent.summary || !agent.skills.length) blockers.push('A bounded purpose and at least one skill are required.');
-  if (!['concept', 'paused', 'retired'].includes(agent.lifecycle) && !agent.interfaces.length) blockers.push('An active agent needs a versioned interface declaration.');
+  if (!['concept', 'paused', 'retired'].includes(agent.lifecycle)
+    && !agent.interfaces.some((entry) => entry.version)) {
+    blockers.push('An active agent needs a versioned interface declaration.');
+  }
   if (['review', 'production'].includes(agent.lifecycle) && !agent.authentication.schemes.length) blockers.push('A review or production agent needs a declared authentication scheme.');
   if (['review', 'production'].includes(agent.lifecycle) && agent.data.classification === 'unassessed') blockers.push('A review or production agent needs an assessed data classification.');
   if (['review', 'production'].includes(agent.lifecycle) && (!agent.data.sources.length || !agent.data.retention)) blockers.push('A review or production agent needs data sources and retention notes.');
@@ -639,13 +660,14 @@ export function evaluateAgent(agent, { now = new Date(), staleAfterDays = 180 } 
     if (agent.evidence[gate].status === 'missing') blockers.push(`${GATE_LABELS[gate]} evidence is missing.`);
   }
   if (staleGates.length) blockers.push(`Evidence is stale in ${staleGates.map((gate) => GATE_LABELS[gate]).join(', ')}.`);
+  if (futureGates.length) blockers.push(`Evidence has a future review date in ${futureGates.map((gate) => GATE_LABELS[gate]).join(', ')}.`);
   const uniqueBlockers = [...new Set(blockers)];
   let status = 'review';
   if (agent.lifecycle === 'concept') status = 'concept';
   else if (agent.lifecycle === 'paused' || agent.lifecycle === 'retired') status = 'inactive';
   else if (uniqueBlockers.length) status = 'blocked';
   else if (score >= 85 && (agent.lifecycle === 'review' || agent.lifecycle === 'production')) status = 'ready';
-  return { score, status, blockers: uniqueBlockers, gates, staleGates };
+  return { score, status, blockers: uniqueBlockers, gates, staleGates, futureGates };
 }
 
 export function readinessLabel(value) {
@@ -703,7 +725,11 @@ export function serializeRegistry(value) {
 }
 
 function markdownText(value) {
-  return String(value || '').replace(/[\r\n]+/g, ' ').replace(/([\\`*_{}[\]()#+.!|>-])/g, '\\$1');
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/[\r\n]+/g, ' ')
+    .replace(/([\\`*_{}[\]()#+.!|>-])/g, '\\$1');
 }
 
 export function renderMarkdownPacket(value, options = {}) {

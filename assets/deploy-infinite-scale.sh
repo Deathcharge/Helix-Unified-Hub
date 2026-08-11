@@ -131,8 +131,7 @@ deploy_portal() {
     },
     "dependencies": {
         "express": "^4.18.2",
-        "ws": "^8.14.2",
-        "axios": "^1.6.0"
+        "ws": "^8.14.2"
     }
 }
 EOF
@@ -142,28 +141,50 @@ EOF
 const express = require('express');
 const WebSocket = require('ws');
 const http = require('http');
-const axios = require('axios');
+const crypto = require('crypto');
 
 const app = express();
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+const wss = new WebSocket.Server({ noServer: true, maxPayload: 32 * 1024 });
 
 // Serve static files
 app.use(express.static('public'));
-app.use(express.json());
+app.use(express.json({ limit: '32kb' }));
 
 // Portal configuration
 const PORT = process.env.PORT || 3000;
 const PORTAL_NAME = '$repo_name';
 const SUBDOMAIN = '$subdomain';
 const DOMAIN = '$MANUS_DOMAIN';
+const WEBHOOK_SECRET = process.env.PORTAL_WEBHOOK_SECRET;
+const ALLOWED_ORIGIN = process.env.PORTAL_ALLOWED_ORIGIN || 'https://$subdomain.$MANUS_DOMAIN';
 
-// Railway backend integration
-const RAILWAY_API = process.env.RAILWAY_API || 'https://helix-unified-production.up.railway.app';
+if (!WEBHOOK_SECRET || WEBHOOK_SECRET.length < 32) {
+    throw new Error('PORTAL_WEBHOOK_SECRET must be set to at least 32 characters.');
+}
 
-// WebSocket for real-time updates
+function rejectUpgrade(socket, status = '403 Forbidden') {
+    socket.write('HTTP/1.1 ' + status + '\r\nConnection: close\r\n\r\n');
+    socket.destroy();
+}
+
+server.on('upgrade', (request, socket, head) => {
+    if ((request.headers.origin || '') !== ALLOWED_ORIGIN) {
+        rejectUpgrade(socket);
+        return;
+    }
+    if (wss.clients.size >= 100) {
+        rejectUpgrade(socket, '503 Service Unavailable');
+        return;
+    }
+    wss.handleUpgrade(request, socket, head, (ws) => wss.emit('connection', ws, request));
+});
+
+// Read-only WebSocket for public portal updates
 wss.on('connection', (ws) => {
     console.log('WebSocket connection established for portal:', PORTAL_NAME);
+    ws.isAlive = true;
+    ws.on('pong', () => { ws.isAlive = true; });
     
     // Send portal status
     ws.send(JSON.stringify({
@@ -174,24 +195,21 @@ wss.on('connection', (ws) => {
         timestamp: Date.now()
     }));
     
-    // Handle consciousness data
-    ws.on('message', async (message) => {
-        const data = JSON.parse(message);
-        
-        if (data.type === 'ucf_metrics') {
-            // Forward to Railway backend
-            try {
-                await axios.post('\${RAILWAY_API}/api/ucf/update', {
-                    portal: PORTAL_NAME,
-                    metrics: data.metrics,
-                    timestamp: Date.now()
-                });
-            } catch (error) {
-                console.error('UCF update failed:', error.message);
-            }
-        }
-    });
+    ws.on('message', () => ws.close(1008, 'Read-only stream'));
 });
+
+const heartbeat = setInterval(() => {
+    wss.clients.forEach((client) => {
+        if (!client.isAlive) {
+            client.terminate();
+            return;
+        }
+        client.isAlive = false;
+        client.ping();
+    });
+}, 30000);
+heartbeat.unref();
+server.on('close', () => clearInterval(heartbeat));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -207,16 +225,31 @@ app.get('/health', (req, res) => {
 
 // Zapier webhook endpoint
 app.post('/zapier', (req, res) => {
-    const webhook_data = req.body;
-    
-    console.log('Zapier webhook received:', webhook_data);
+    const prefix = 'Bearer ';
+    const authorization = req.get('authorization') || '';
+    if (!authorization.startsWith(prefix)) return res.status(401).json({ error: 'Unauthorized' });
+    const supplied = Buffer.from(authorization.slice(prefix.length));
+    const expected = Buffer.from(WEBHOOK_SECRET);
+    if (supplied.length !== expected.length || !crypto.timingSafeEqual(supplied, expected)) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+    if (!req.body || typeof req.body !== 'object' || Array.isArray(req.body)) {
+        return res.status(400).json({ error: 'Expected a JSON object.' });
+    }
+    const message = String(req.body.message || '').trim().slice(0, 1000);
+    if (!message) return res.status(400).json({ error: 'A message is required.' });
+    const webhookData = {
+        event: String(req.body.event || 'notification').trim().slice(0, 64),
+        message
+    };
+    console.log('Zapier webhook received:', webhookData.event);
     
     // Broadcast to all connected clients
     wss.clients.forEach(client => {
         if (client.readyState === WebSocket.OPEN) {
             client.send(JSON.stringify({
                 type: 'zapier_webhook',
-                data: webhook_data,
+                data: webhookData,
                 portal: PORTAL_NAME,
                 timestamp: Date.now()
             }));
@@ -411,14 +444,6 @@ EOF
                     this.ucfMetrics.zoom = Math.min(100, this.ucfMetrics.zoom + Math.random() * 5 - 2);
                     
                     this.updateUCFDisplay();
-                    
-                    // Send to backend
-                    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-                        this.ws.send(JSON.stringify({
-                            type: 'ucf_metrics',
-                            metrics: this.ucfMetrics
-                        }));
-                    }
                 }, 3000);
             }
             
@@ -496,7 +521,7 @@ EOF
                 const log = document.getElementById('consciousness-log');
                 const timestamp = new Date().toLocaleTimeString();
                 const entry = document.createElement('div');
-                entry.innerHTML = \`[\${timestamp}] \${message}\`;
+                entry.textContent = \`[\${timestamp}] \${message}\`;
                 log.appendChild(entry);
                 
                 // Keep only last 10 entries
