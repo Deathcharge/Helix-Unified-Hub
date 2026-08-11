@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Scope, remediations, and residual gates from the Samsarix Agent Readiness Registry prerelease security review.">
+  <meta name="theme-color" content="#07100f">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Prerelease security review · Samsarix Agent Registry</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#security-review">Skip to the security review</a>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Samsarix Agent Registry home"><span class="brand-mark" aria-hidden="true">S</span><span>Samsarix Agent Registry</span></a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="registry.html">Registry</a>
+      <a href="./#catalog">Directory</a>
+      <a href="legal.html">License</a>
+    </nav>
+  </header>
+  <main class="legal-content" id="security-review">
+    <p class="eyebrow">Prerelease assurance</p>
+    <h1>Security findings are visible, fixed, and bounded.</h1>
+    <p>Samsarix LLC completed a standard Codex Security review on August 11, 2026 against revision <code>a2d460e47f5ae2fa1897c6bb38b265a1676f38cb</code>. The review covered the maintained browser registry, CLI, Action, build and Pages workflow, plus runnable Node, Python, Discord, webhook, generator, and deployment prototypes. Git history, live deployment state, binary internals, and most archival prose were outside its scope.</p>
+    <p><a href="SECURITY_REVIEW.md">Download the canonical Markdown review record</a>.</p>
+
+    <h2>Result</h2>
+    <p>The scan reported eight source-backed findings: one high-severity current-tree privacy exposure, five medium-severity readiness-integrity, WebSocket, and legacy DOM issues, and two low-severity export and URL-retention issues.</p>
+    <ul>
+      <li>Identified personal conversation, context, workspace-output, Notion-log, and runtime-log exports were removed from the current tree, with filename guards added.</li>
+      <li>Calendar-invalid and future-dated evidence is blocked, and active records need a versioned interface before they can be ready.</li>
+      <li>Credential-like URL values are rejected and Markdown exports encode imported raw HTML.</li>
+      <li>Validated legacy navigation, Zapier WebSocket, generated webhook, and browser-stream paths are authenticated or constrained, bounded, and rendered as text.</li>
+    </ul>
+
+    <h2>Release controls</h2>
+    <p>Pages is HTTPS-enforced and limited to <code>main</code>. The protected branch requires the <code>validate</code> check, pull-request flow, and resolved conversations and blocks force pushes and deletion. Repository administrators retain recovery bypass access.</p>
+
+    <h2>Residual gates</h2>
+    <p>This review does not certify the product or prove production safety. Stable or commercial promotion still requires:</p>
+    <ul>
+      <li>account-side revocation or rotation of historical credential categories;</li>
+      <li>a decision on coordinated Git-history rewriting and cache-removal requests;</li>
+      <li>provenance and redistribution approval for retained binary and data artifacts; and</li>
+      <li>appropriate legal review of the source-available and commercial terms.</li>
+    </ul>
+    <p>Unsupported prototypes need a separate release boundary and security review before deployment.</p>
+  </main>
+  <footer class="site-footer">
+    <p>Samsarix Agent Readiness Registry · v1.3 release candidate · © 2026 Samsarix LLC</p>
+    <p><a href="mailto:support@samsarix.com">Report a security concern</a> · <a href="registry.html">Open registry</a></p>
+  </footer>
+</body>
+</html>

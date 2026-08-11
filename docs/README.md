@@ -18,8 +18,10 @@ The maintained product files are:
   machine-readable portable contract; and
 - `a2a-agent-card-example.json` and `mcp-server-example.json` for reproducible
   fictional portable-metadata imports;
-- `SECURITY_REVIEW.md` for the prerelease audit/remediation record; and
-- `EXTERNAL_LINKS.md` for the owner-maintained link-review process.
+- `security-review.html` and `SECURITY_REVIEW.md` for the presented and canonical
+  prerelease audit/remediation record; and
+- `external-links.html` and `EXTERNAL_LINKS.md` for the presented and canonical
+  owner-maintained link-review process.
 
 The repository root additionally contains `action.yml`, `bin/`, and
 `scripts/registry-cli.mjs`. Those supported-LTS Node entry points reuse `assets/readiness.mjs`
