@@ -29,7 +29,7 @@
     <h2>Cadence and ownership</h2>
     <ul>
       <li>A read-only GitHub Actions workflow checks the inventory each Monday at 09:17 UTC and supports manual runs.</li>
-      <li><a href="mailto:support@samsarix.com">support@samsarix.com</a> owns triage and reviews a failed scheduled run within seven days.</li>
+      <li><a href="mailto:support@samsarix.com">support@samsarix.com</a> owns triage, reviews a failed scheduled run within seven days, and records the resolution in the commit or issue that changes the link.</li>
       <li>Maintainers run <code>npm run check:links</code> before a prerelease and after changing an external destination or research reference.</li>
     </ul>
 
@@ -43,7 +43,7 @@
     </ul>
 
     <h2>Operational boundary</h2>
-    <p>The workflow never edits catalog status or opens an issue automatically. Scheduled GitHub workflows run from the default branch and can be disabled after extended repository inactivity, so disappearance of the check requires an owner to re-enable and run it manually.</p>
+    <p>The workflow never edits catalog status or opens an issue automatically. Scheduled GitHub workflows run from the default branch, and GitHub may disable a public repository's schedule after 60 days without activity. If the check disappears, an owner must re-enable and run it manually.</p>
   </main>
   <footer class="site-footer">
     <p>Samsarix Agent Readiness Registry · v1.3 release candidate · © 2026 Samsarix LLC</p>

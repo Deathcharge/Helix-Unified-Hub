@@ -74,7 +74,10 @@ test('security and external-link records have styled public presentation pages',
     readFile(path.join(docs, 'external-links.html'), 'utf8')
   ]);
   for (const html of [securityPage, linksPage]) {
-    assert.match(html, /Content-Security-Policy/);
+    assert.match(
+      html,
+      /http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'"/
+    );
     assert.match(html, /href="assets\/styles\.css"/);
     assert.match(html, /Samsarix Agent Registry/);
     assert.match(html, /support@samsarix\.com/);
