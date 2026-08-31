@@ -69,6 +69,54 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 
 ## Findings and implementation checklist
 
+### 2026-08-31 continuation: repeatable browser compatibility evidence
+
+Baseline: clean `main` at `169e181a4d7d174f3fdf8c8b4afd511373b342e2`, with
+PR #20 deployed. Chromium evidence existed, but Firefox/WebKit support was unproven
+and the successful rendered workflow was not available as a repeatable script.
+
+Isolated Firefox 153.0 and WebKit 26.5 test engines exercised the public application
+without source overrides. Both imported all three formats, restored saved data,
+rejected malformed/oversized/duplicate/credential-field fixtures without changing
+the ready record, filtered stale evidence, downloaded matching JSON/Markdown, and
+reset back to the bundled concepts. Independent Node comparisons matched both
+engines' downloaded bytes against the shared policy output. Keyboard selection,
+evidence scrolling, and return navigation also worked. The initial WebKit click
+acknowledgment timeout and the narrower scope of a Windows WebKit test engine are
+explicitly recorded in [`BROWSER_VERIFICATION.md`](BROWSER_VERIFICATION.md).
+
+Added `scripts/browser-smoke.mjs`, an optional function for Playwright CLI's
+`run-code --filename` command, plus a maintainer guide and four dependency-free
+safety tests. The smoke check repeats selection, keyboard/overflow/empty behavior,
+all three imports, reload, malformed-input recovery, real download parity, and
+confirmed reset. It checks the fresh-workspace status before fixture requests or
+imports, attempts cleanup after intermediate failure, preserves the original error
+when cleanup also fails, and reports the actual engine version and fixed review
+date. Real-browser guard verification refused a restored fixture and left it intact.
+
+The final function returned all six passing check groups in Chrome 151.0.7922.175,
+Firefox 153.0, and WebKit 26.5. Its fixed date avoids expiring the fictional ready
+fixture; it does not change the operating-system clock, production policy, or
+application source. The ordinary controller tests remain distinct from rendered
+coverage, and browser smoke is optional rather than silently included in
+`npm run check` or the required GitHub matrix.
+
+Local verification: `npm ci --ignore-scripts --no-audit --no-fund` passed;
+`npm run check` passed 74/74 tests, lint, and build; `node --check
+scripts/browser-smoke.mjs` and `git diff --check` passed. The documented pinned
+`npx` open/run-code/console/close sequence also passed in Firefox. All four isolated
+audit sessions were closed after their test inventories were cleared; final browser
+consoles reported zero errors and warnings. Exact-head CI and publication results
+belong in the pull-request record.
+
+No product-runtime correction was needed from these checks. No package/lockfile,
+CLI release asset, license, hosting configuration, or supported runtime dependency
+changed. The optional test engine was downloaded only to the local tool cache with
+browser-cache garbage collection disabled; no personal profile or existing browser
+installation was replaced. Test artifacts remain under ignored `output/playwright/`.
+This closes a verification gap, not the real-user, physical-device, assistive-
+technology, credential/history/provenance, or legal release gates.
+
 ### 2026-08-31 continuation: keyboard and narrow-screen navigation
 
 Baseline: clean `main` at `5aa58b117552767c2dfd4ddb8ffdd7e0c0b99ddc`, after
