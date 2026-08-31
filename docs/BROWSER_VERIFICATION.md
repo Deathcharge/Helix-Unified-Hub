@@ -87,6 +87,13 @@ policy. The separate Node policy tests check scoring and validation rules.
 
 ## Recorded compatibility evidence
 
+Public rollout testing after PR #22 caught a cached upgrade mismatch in an
+already-open Firefox session: new Add controls with old replacement behavior.
+The asset-versioning follow-up addresses the entire registry module chain and
+styles. Verify an already-open session as well as a fresh one after a UI/controller
+release; a clean source-overridden run cannot prove that upgrade path. Final
+deployment evidence and any remaining limits are recorded on the follow-up PR.
+
 The safe multi-agent import continuation extended the smoke to seven groups. Before
 publication, the final changed web files were exercised through isolated source
 overrides in Chrome 151.0.7922.175, Firefox 153.0, and WebKit 26.5: all seven groups

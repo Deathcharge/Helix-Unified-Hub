@@ -9,8 +9,8 @@ import {
   readinessLabel,
   renderMarkdownPacket,
   serializeRegistry
-} from './readiness.mjs';
-import { prepareRegistryImport } from './registry-import.mjs';
+} from './readiness.mjs?v=a56069e69b504a5be6968875f5d97b446787f2c84015839ac251e43e30a115b2';
+import { prepareRegistryImport } from './registry-import.mjs?v=6d3e2f272a738c320175e82f3ba4733cca5393ff7f1343759d039d8070be21df';
 
 const STORAGE_KEY = 'samsarix.agent-readiness-registry.v1';
 const elements = {

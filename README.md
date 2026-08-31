@@ -94,6 +94,11 @@ accept the resulting multi-agent JSON.
 The newest selected file owns a pending import; an older read cannot overwrite it.
 The import mode is captured when the file is selected. Mode defaults to Replace
 on reload and after reset; choosing Add is explicit and never inferred from a file.
+
+Maintainers: after editing registry modules or shared styles, run
+`node scripts/version-registry-assets.mjs --write` before `npm run check`. It updates
+content-based browser asset URLs through the dependency chain. Lint and build
+reject stale references; this avoids new controls running against old cached code.
 Confirming **Reset sample** also invalidates unfinished reads before removing this
 application's saved inventory. If browser settings prevent removal, the workspace
 reports that only its in-memory view was reset and that saved data may return.
