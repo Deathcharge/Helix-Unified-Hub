@@ -47,6 +47,7 @@ Thumbs.db
 tmp/
 temp/
 .playwright-cli/
+/output/playwright/
 *.tmp
 
 # Private conversation, context, and generated workspace exports

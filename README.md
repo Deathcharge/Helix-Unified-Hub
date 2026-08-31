@@ -75,6 +75,12 @@ credential-bearing fields, and secret MCP values/defaults are rejected before th
 current workspace changes. The browser renders imported values as text, never
 imported HTML.
 
+The newest selected file owns a pending import; an older read cannot overwrite it.
+Confirming **Reset sample** also invalidates unfinished reads before removing this
+application's saved inventory. If browser settings prevent removal, the workspace
+reports that only its in-memory view was reset and that saved data may return.
+Clear this site's data in browser settings when an explicit removal warning appears.
+
 The readiness score is an explainable workflow signal. It is not a compliance
 certification, a safety warranty, live health, or a substitute for evaluation and
 human approval. Concepts, paused records, and retired records cannot be labeled
@@ -148,7 +154,10 @@ the package identity and Node compatibility for deterministic installation.
 The protected `validate` check also requires packaged CLI tests on Windows and
 Linux with Node 22 and 24. Tests unpack and offline-install the real archive, check
 its exact contents and hashes, exercise the installed executable and all commands,
-and retain security/error-code coverage. Browser/site tests still run separately.
+and retain security/error-code coverage. The matrix also runs controller state and
+recovery tests with a minimal DOM/storage adapter and a fixed review clock. These
+execute the actual browser module but do not replace rendered browser, accessibility,
+or device testing. Browser QA notes are in the productization record.
 
 Build release assets from a clean checkout with `npm run pack:cli`. Outputs include
 the source revision and dirty-state marker; do not publish a dirty build. Rebuilding
