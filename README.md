@@ -266,6 +266,17 @@ Current-tree redaction does not revoke credentials or erase earlier commits.
 
 ## Limitations and project status
 
+Trying the registry for a real review workflow? Use
+[Registry workflow feedback](https://github.com/Deathcharge/Helix-Unified-Hub/issues/new?template=workflow-feedback.yml)
+to describe the task, outcome, and next obstacle. This opens a **public GitHub
+issue**; use bundled examples or fictional reproductions, never real inventories
+or exported review packets. Sensitive/security reports go through
+[`SECURITY.md`](SECURITY.md). The
+[pilot protocol](docs/AGENT_REGISTRY_PRODUCT.md#first-use-pilot-protocol) explains
+what would count as observed usefulness; no completed pilot or validated demand is
+claimed. See the [owner evidence checklist](docs/PRODUCTIZATION.md#owner-evidence-checklist)
+for the remaining promotion gates and verification steps.
+
 - The registry does not run agents or MCP servers, fetch discovery metadata, install
   packages, probe endpoints, monitor production behavior, or replace an
   evaluation/observability system.

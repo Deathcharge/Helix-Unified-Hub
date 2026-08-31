@@ -1,87 +1,69 @@
 # Samsarix Agent Readiness Registry roadmap
 
-This roadmap separates four gates: merge, release, publication, and flagship adoption. Passing one does not imply the next.
+## Current product boundary
 
-## 2026-08-08 product direction
+This repository is a standalone, local-first agent inventory and evidence-review
+tool for individual builders and small teams. The Samsarix Field Guide remains
+the portfolio navigator; Samsarix Unified remains the flagship. Neither is a
+runtime dependency, and this roadmap does not authorize changes to either project.
+The [accepted product brief](docs/AGENT_REGISTRY_PRODUCT.md) defines the target user,
+research, nine-gate policy, and non-goals.
 
-The repository owner explicitly authorized further development into a competitive
-offering. The product must still avoid competing with the Samsarix Field Guide as a
-general portfolio front door. Its differentiated direction is now **Samsarix Agent
-Readiness Registry**: a local-first, vendor-neutral inventory and pre-deployment
-evidence workspace for AI agents.
+Earlier guidance treated the directory as a consolidation source. That historical
+portfolio assessment is superseded for the independently useful registry by the
+owner's 2026-08-08 authorization. It does not require migrating or freezing this
+product. Historical prototypes remain unsupported; source, binaries, and sensitive
+history must not be moved to another repository as an incidental cleanup step.
+The historical GitHub name remains a compatibility alias; renaming it is separate
+owner-controlled work, not a prerequisite for using the registry.
 
-The accepted product brief, market evidence, initial user, non-goals, readiness
-model, and v1.1 acceptance criteria are in
-[`docs/AGENT_REGISTRY_PRODUCT.md`](docs/AGENT_REGISTRY_PRODUCT.md).
+## Delivered release-candidate capabilities
 
-Release sequence:
+1. Browser workspace, portable JSON Schema, A2A import, explainable readiness gates,
+   and deterministic JSON/Markdown review packets.
+2. Dependency-free validate/check/report CLI and a pinned, read-only GitHub Action.
+3. Bounded MCP Registry metadata import with secret-value rejection and no execution.
+4. Security hardening, current-tree personal-export removal, and external-link review.
+5. CLI-only release archive, manifests/checksums, and extracted/offline-installed
+   Windows/Linux Node 22/24 compatibility checks.
+6. Keyboard evidence navigation, recovery and race-condition coverage, and repeatable
+   Chrome/Firefox/WebKit checks with explicit test-completion evidence.
+7. Additive multi-agent imports, confirmed replacement, aggregate bounds, and
+   content-versioned browser assets for cached upgrade paths.
 
-1. **Implemented for v1.1 RC:** static registry workspace, portable prose and JSON
-   Schema contracts, A2A Agent Card import, explainable readiness assessment, and
-   deterministic review-packet export.
-2. **Implemented for v1.2 RC:** dependency-free validate/check/report CLI, exact
-   policy exit codes, escaped GitHub annotations, and a read-only JavaScript Action
-   using the shared bounded parser and evaluator.
-3. **Implemented for v1.3 RC:** bounded official MCP Registry `server.json` import,
-   conservative secret-input handling, and shared browser/CLI/Action readiness gaps.
-4. **Implemented for v1.3 RC hardening:** formal security review, current-tree
-   personal-export removal, semantic readiness fixes, inert Markdown export,
-   hardened legacy network/DOM paths, and scheduled external-link review.
-5. **Implemented for v1.3 RC2 distribution:** CLI-only release archive, explicit
-   source-file allowlist, per-file manifest/checksums, extracted/offline-installed
-   command tests, and Windows/Linux Node 22/24 CI coverage.
-6. Validate demand before any multi-user service, live discovery, or runtime
-   observability integration.
+Latest implementation and deployment evidence is in
+[the productization record](docs/PRODUCTIZATION.md). Delivered functionality is not
+evidence of customer adoption, legal approval, or production safety.
 
-The next evidence gate is external use: collect real registry fixtures, policy-gap
-reports, workflow adoption, and requests for collaboration or signed approval
-history. Do not infer demand from repository traffic alone or add a hosted control
-plane before that signal exists.
+## Next work, ordered by value
 
-The earlier consolidation guidance below remains historical context and a constraint
-against generic portfolio duplication; it no longer freezes differentiated product
-work authorized by the owner.
+1. Close the external credential, history/retention, provenance, and legal gates in
+   the [owner evidence checklist](docs/PRODUCTIZATION.md#owner-evidence-checklist).
+   Unknown or undocumented status remains open; do not dismiss alerts to improve
+   the appearance of the repository.
+2. Run the [first-use pilot protocol](docs/AGENT_REGISTRY_PRODUCT.md#first-use-pilot-protocol)
+   with consenting target users. Collect task outcomes and the next real workflow
+   need, not private inventories or invented adoption metrics. Fix observed blockers
+   before adding more capability.
+3. Verify physical Safari/mobile and screen-reader behavior. Test-engine WebKit and
+   DOM contracts are useful evidence but do not establish those configurations.
+4. Normalize or archive remaining duplicate historical material only after the
+   owner decides retention and redistribution boundaries.
 
-## Product boundary
+Team history, signed approvals, policy packs, live discovery, managed hosting, and
+runtime observability are demand-gated possibilities, not promised or partially
+implemented features. A new service requires a separately approved security,
+privacy, support, and operating-cost model.
 
-Portfolio role: **merge/consolidation candidate**. Preserve the productized branch and migrate unique assets into the canonical Samsarix surface through an explicit consolidation plan; do not maintain two competing implementations.
-Preferred future repository identity: `Deathcharge/samsarix-agent-readiness-registry`; the historical remote name remains owner-controlled.
+## Four distinct gates
 
-Current disposition: The truthful productization state is merged. General lifecycle/boundary guidance has been represented in the canonical Field Guide without migrating source, binaries, exports, or sensitive-history categories. Preserve this repository as a consolidation source while credential, retention, rename, freeze, and archive decisions remain owner-controlled.
+| Gate | Evidence required |
+| --- | --- |
+| Merge | Exact-head tests, reviewed scope, required GitHub checks, and no locally actionable P0 defect. |
+| Release-candidate publication | Verified Pages artifact or minimal CLI archive, explicit limitations, recoverable rollout, and recorded verification. |
+| Stable/commercial promotion | Applicable owner evidence, acceptable residual risk, and observed target-user workflow results; a green build alone is insufficient. |
+| Optional flagship adoption | Explicit owner request, consumer-owned integration contract, compatibility/support owner, and parity/rollback evidence. Never infer this from a standalone merge. |
 
-## Stabilize the productized default
-
-- Keep the default branch buildable from a clean checkout and preserve exact-head CI evidence.
-- Keep Samsarix LLC branding, package identity, license metadata, and compatibility aliases internally consistent.
-- Preserve the pre-productization default under a rollback ref before merging; do not delete legacy history.
-- Review priority: Rotate historical credential categories, decide personal-data/binary retention, and stop treating this maintained directory as a competing general portfolio front door.
-
-## Release candidate
-
-- Inventory unique routes, schemas, content, and deployment behavior.
-- Migrate one bounded slice at a time with parity evidence and redirects where needed.
-- Stop duplicate feature work once the canonical destination passes acceptance tests.
-
-Current hardening backlog:
-
-- Near-total functional duplication with the flagship's gallery and the stronger portfolio Field Guide.
-- Significant legacy burden remains outside the maintained static product, including
-  duplicate prototypes, incomplete experiments, deployment scripts, and binaries.
-- Historical credentials require account-side revocation/rotation; Git history still contains sensitive categories.
-- Identified current-tree conversation/context/workspace/log exports are removed;
-  coordinated history and cache treatment remains unresolved.
-- APK/ZIP/PDF/data provenance and redistribution approval are unverified.
-- Source-available BSL plus excluded legacy/third-party material is difficult to communicate and maintain.
-- The historical remote name still differs from the product identity; renaming remains
-  a separate compatibility decision.
-
-## Samsarix adoption
-
-- Define a public API, event, schema, artifact, or deployment contract before connecting to Samsarix Unified.
-- Add a consumer-owned contract fixture covering authentication, privacy, limits, errors, and version compatibility.
-- Make one implementation canonical; remove or freeze duplicate behavior only after parity and rollback are proven.
-- Record an owner, support level, compatibility window, and measurable adoption signal.
-
-## Completion evidence
-
-A milestone is complete only when its exact commit, commands and results, artifact digest, consumer or deployment, and rollback path are recorded in a pull request or release record. README claims must not exceed that evidence.
+Keep releases traceable to a commit, commands/results, artifact digest, deployment
+or consumer, and rollback path. Preserve existing prerelease assets and Git history;
+do not force-push, rewrite history, or migrate another repository implicitly.
