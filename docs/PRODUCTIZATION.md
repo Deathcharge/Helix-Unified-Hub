@@ -69,6 +69,50 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 
 ## Findings and implementation checklist
 
+### 2026-08-31 completion audit: pilot intake and precise owner gates
+
+Baseline: clean `main` at `06f6edeed102efa4ebad3d6e0183d2b01d45d5f9` with
+PR #23 and main/Pages run `33401145312` successful. The implemented browser,
+CLI/Action, and distribution journeys have recorded exact tests and public evidence.
+The next missing proof is external: no completed target-user pilot, credential
+receipt, retention/provenance decision, or legal-review sign-off is recorded.
+
+Read-only GitHub checks confirmed required `validate`, strict up-to-date checks,
+pull-request flow, resolved conversations, and blocked force-push/deletion on main;
+Pages remains workflow-based and HTTPS-enforced. Paginated Dependabot results had
+zero open alerts. Secret-scanning alert #1 remains open with validity `unknown`
+and no resolution; no secret value was printed or copied. This is not proof that
+the PAT is active or revoked. No alerts were dismissed and no bearer hook was probed.
+Only the old cross-repository Phase 2 issue (#5) is open; it is not evidence of a
+registry pilot and was not closed or treated as authority to change other repos.
+
+Two local gaps were found: ROADMAP.md still directed consolidation/freezing in
+conflict with the accepted standalone registry, and no structured feedback intake
+existed (no `.github/ISSUE_TEMPLATE` definitions were present). The roadmap now
+separates current identity from historical portfolio guidance and orders remaining
+work by release risk and observed user needs. The product brief defines a consent-
+based first-use protocol and distinguishes observation, self-report, and proposals.
+A public-safe GitHub workflow-feedback form captures product version, surface,
+evidence basis, task, reproduction, outcome, and frequency, with private security
+routing and no request for real inventories or attachments. The form is not a
+sanitizer, a private channel, or proof that anyone has adopted the product.
+
+The owner checklist below specifies evidence shape, location, and verification for
+each open gate. Official GitHub and Zapier guidance informed those instructions;
+general provider behavior is not substituted for account-specific proof. No live
+credential, workflow, history, license, commercial agreement, or other repository
+was changed. Current runtime and historical release assets remain unchanged.
+
+Local verification: `npm run check` passed 95/95 tests, lint, and build; the four
+new feedback-contract tests passed independently. `npm run check:links` reached
+all 12 curated destinations with HTTP 200, including the five added official
+references. Syntax/whitespace checks passed. The public issue chooser redirects to
+GitHub sign-in, and the older GraphQL `issueTemplates` field does not provide useful
+form evidence (a known form-using reference repository also returned an empty list).
+Authenticated hosted form rendering/submission is therefore unverified; no test
+issue or fabricated pilot report was submitted. Published configuration and document
+parity will be checked after the protected merge and recorded on the PR.
+
 ### 2026-08-31 rollout follow-up: content-versioned registry assets
 
 The first public check after PR #22 found a mixed-version runtime in an already-open
@@ -423,6 +467,42 @@ signed attestation, public npm publication, or stable-production claim is inferr
   and runtime-log exports were removed under the owner's repository wrap-up
   authorization. Any coordinated history rewrite, cache request, or private archival
   retention still requires an explicit retention plan.
+
+## Owner evidence checklist
+
+All gates below are **open / unverified as of 2026-08-31**. A green build permits
+the documented release-candidate workflow; it does not close these promotion gates.
+Keep sensitive receipts in an owner-controlled private location. Public records
+should contain only a gate ID, date, responsible owner/role, scoped commit/artifact,
+outcome, and non-sensitive evidence reference—not tokens, hook URLs, private legal
+advice, personal exports, or participant identities. This table is not a legal
+opinion or authorization to change unrelated accounts or repositories.
+
+| Gate | Required owner action and location | Completion evidence and verification |
+| --- | --- | --- |
+| G1 — historical GitHub PAT | Review [secret-scanning alert #1](https://github.com/Deathcharge/Helix-Unified-Hub/security/secret-scanning/1) in an owner session and identify the exposed PAT in GitHub account Settings → Developer settings → Personal access tokens. Check dependent access before revocation; do not revoke unrelated tokens. | Account/provider receipt tied to that alert/token, with a revocation/removal date and dependent-workflow check. Record only the alert number and receipt reference publicly. `state: open, validity: unknown` does not pass; manually closing the alert is not revocation proof. |
+| G2 — three historical Zapier catch hooks | Identify each affected Zap privately, record aliases H1/H2/H3, and turn off/delete the exposed triggers or replace them with newly generated hook URLs and update intended senders. Do not reactivate exposed URLs. | For each alias: owner, date, disabled/deleted/replaced status, private provider evidence, and confirmation of any intended sender migration. Do not send probe requests to leaked hooks: they may execute actions. New URLs must remain outside Git, issues, and reports. |
+| G3 — personal-data/history retention | Decide the treatment of removed conversation/context/log exports still present in Git history and caches. Record scope, retention rationale, affected-party considerations, and any required coordinated cleanup. | Explicit owner decision plus evidence that required actions were completed, or a reviewed, scoped residual-risk acceptance. Any history rewrite/cache-removal operation needs its own approved plan; no force push or cross-repository migration is implied. |
+| G4 — retained artifact provenance | Review the remaining APK/PDF/ZIP/audio/dataset and excluded legacy categories listed in THIRD_PARTY_NOTICES.md. Record exact tracked paths and content hashes, rights/source, permitted distribution scope, and keep/remove decisions. | An owner-reviewed inventory covering retained categories and the intended distribution. Unknown authorship or an absent notice is not permission. Record restricted receipts privately; publish only non-sensitive approvals/exclusions and verify that release allowlists match them. |
+| G5 — licensing and commercial review | Obtain the already-required owner/legal review of BSL scope, Additional Use Grant, AGPL transition, trademarks, contribution rights, and any proposed commercial terms. | Dated owner/legal sign-off reference tied to exact notice versions and offering scope, with required changes completed. No lawyer's approval or contributor agreement is inferred from the current files. |
+| G6 — real-user usefulness | Run the [first-use pilot protocol](AGENT_REGISTRY_PRODUCT.md#first-use-pilot-protocol) with consenting target users, using fictional examples and non-identifying notes. | Record actual task counts/outcomes, observed blockers, and whether a recurring review decision benefits. No completed pilot is recorded. Synthetic tests, traffic, and untried feature requests do not pass this gate. |
+
+GitHub documents [PAT management and deletion](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
+and [expiration/revocation behavior](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/token-expiration-and-revocation).
+Automatic revocation can occur, but the repository's current unknown alert status
+is not account-specific evidence of it. Token deletion may affect associated deploy
+keys; the owner must check dependent access rather than revoke account-wide credentials.
+
+Zapier's [static webhook behavior guidance](https://help.zapier.com/hc/en-us/articles/24290475355277-Maximize-efficiency-with-updated-webhook-behaviour)
+states that off/deleted Catch Hook or Catch Raw Hook Zaps return 404 after a possible
+delay, and reactivation restores acceptance. Treat a merely disabled exposed hook
+as a continuing non-reactivation obligation, not as a newly secret URL. No remote
+probe is needed for this repository's verification record.
+
+The form follows [GitHub's issue-form contract](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms).
+Its JSON-compatible YAML representation uses the [JSON subset supported by YAML](https://yaml.org/spec/1.2.2/)
+to allow dependency-free structural checks. Those checks do not prove GitHub's
+hosted UI rendering, validate a submitted report's truth, or make public input private.
 
 ## Known risks
 

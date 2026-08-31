@@ -1,0 +1,10 @@
+{
+  "blank_issues_enabled": true,
+  "contact_links": [
+    {
+      "name": "Private security or sensitive report",
+      "url": "https://github.com/Deathcharge/Helix-Unified-Hub/blob/main/SECURITY.md",
+      "about": "Read the private reporting instructions. Do not put vulnerabilities, credentials, or private inventories in public issues."
+    }
+  ]
+}

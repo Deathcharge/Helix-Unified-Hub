@@ -1,7 +1,7 @@
 # Samsarix Agent Readiness Registry product brief
 
-Date: 2026-08-08
-Decision status: accepted direction for the next release increment
+Decision date: 2026-08-08
+Delivery status: implemented release candidate; target-user pilot remains unverified
 
 ## Product decision
 
@@ -189,7 +189,7 @@ behavioral test, or hosted registry. It performs no discovery fetch and treats t
 official Registry's preview schema/API as external, versioned inputs rather than a
 Samsarix-controlled contract.
 
-## Non-goals for v1.1
+## Current non-goals
 
 - running or calling an agent;
 - accepting credentials, secrets, prompts, traces, or production conversation data;
@@ -214,6 +214,56 @@ The first release is successful when a new visitor can, without documentation:
 Early adoption signals are local template downloads, imported manifests, exported
 review packets, GitHub issues from real agent inventories, and requests for team
 history or signed approvals. No analytics will be added merely to count those events.
+
+## First-use pilot protocol
+
+Status: **planned; no completed target-user pilot is recorded**. Automated tests,
+maintainer walkthroughs, repository traffic, and hypothetical feedback are not
+customer adoption evidence. Start with a small, explicitly consenting group of
+builders/reviewers; an initial three-person round is a usability investigation, not
+a statistically representative study or proof of product-market fit.
+
+The owner recruits participants directly only with their consent. Do not scrape
+contacts, send unsolicited invitations, add analytics, or request production data.
+Use a fresh browser workspace and the bundled fictional fixtures. Participants may
+stop at any point. Do not record screens or identifiable quotes without separate
+consent; default to non-identifying task notes with a short agreed retention period.
+
+For the first attempt, give only the public registry URL and the task, not a guided
+tour. Record where help became necessary instead of silently coaching past a problem:
+
+| Task | Observe and record |
+| --- | --- |
+| Explain the product's job and a bundled concept's blocker. | Can the participant distinguish an inventory review from execution or certification? |
+| Start a clean inventory with the A2A example, then add the MCP example. | Can they choose Replace then Add and keep both records? Record confusion or assistance. |
+| Add the same MCP example again, then cancel a replacement. | Does the participant understand why the duplicate is rejected and confirm their records remain? |
+| Find missing ownership/security evidence and review available filters. | Can they identify a concrete next review action without treating a score as proof? |
+| Export JSON/Markdown, reload, then explain the packet to another reviewer. | Can they find the files, recover the inventory, and explain what the packet does and does not establish? |
+| Reset the sample at the end. | Can they intentionally remove this test inventory and understand that browser storage is local? |
+
+For CLI/Action users, repeat the documented fictional passing and failing commands
+in [CI_INTEGRATION.md](CI_INTEGRATION.md). Use its pinned example date for a
+reproducible fixture result; do not misrepresent that as a current production check.
+Record actual exit codes, whether the packet informs a decision, and any setup help.
+
+Keep each observation tied to an exact product commit/release, date, broad role,
+surface/browser/OS, task outcome (unaided / needed help / failed / not attempted),
+and a generic workflow need. Ask what the participant uses today, how frequently
+the job recurs, and what would prevent repeat use. Separate direct observation,
+self-reported need, and untested suggestion; do not invent time savings or users.
+
+Use [Registry workflow feedback](https://github.com/Deathcharge/Helix-Unified-Hub/issues/new?template=workflow-feedback.yml)
+only for a public-safe summary or fictional reproduction. GitHub submissions are
+public and leave the local-only workspace boundary. Never attach real inventories,
+review packets, private URLs, prompts, logs, or personal data. Sensitive/security
+reports go through [the security policy](https://github.com/Deathcharge/Helix-Unified-Hub/blob/main/SECURITY.md).
+
+After the round, the owner records participant/task counts (including failures and
+unattempted tasks), observed blockers, linked fictional reproductions, and the next
+decision in `PRODUCTIZATION.md`, without identities or raw private notes. Address
+any data-loss, misleading-readiness, or primary-journey failure before expanding.
+Further features require a named recurring job and evidence that current artifacts
+cannot support it; enthusiastic comments alone do not justify a hosted service.
 
 ## Commercial path
 
