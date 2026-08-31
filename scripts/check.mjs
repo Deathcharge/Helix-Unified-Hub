@@ -140,7 +140,7 @@ async function htmlFiles(directory) {
 async function repositoryFiles(directory) {
   const found = [];
   for (const entry of await readdir(directory, { withFileTypes: true })) {
-    if (entry.isDirectory() && ['.git', 'dist', 'node_modules'].includes(entry.name)) continue;
+    if (entry.isDirectory() && ['.git', 'dist', 'release', 'node_modules'].includes(entry.name)) continue;
     const absolute = path.join(directory, entry.name);
     if (entry.isDirectory()) found.push(...(await repositoryFiles(absolute)));
     else found.push(absolute);
@@ -335,7 +335,7 @@ for (const absolute of await repositoryFiles(root)) {
 const packageMetadata = JSON.parse(packageText);
 const packageLock = JSON.parse(lockText);
 if (
-  packageMetadata.version !== "1.3.0-rc.1" ||
+  packageMetadata.version !== "1.3.0-rc.2" ||
   packageLock.version !== packageMetadata.version
 )
   fail("Package and lockfile release versions are inconsistent.");
@@ -348,6 +348,15 @@ if (packageMetadata.bin?.["samsarix-registry"] !== "bin/samsarix-registry.mjs")
   fail("package.json: registry executable is not declared.");
 if (packageMetadata.scripts?.registry !== "node bin/samsarix-registry.mjs")
   fail("package.json: registry script is inconsistent.");
+if (packageMetadata.scripts?.['pack:cli'] !== "node scripts/package-cli.mjs")
+  fail("package.json: CLI distribution builder is not declared.");
+if (!pagesWorkflow.includes("needs: cli-package")
+  || !pagesWorkflow.includes("if: always()")
+  || !pagesWorkflow.includes('run: test "$PACKAGE_RESULT" = success')
+  || !pagesWorkflow.includes("os: [ubuntu-latest, windows-latest]")
+  || !pagesWorkflow.includes("node: [22, 24]")
+  || !pagesWorkflow.includes("run: node --test tests/distribution.test.mjs"))
+  fail("Pages validation must require the Windows/Linux Node 22/24 CLI distribution matrix.");
 
 if (agentRegistry) {
   if (agentRegistry.agents.length !== 12)
@@ -442,6 +451,9 @@ for (const relativePath of [
   "docs/assets/og-agent-registry.png",
   "docs/review-ready-registry-example.json",
   "scripts/registry-cli.mjs",
+  "scripts/package-cli.mjs",
+  "tests/distribution.test.mjs",
+  "docs/CLI_DISTRIBUTION.md",
 ]) {
   try {
     await access(path.join(root, relativePath));
@@ -512,14 +524,14 @@ if (!license.includes("Licensor:             Samsarix LLC"))
   fail("LICENSE: Samsarix LLC is not the named licensor.");
 if (!license.includes("contact@samsarix.com"))
   fail("LICENSE: commercial contact is missing.");
-if (!license.includes("Version 1.3.0-rc.1"))
+if (!license.includes(`Version ${packageMetadata.version}`))
   fail("LICENSE: release version is inconsistent.");
-if (!publishedLicense.includes("Version 1.3.0-rc.1"))
+if (!publishedLicense.includes(`Version ${packageMetadata.version}`))
   fail("docs/LICENSE.txt: release version is inconsistent.");
 const citation = await read("CITATION.cff");
 if (!citation.includes('title: "Samsarix Agent Readiness Registry"'))
   fail("CITATION.cff: product title is inconsistent.");
-if (!citation.includes('version: "1.3.0-rc.1"'))
+if (!citation.includes(`version: "${packageMetadata.version}"`))
   fail("CITATION.cff: release version is inconsistent.");
 
 if (failures.length) {

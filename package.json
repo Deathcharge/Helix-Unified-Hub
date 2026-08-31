@@ -1,6 +1,6 @@
 {
   "name": "samsarix-agent-readiness-registry",
-  "version": "1.3.0-rc.1",
+  "version": "1.3.0-rc.2",
   "private": true,
   "type": "module",
   "description": "A local-first, dependency-free readiness registry for AI agent inventories and evidence review.",
@@ -18,6 +18,7 @@
     "check": "npm run lint && npm test && npm run build",
     "check:links": "node scripts/check-links.mjs",
     "lint": "node scripts/check.mjs",
+    "pack:cli": "node scripts/package-cli.mjs",
     "registry": "node bin/samsarix-registry.mjs",
     "serve": "node scripts/serve.mjs",
     "test": "node --test"

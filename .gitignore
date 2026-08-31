@@ -26,6 +26,7 @@ ENV/
 
 # Build outputs
 dist/
+release/
 build/
 *.apk
 *.aab

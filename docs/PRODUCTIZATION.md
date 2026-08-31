@@ -69,6 +69,36 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 
 ## Findings and implementation checklist
 
+### 2026-08-31 continuation: distribution and consumer safety
+
+Baseline: clean `main` at `b81dbd18d86fc0cb23c16d0c260a35c3b092affb`, no open
+pull requests, `npm run check` passed 46 tests plus lint/build, and all three
+post-release scheduled link checks succeeded. `v1.3.0-rc.1` had no downloadable
+CLI asset: users had to clone the legacy-heavy repository. The CI guide also pinned
+an Action revision from before the August security remediation.
+
+This increment provides a minimal distribution of the existing offline workflow:
+
+- The CLI distribution is staged from an explicit file allowlist, contains no
+  runtime dependencies or install scripts, and retains `private: true` to prevent
+  accidental npm publication. Website/gallery files, historical assets, prototypes,
+  Git history, and the separately distributed Action are not included.
+- The archive carries a self-contained README, fictional fixtures, JSON Schema,
+  controlling notices, and a byte-hash manifest with source revision/dirty state.
+  External SHA-256 files support download integrity checks, not identity attestation.
+- Tests exercise the extracted and offline-installed archive, executable shim,
+  passing and blocked cases, all commands, deterministic reports, failure exits,
+  future evidence, exact contents/hashes, and safe packaging behavior.
+- A four-job Windows/Linux, Node 22/24 matrix must succeed before the required
+  `validate` check can pass and Pages can deploy.
+- The Action example now pins the hardened `b81dbd1` prerelease.
+
+Bounded research: [npm pack](https://docs.npmjs.com/cli/pack/) supports local tarballs
+with scripts disabled, and [GitHub release integrity guidance](https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain/secure-your-dependencies/verify-release-integrity)
+distinguishes named release assets from on-demand source archives. The implementation
+uses npm's existing packer, not a custom archive format. No new market demand,
+signed attestation, public npm publication, or stable-production claim is inferred.
+
 ### P0
 
 - [x] Replace the misleading README with setup and product documentation that matches the repository.
@@ -91,6 +121,7 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 - [x] Add accessible, responsive loading, empty, validation-failure, reset, and recovery states for the workspace.
 - [x] Publish a starter registry manifest, machine-readable JSON Schema, A2A example, and precise trust-boundary documentation.
 - [x] Add a current official MCP Registry `server.json` adapter and fictional fixture with secret-value, URL-template, and no-execution boundaries.
+- [x] Add a CLI-only release archive with provenance metadata, checksums, a standalone quickstart, and extracted/offline-installed compatibility tests.
 
 ### P2
 
@@ -116,6 +147,7 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 - Every record exposes its readiness gates, score rationale, blockers, and stale-review state; concept lifecycle records cannot be labeled ready.
 - Search plus lifecycle, risk, and readiness filters work locally, and JSON/Markdown exports are deterministic and useful without this application.
 - Browser storage behavior, reset semantics, import limits, non-goals, and the absence of telemetry/network execution are visible to the user.
+- The CLI archive contains exactly the maintained allowlist; it works outside the source checkout after extraction or offline npm installation, with matching file hashes and preserved readiness/error exits.
 
 ## Completed work
 
@@ -142,6 +174,7 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 - Added the v1.3 MCP metadata adapter for one official dated `server.json` or API response wrapper, with conservative interface mapping, unresolved URL-template handling, secret-input-name summaries, actual secret-value rejection, and no network/package/runtime access.
 - Completed a formal standard Codex Security scan against `a2d460e47f5ae2fa1897c6bb38b265a1676f38cb`, removed identified current-tree personal exports, blocked future-dated evidence and unversioned active interfaces, neutralized Markdown raw HTML, rejected credential-like URL values, and hardened the validated legacy WebSocket/DOM paths.
 - Added a dependency-free external-link checker, unit tests, a weekly/manual read-only workflow, a curated authoritative-source inventory, and a seven-day owner triage policy.
+- Added the v1.3.0-rc.2 CLI-only packer, byte-hash manifest/checksums, self-contained distribution guide, isolated consumer tests, and required Windows/Linux Node 22/24 package compatibility matrix.
 
 ## Deferred and owner-blocked work
 
@@ -167,6 +200,23 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 - On 2026-08-10 GitHub reported 130 open Dependabot alerts: 31 high, 61 medium, and 38 low. All mapped to four unsupported pip manifests, not to the dependency-free root registry package. PR #14 preserved their exact text under `legacy/dependency-snapshots/`, removed the recognized manifest/build paths, and added hash/absence checks. After merge `65b674792b5995ead6226f7ac4328090d9f0a92e`, the dependency graph workflow passed and GitHub reported 0 open alerts without manual dismissal. The snapshots remain unsafe to install merely because their alert records closed.
 
 ## Final verification evidence
+
+CLI distribution evidence recorded on 2026-08-31 on
+`codex/cli-release-distribution`:
+
+- `npm run check` passed: 27 catalog entries and 12 agents validated, 51/51 tests
+  passed, and `dist/` rebuilt. This includes all five new distribution tests.
+- The tests extracted the archive and installed it offline into a separate consumer
+  directory, then exercised the actual npm executable shim, all three import
+  formats, passing/blocked gates, deterministic reports, stdin, malformed/oversized
+  data, missing files, and future-dated evidence.
+- Both installations contained exactly 16 files, with no runtime dependencies or
+  install scripts. Every manifest byte count/hash matched; repeat builds with the
+  same toolchain were identical. Different existing output and linked source/output
+  directories were refused without overwriting their contents.
+- GitHub compatibility/merge/deployment results and the final clean source revision
+  belong in the pull request and release record; local tests are not a claim that
+  those external checks have already completed.
 
 CLI/action release-candidate evidence recorded on 2026-08-10 on
 `agent/registry-cli-v1-2`:
@@ -227,4 +277,4 @@ Recorded against the release-candidate working tree on 2026-07-28:
 
 ## Distribution and sustainability
 
-Distribute the workspace as a static GitHub Pages artifact built from `docs/` and the enforcement layer as source in the same repository. Hosting cost is effectively the repository/Pages plan plus normal maintainer time; the core product has no API, database, AI-token, or telemetry cost. The local registry and baseline GitHub check are the free adoption surface. Plausible later revenue comes from managed private registries, organization policy packs, signed approval history, migration/review services, and contracted support—but only after real demand and a separately approved security/operating model. No market demand or product-market fit is claimed.
+Distribute the workspace as a static GitHub Pages artifact built from `docs/`, the CLI as a minimal named GitHub release asset, and the Action as pinned source in the same repository. Hosting cost is effectively the repository/Pages plan plus normal maintainer time; the core product has no API, database, AI-token, or telemetry cost. The local registry and baseline GitHub check are the free adoption surface. Plausible later revenue comes from managed private registries, organization policy packs, signed approval history, migration/review services, and contracted support—but only after real demand and a separately approved security/operating model. No market demand or product-market fit is claimed.

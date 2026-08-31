@@ -4,7 +4,7 @@ title: "Samsarix Agent Readiness Registry"
 type: software
 authors:
   - name: "Samsarix LLC"
-version: "1.3.0-rc.1"
+version: "1.3.0-rc.2"
 abstract: "A local-first registry for AI agent and MCP server inventory, portable metadata import, explainable readiness evidence, deterministic review packets, and repository policy enforcement."
 repository-code: "https://github.com/Deathcharge/Helix-Unified-Hub"
 url: "https://deathcharge.github.io/Helix-Unified-Hub/"
