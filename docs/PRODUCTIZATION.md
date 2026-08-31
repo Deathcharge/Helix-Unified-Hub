@@ -69,6 +69,33 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 
 ## Findings and implementation checklist
 
+### 2026-08-31 rollout follow-up: content-versioned registry assets
+
+The first public check after PR #22 found a mixed-version runtime in an already-open
+Firefox test session: the new Add control was visible, but Add still produced the
+old `Imported 1 agent` replacement behavior. This was reproduced separately with
+fictional A2A/MCP files (total remained 1 instead of 2), not dismissed as a flaky
+test. Chrome and WebKit passed the public check. All test data was reset. The
+earlier clean-source checks did not cover this cached upgrade path.
+
+The registry HTML now refers to content-versioned script/style URLs. The controller
+and import helper also use versioned dependency URLs, with one identical readiness
+module URL in both. `scripts/version-registry-assets.mjs` calculates canonical-LF
+SHA-256 versions from leaves to parents; a policy change updates both importers
+and the HTML entry point. It adds no bundler or runtime package. `--write` performs
+the bounded mechanical reference update; lint and build refuse stale references,
+and build checks before removing the old artifact. Tests cover idempotence, source
+immutability, dependency propagation, LF/CRLF stability, and missing/ambiguous
+references. The four-way OS/Node matrix includes these checks.
+
+The same Firefox session passed the seven-group smoke with the new source before
+publication. The final public same-session upgrade and fresh-session result are
+recorded on the follow-up PR after deployment. This is cache invalidation, not
+cryptographic integrity verification, immutable server-side asset retention, or an
+offline application. The host can still serve a previously cached HTML document
+until it refreshes; export backups remain important. No policy or CLI behavior,
+license, host, dependency count, or historical release asset changed.
+
 ### 2026-08-31 continuation: safe multi-agent inventory assembly
 
 Baseline: clean `main` at `c1e5300aee5457c07068616c40de5ec98bc7ca56` (PR #21).

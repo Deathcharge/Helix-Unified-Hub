@@ -3,7 +3,7 @@ import {
   RegistryValidationError,
   normalizeRegistryDocument,
   serializeRegistry
-} from './readiness.mjs';
+} from './readiness.mjs?v=a56069e69b504a5be6968875f5d97b446787f2c84015839ac251e43e30a115b2';
 
 // Prepare atomically: neither source is mutated, and the saved/exported form must
 // fit the same limit as a file import so a successful workspace can be restored.

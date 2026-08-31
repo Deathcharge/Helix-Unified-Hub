@@ -5,6 +5,7 @@ import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { SAFE_STATUSES, safeHref } from "../docs/assets/catalog.mjs";
 import { loadLinkTargets } from "./check-links.mjs";
+import { syncRegistryAssetVersions } from "./version-registry-assets.mjs";
 import {
   evaluateAgent,
   normalizeRegistryDocument,
@@ -15,6 +16,9 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const docs = path.join(root, "docs");
 const failures = [];
 const fail = (message) => failures.push(message);
+if ((await syncRegistryAssetVersions()).length) {
+  fail("Registry asset versions are stale. Run node scripts/version-registry-assets.mjs --write.");
+}
 const read = (relativePath) => readFile(path.join(root, relativePath), "utf8");
 const registry = JSON.parse(await read("docs/portals.json"));
 const dependencySnapshots = [
