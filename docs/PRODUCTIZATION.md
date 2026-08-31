@@ -88,7 +88,7 @@ registry pilot and was not closed or treated as authority to change other repos.
 
 Two local gaps were found: ROADMAP.md still directed consolidation/freezing in
 conflict with the accepted standalone registry, and no structured feedback intake
-existed (`repository.issueTemplates` returned an empty array). The roadmap now
+existed (no `.github/ISSUE_TEMPLATE` definitions were present). The roadmap now
 separates current identity from historical portfolio guidance and orders remaining
 work by release risk and observed user needs. The product brief defines a consent-
 based first-use protocol and distinguishes observation, self-report, and proposals.
@@ -106,9 +106,12 @@ was changed. Current runtime and historical release assets remain unchanged.
 Local verification: `npm run check` passed 95/95 tests, lint, and build; the four
 new feedback-contract tests passed independently. `npm run check:links` reached
 all 12 curated destinations with HTTP 200, including the five added official
-references. Syntax/whitespace checks passed. GitHub's hosted form registration and
-published-document parity will be checked after the protected merge and recorded
-on the PR; no test issue or fabricated pilot report will be submitted.
+references. Syntax/whitespace checks passed. The public issue chooser redirects to
+GitHub sign-in, and the older GraphQL `issueTemplates` field does not provide useful
+form evidence (a known form-using reference repository also returned an empty list).
+Authenticated hosted form rendering/submission is therefore unverified; no test
+issue or fabricated pilot report was submitted. Published configuration and document
+parity will be checked after the protected merge and recorded on the PR.
 
 ### 2026-08-31 rollout follow-up: content-versioned registry assets
 
