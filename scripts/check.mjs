@@ -371,8 +371,9 @@ if (!pagesWorkflow.includes("needs: cli-package")
   || !pagesWorkflow.includes('run: test "$PACKAGE_RESULT" = success')
   || !pagesWorkflow.includes("os: [ubuntu-latest, windows-latest]")
   || !pagesWorkflow.includes("node: [22, 24]")
+  || !pagesWorkflow.includes("run: node --test tests/browser-state.test.mjs")
   || !pagesWorkflow.includes("run: node --test tests/distribution.test.mjs"))
-  fail("Pages validation must require the Windows/Linux Node 22/24 CLI distribution matrix.");
+  fail("Pages validation must require the Windows/Linux Node 22/24 CLI distribution and browser-state matrix.");
 
 if (agentRegistry) {
   if (agentRegistry.agents.length !== 12)

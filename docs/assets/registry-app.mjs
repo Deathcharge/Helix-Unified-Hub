@@ -21,6 +21,7 @@ const elements = {
   exportMarkdown: document.querySelector('#export-markdown'),
   file: document.querySelector('#registry-file'),
   lifecycle: document.querySelector('#lifecycle-filter'),
+  layout: document.querySelector('.registry-layout'),
   list: document.querySelector('#agent-list'),
   message: document.querySelector('#workspace-message'),
   ready: document.querySelector('#metric-ready'),
@@ -38,6 +39,7 @@ const elements = {
 const state = {
   bundled: null,
   filters: { query: '', lifecycle: 'all', risk: 'all', readiness: 'all' },
+  importVersion: 0,
   registry: null,
   resetTimer: null,
   selectedId: ''
@@ -217,6 +219,7 @@ function render() {
   elements.list.replaceChildren(...visible.map((agent) => createAgentRow(agent, evaluateAgent(agent))));
   elements.list.hidden = visible.length === 0;
   elements.detail.hidden = visible.length === 0;
+  elements.layout.hidden = visible.length === 0;
   elements.empty.hidden = visible.length !== 0;
   elements.resultCount.textContent = `${visible.length} of ${state.registry.agents.length} ${state.registry.agents.length === 1 ? 'agent' : 'agents'}`;
   const selected = state.registry.agents.find((agent) => agent.id === state.selectedId);
@@ -250,15 +253,24 @@ function downloadText(filename, type, content) {
 }
 
 async function importFile(file) {
-  clearError();
   if (!file) return;
+  const version = ++state.importVersion;
+  disarmReset();
+  clearError();
+  // Capture the File above, then allow even the same rejected file to be retried.
+  elements.file.value = '';
   if (file.size > MAX_IMPORT_BYTES) {
     showError(new RegistryValidationError([`The selected file exceeds the ${MAX_IMPORT_BYTES / 1024} KiB limit.`]));
+    showMessage('Import rejected. The current registry was not changed.');
     return;
   }
   showMessage(`Validating ${file.name} locally…`);
   try {
-    const imported = parseRegistryText(await file.text());
+    const text = await file.text();
+    // A newer selection or confirmed reset owns the workspace now.
+    if (version !== state.importVersion) return;
+    const imported = parseRegistryText(text);
+    disarmReset();
     state.registry = imported;
     state.selectedId = imported.agents[0].id;
     setControlsEnabled(true);
@@ -269,10 +281,25 @@ async function importFile(file) {
       persisted ? 'success' : ''
     );
   } catch (error) {
+    if (version !== state.importVersion) return;
     showError(error);
     showMessage('Import rejected. The current registry was not changed.');
-  } finally {
-    elements.file.value = '';
+  }
+}
+
+function disarmReset() {
+  window.clearTimeout(state.resetTimer);
+  state.resetTimer = null;
+  delete elements.reset.dataset.armed;
+  elements.reset.textContent = 'Reset sample';
+}
+
+function removeSavedRegistry() {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+    return true;
+  } catch {
+    return false;
   }
 }
 
@@ -283,15 +310,15 @@ function resetRegistry() {
     showMessage('Reset will remove the browser-saved inventory and restore the bundled concepts. Select Confirm reset to continue.');
     window.clearTimeout(state.resetTimer);
     state.resetTimer = window.setTimeout(() => {
-      delete elements.reset.dataset.armed;
-      elements.reset.textContent = 'Reset sample';
+      disarmReset();
+      showMessage('Reset confirmation expired. No inventory was removed.');
     }, 5000);
     return;
   }
-  window.clearTimeout(state.resetTimer);
-  delete elements.reset.dataset.armed;
-  elements.reset.textContent = 'Reset sample';
-  try { localStorage.removeItem(STORAGE_KEY); } catch { /* The in-memory reset still succeeds. */ }
+  // Invalidate pending reads before clearing storage or changing visible state.
+  state.importVersion += 1;
+  disarmReset();
+  const removed = removeSavedRegistry();
   state.registry = state.bundled;
   state.selectedId = state.registry.agents[0].id;
   state.filters = { query: '', lifecycle: 'all', risk: 'all', readiness: 'all' };
@@ -301,7 +328,12 @@ function resetRegistry() {
   elements.readiness.value = 'all';
   clearError();
   render();
-  showMessage('Browser-saved inventory removed. The bundled concept sample is restored.', 'success');
+  if (removed) {
+    showMessage('Browser-saved inventory removed. The bundled concept sample is restored.', 'success');
+  } else {
+    showError(new Error('Browser-saved inventory could not be removed. Clear this site’s data in browser settings if you need it deleted.'));
+    showMessage('The bundled concept sample is restored in memory only. Previous saved data may return on reload.');
+  }
 }
 
 async function loadBundledRegistry() {
@@ -318,8 +350,9 @@ async function loadBundledRegistry() {
       if (saved) restored = parseRegistryText(saved);
     } catch (error) {
       if (error instanceof RegistryValidationError) {
-        try { localStorage.removeItem(STORAGE_KEY); } catch { /* Continue with the safe bundled fallback. */ }
-        storageNotice = 'Invalid saved browser data was removed; the bundled inventory was restored.';
+        storageNotice = removeSavedRegistry()
+          ? 'Invalid saved browser data was removed; the bundled inventory was restored.'
+          : 'Invalid saved browser data could not be removed; showing the safe bundled inventory. Clear this site’s data in browser settings to remove the invalid saved copy.';
       } else {
         storageNotice = 'Browser storage is unavailable; the bundled inventory will not persist changes.';
       }

@@ -69,6 +69,57 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 
 ## Findings and implementation checklist
 
+### 2026-08-31 continuation: browser state and recovery
+
+Baseline: clean `main` at `77b0e72e9d903a31f9d109dc31621ce6d2de7d6e`, public RC2
+assets, and successful main CI/Pages run `33390034287`. CLI distribution was verified,
+but the registry's browser controller had only static source contracts, not direct
+event/state regression tests.
+
+An isolated Chromium session exercised the public release. A2A and MCP imports,
+reload persistence, and JSON/Markdown downloads worked; downloaded bytes matched the
+shared policy's output. Malformed, oversized, duplicate-ID, and credential-field
+imports retained the previous inventory. Observed requests were same-origin static
+resources and bundled inventories, not imported endpoints or upload requests.
+
+Two concrete gaps were reproduced:
+
+- **P1, reset ordering:** delaying a File read, confirming reset, then completing
+  the read changed the workspace from the restored sample back to the imported MCP
+  record and saved it again. The controller now invalidates pending reads on a newer
+  selection or confirmed reset, ignores obsolete successes/errors, and disarms stale
+  confirmation controls. Oversized files can also be selected again immediately.
+- **P1, error/recovery visibility:** an empty result set left a 620px blank results
+  container above the explanation. The entire empty layout now becomes hidden.
+  Storage-removal failures also no longer claim that saved data was removed; they
+  explicitly distinguish an in-memory reset from clearing the saved copy.
+
+Sixteen dependency-free controller tests execute the actual module through a small
+DOM/storage adapter. They cover sample loading, all import formats, deterministic
+JSON download, rejected imports, latest-selection ordering, reset/read races,
+confirmation expiry, storage failures, invalid saved-state recovery, stale evidence,
+and manual import after sample-load failure. Node's test clock is fixed so the
+fictional ready fixture does not expire with wall-clock time. These tests run in
+the existing Windows/Linux Node 22/24 compatibility matrix; they are not layout or
+assistive-technology emulation.
+
+The in-app browser tool could not start its runtime after two attempts. Browser
+verification therefore used an isolated Playwright CLI session, never an existing
+user profile. Before publication, the corrected controller was supplied through a
+local request override in that session: the same reset race then kept the sample,
+storage-removal fault injection produced the explicit warning, and stale filtering
+worked. At 390px width the empty layout occupied zero height, its explanation began
+16px below the result bar, and no document-level horizontal overflow was observed.
+Local screenshots, snapshots, downloads, and fictional fixtures stay under ignored
+`output/playwright/`; no personal browser data is included in the repository.
+
+Local verification: `node --test tests/browser-state.test.mjs` passed 16/16;
+`npm run check` passed 67/67 tests, lint, and build; controller syntax and
+`git diff --check` passed. Final exact-head CI, merge, and unmodified public-browser
+verification belong in the pull-request record. This correction does not change the
+CLI policy/package or overwrite the published RC2 assets, and it does not close the
+credential, historical retention, provenance, legal, or real-user-validation gates.
+
 ### 2026-08-31 continuation: distribution and consumer safety
 
 Baseline: clean `main` at `b81dbd18d86fc0cb23c16d0c260a35c3b092affb`, no open
