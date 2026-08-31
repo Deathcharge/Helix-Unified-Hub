@@ -73,7 +73,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   border-radius: 50%;
   color: var(--accent);
 }
-.site-nav { display: flex; gap: 8px; }
+.site-nav { display: flex; flex-wrap: wrap; gap: 8px; }
 .site-nav a {
   min-height: 44px;
   padding: 10px 14px;

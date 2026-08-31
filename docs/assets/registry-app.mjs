@@ -81,6 +81,7 @@ function createAgentRow(agent, assessment) {
   button.type = 'button';
   button.className = 'agent-row';
   button.dataset.agentId = agent.id;
+  button.setAttribute('aria-controls', 'agent-detail');
   button.setAttribute('aria-pressed', String(agent.id === state.selectedId));
   const top = document.createElement('div');
   top.className = 'agent-row-top';
@@ -98,8 +99,11 @@ function createAgentRow(agent, assessment) {
   button.append(top, createTextElement('p', '', agent.summary), meta);
   button.addEventListener('click', () => {
     state.selectedId = agent.id;
+    const listScroll = elements.list.scrollTop;
     render();
-    elements.detail.focus({ preventScroll: true });
+    elements.list.scrollTop = listScroll;
+    // Focus the short heading, not an off-screen or partially visible article.
+    elements.detail.querySelector('.detail-title').focus();
   });
   return button;
 }
@@ -114,17 +118,28 @@ function createList(items, className, emptyText) {
 
 function renderDetail(agent, assessment) {
   elements.detail.replaceChildren();
-  elements.detail.tabIndex = -1;
   const heading = document.createElement('div');
   heading.className = 'detail-heading';
   const title = document.createElement('div');
+  const name = createTextElement('h2', 'detail-title', agent.name);
+  name.id = 'selected-agent-title';
+  name.tabIndex = -1;
   title.append(
     createTextElement('p', 'eyebrow', readinessLabel(assessment.status)),
-    createTextElement('h2', '', agent.name)
+    name
   );
   const score = createTextElement('div', 'score-ring', String(assessment.score));
   score.setAttribute('aria-label', `Readiness score ${assessment.score} out of 100`);
   heading.append(title, score);
+
+  const back = createTextElement('button', 'button detail-back', 'Back to agent list');
+  back.type = 'button';
+  back.setAttribute('aria-controls', 'agent-list');
+  back.addEventListener('click', () => {
+    // Resolve the current row after render; never interpolate imported IDs into selectors.
+    const row = Array.from(elements.list.children).find((item) => item.dataset.agentId === agent.id);
+    row?.focus();
+  });
 
   const meta = document.createElement('div');
   meta.className = 'detail-meta';
@@ -170,14 +185,25 @@ function renderDetail(agent, assessment) {
   const evidence = document.createElement('section');
   evidence.className = 'detail-section';
   evidence.append(createTextElement('h3', '', 'Evidence gates'));
+  const scrollHelp = createTextElement('p', 'evidence-scroll-help', 'If columns extend beyond the table, scroll horizontally. With the table focused, use Left and Right arrow keys.');
+  scrollHelp.id = 'evidence-scroll-help';
+  evidence.append(scrollHelp);
   const tableWrap = document.createElement('div');
   tableWrap.className = 'evidence-table-wrap';
+  tableWrap.tabIndex = 0;
+  tableWrap.setAttribute('role', 'region');
+  tableWrap.setAttribute('aria-label', `${agent.name} readiness evidence`);
+  tableWrap.setAttribute('aria-describedby', 'evidence-scroll-help');
   const table = document.createElement('table');
   table.className = 'evidence-table';
   const caption = createTextElement('caption', 'visually-hidden', `${agent.name} readiness evidence`);
   const head = document.createElement('thead');
   const headRow = document.createElement('tr');
-  for (const value of ['Gate', 'Status', 'Evidence', 'Reviewed']) headRow.append(createTextElement('th', '', value));
+  for (const value of ['Gate', 'Status', 'Evidence', 'Reviewed']) {
+    const cell = createTextElement('th', '', value);
+    cell.scope = 'col';
+    headRow.append(cell);
+  }
   head.append(headRow);
   const body = document.createElement('tbody');
   for (const gate of EVIDENCE_GATES) {
@@ -198,7 +224,7 @@ function renderDetail(agent, assessment) {
   tableWrap.append(table);
   evidence.append(tableWrap);
 
-  elements.detail.append(heading, createTextElement('p', 'detail-summary', agent.summary), meta, blockers, ownership, interfaces, evidence);
+  elements.detail.append(heading, back, createTextElement('p', 'detail-summary', agent.summary), meta, blockers, ownership, interfaces, evidence);
 }
 
 function renderMetrics() {

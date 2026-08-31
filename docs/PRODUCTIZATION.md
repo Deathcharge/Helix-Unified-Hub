@@ -69,6 +69,63 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 
 ## Findings and implementation checklist
 
+### 2026-08-31 continuation: keyboard and narrow-screen navigation
+
+Baseline: clean `main` at `5aa58b117552767c2dfd4ddb8ffdd7e0c0b99ddc`, after
+PR #19's reset/recovery correction. The maintained product, target user, import
+policy, CLI distribution, and external release gates are unchanged.
+
+- **P1, off-screen selection:** at 390×844, selecting Agni focused the detail
+  article with scrolling suppressed. Its heading remained at viewport Y=2155,
+  so the selected evidence was invisible. Selection now focuses a short, named
+  heading with native scrolling enabled and preserves the desktop list's scroll
+  position. A normal 44px-minimum button returns to the current selected row,
+  including filtered results. No imported identifier enters a CSS selector.
+- **P2, keyboard evidence access:** the horizontally overflowing evidence table
+  now has an explicit tab stop, named region, visible focus, scroll instructions,
+  caption, and scoped column headers. The heading is programmatically focusable
+  but not an extra Tab stop. The article is named by that heading rather than
+  simultaneously announcing its entire replaced content as a live region;
+  result counts and import/error status retain their announcements.
+- **P2, narrow navigation overflow:** the shared header forced a 390px document
+  width at a 320px viewport. Navigation links now wrap without shrinking their
+  touch targets. The established theme and GitHub Pages architecture are retained.
+
+The implementation follows [native focus scrolling](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus),
+[keyboard access to overflow regions](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/overflow#accessibility),
+and [logical focus order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html).
+These sources inform the interaction; they are not a conformance certification.
+
+Three new dependency-free controller tests cover title focus and return targets,
+filtered/empty focus retention, and evidence-region semantics. The existing page
+contract also checks the heading-to-article relationship. These tests execute the
+real controller with the small adapter, not a browser layout or screen reader.
+
+Isolated Chromium verification used the Playwright CLI because the in-app browser
+runtime could not initialize. Before publication, only the four changed site
+resources were overridden with local files in that isolated session. Observed:
+
+- Selection and return worked at widths 320, 390, 768, and 1280 (height 844), with
+  a visible 3px keyboard focus outline and no document-level horizontal overflow.
+- A desktop list scrolled to 1136px retained that position across selection and
+  returned focus to Vega; filtering to Phoenix returned to Phoenix instead.
+- Starting from a fresh page, ordinary Tab navigation reached the first agent;
+  Space opened its heading, Tab/Enter returned to its row, and the next Tab reached
+  the next agent. From the heading, Tab reaches the return button and then the
+  evidence region; Right Arrow scrolls its overflowing columns.
+- Reduced-motion mode retained automatic rather than smooth scrolling. At 320px,
+  the landing, registry, license, security-review, and external-links pages all
+  fit the document width. Empty filtering retained input focus and hid the results
+  layout completely.
+
+Local verification: `npm ci --ignore-scripts --no-audit --no-fund` passed;
+`npm run check` passed all 70 tests, lint, and build; focused controller/page tests
+passed 26/26; controller syntax and `git diff --check` passed. Final exact-head
+CI/deployment evidence is recorded with this increment's pull request. Browser artifacts remain ignored under
+`output/playwright/`. No Safari/Firefox, physical mobile device, screen-reader, or
+full WCAG audit is claimed. The CLI policy and published RC2 archive are unchanged;
+no new dependency, service, telemetry, storage key, or billable resource is added.
+
 ### 2026-08-31 continuation: browser state and recovery
 
 Baseline: clean `main` at `77b0e72e9d903a31f9d109dc31621ce6d2de7d6e`, public RC2

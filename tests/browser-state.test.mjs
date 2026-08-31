@@ -25,6 +25,7 @@ class Element {
     this.hidden = false;
     this.files = [];
     this.ownText = '';
+    this.scrollTop = 0;
   }
   set textContent(text) { this.ownText = String(text); this.children = []; }
   get textContent() { return this.ownText + this.children.map((child) => typeof child === 'string' ? child : child.textContent).join(''); }
@@ -33,7 +34,17 @@ class Element {
   setAttribute(name, value) { this.attributes.set(name, String(value)); }
   addEventListener(name, listener) { this.listeners.set(name, listener); }
   emit(name) { return this.listeners.get(name)?.({ currentTarget: this }); }
-  focus() { this.focused = true; }
+  querySelector(selector) {
+    assert.match(selector, /^\.[a-z-]+$/, 'adapter supports only the controller class selectors');
+    for (const child of this.children) {
+      if (typeof child === 'string') continue;
+      if (child.className?.split(' ').includes(selector.slice(1))) return child;
+      const match = child.querySelector(selector);
+      if (match) return match;
+    }
+    return null;
+  }
+  focus(options) { this.focused = true; this.focusOptions = options; document.activeElement = this; }
   click() { return this.emit('click'); }
   remove() { this.removed = true; }
 }
@@ -68,6 +79,7 @@ async function browser(t, options = {}) {
   const globals = {
     document: {
       body,
+      activeElement: body,
       querySelector(selector) {
         assert.ok(elements[selector], `unmodeled controller selector: ${selector}`);
         return elements[selector];
@@ -137,7 +149,71 @@ test('browser controller loads the sample and hides the entire empty results lay
   assert.equal(ui.el('.registry-layout').hidden, false);
   assert.equal(ui.el('agent-empty').hidden, true);
   await ui.el('agent-list').children[0].emit('click');
-  assert.equal(ui.el('agent-detail').focused, true);
+  assert.equal(document.activeElement, ui.el('agent-detail').querySelector('.detail-title'));
+});
+
+test('agent selection focuses its title with native scrolling and returns to the current selected row', async (t) => {
+  const ui = await browser(t);
+  const list = ui.el('agent-list');
+  const original = list.children[7];
+  list.scrollTop = 450;
+  assert.equal(original.attributes.get('aria-controls'), 'agent-detail');
+  await original.emit('click');
+  const title = ui.el('agent-detail').querySelector('.detail-title');
+  assert.equal(title.textContent, 'Phoenix');
+  assert.equal(title.id, 'selected-agent-title');
+  assert.equal(title.tabIndex, -1, 'heading must not add a sequential tab stop');
+  assert.equal(document.activeElement, title);
+  assert.notEqual(title.focusOptions?.preventScroll, true, 'native focus scrolling must stay enabled');
+  assert.equal(list.scrollTop, 450);
+  const current = list.children[7];
+  assert.notEqual(current, original, 'return control must resolve the newly rendered row');
+  assert.equal(current.attributes.get('aria-pressed'), 'true');
+  assert.equal(list.children.filter((row) => row.attributes.get('aria-pressed') === 'true').length, 1);
+  const back = ui.el('agent-detail').querySelector('.detail-back');
+  assert.equal(back.textContent, 'Back to agent list');
+  assert.equal(back.type, 'button');
+  assert.equal(back.attributes.get('aria-controls'), 'agent-list');
+  await back.emit('click');
+  assert.equal(document.activeElement, current);
+  assert.notEqual(current.focusOptions?.preventScroll, true);
+  assert.equal(ui.saved.has(STORAGE_KEY), false, 'navigation must not persist or alter the inventory');
+});
+
+test('filtering keeps focus on its control and return navigation follows the filtered selection', async (t) => {
+  const ui = await browser(t);
+  const search = ui.el('agent-search');
+  search.focus();
+  search.value = 'Phoenix';
+  await search.emit('input');
+  assert.equal(document.activeElement, search, 'render must not steal focus while filtering');
+  assert.equal(ui.el('agent-detail').querySelector('.detail-title').textContent, 'Phoenix');
+  await ui.el('agent-detail').querySelector('.detail-back').emit('click');
+  assert.equal(document.activeElement, ui.el('agent-list').children[0]);
+  search.focus();
+  search.value = 'no-matching-agent';
+  await search.emit('input');
+  assert.equal(document.activeElement, search);
+  assert.equal(ui.el('.registry-layout').hidden, true);
+});
+
+test('evidence overflow is a named keyboard-focusable region with column headers', async (t) => {
+  const ui = await browser(t);
+  const wrap = ui.el('agent-detail').querySelector('.evidence-table-wrap');
+  assert.equal(wrap.tabIndex, 0);
+  assert.equal(wrap.attributes.get('role'), 'region');
+  assert.equal(wrap.attributes.get('aria-label'), 'Aether readiness evidence');
+  assert.equal(wrap.attributes.get('aria-describedby'), 'evidence-scroll-help');
+  const help = ui.el('agent-detail').querySelector('.evidence-scroll-help');
+  assert.equal(help.id, 'evidence-scroll-help');
+  assert.match(help.textContent, /Left and Right arrow keys/);
+  const table = wrap.children[0];
+  assert.equal(table.tagName, 'TABLE');
+  assert.equal(table.children[0].tagName, 'CAPTION');
+  for (const cell of table.children[1].children[0].children) {
+    assert.equal(cell.tagName, 'TH');
+    assert.equal(cell.scope, 'col');
+  }
 });
 
 test('browser imports all three formats, persists normalized data, and downloads matching JSON', async (t) => {

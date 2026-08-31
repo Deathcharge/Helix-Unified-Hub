@@ -236,6 +236,12 @@
 .detail-placeholder p:last-child { color: var(--muted); }
 .detail-heading { display: flex; align-items: start; justify-content: space-between; gap: 20px; }
 .detail-heading h2 { overflow-wrap: anywhere; }
+.detail-title { scroll-margin-block: 24px; }
+.detail-title:focus-visible, .evidence-table-wrap:focus-visible {
+  outline: 3px solid var(--warm);
+  outline-offset: 3px;
+}
+.detail-back { margin-top: 16px; }
 .score-ring {
   display: grid;
   width: 84px;
@@ -259,6 +265,7 @@
 .blocker-list li::marker { color: var(--danger); }
 
 .evidence-table-wrap { overflow-x: auto; }
+.evidence-scroll-help { margin: 0 0 12px; color: var(--muted); font-size: 0.85rem; }
 .evidence-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
 .evidence-table th, .evidence-table td { padding: 11px 9px; border-bottom: 1px solid var(--line); vertical-align: top; text-align: left; }
 .evidence-table th { color: var(--muted); font-size: 0.72rem; text-transform: uppercase; }
