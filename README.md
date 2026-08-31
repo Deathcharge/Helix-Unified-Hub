@@ -26,7 +26,7 @@ and [`CONSOLIDATION.md`](CONSOLIDATION.md).
 
 For browser review, open the [hosted workspace](https://deathcharge.github.io/Helix-Unified-Hub/registry.html).
 For command-line use without cloning the historical repository, download the
-CLI-only `*-cli.tgz` asset and checksum from
+CLI-only `*-cli.tgz`, `*-cli.manifest.json`, and `*-cli.sha256` assets from
 [v1.3.0-rc.2](https://github.com/Deathcharge/Helix-Unified-Hub/releases/tag/v1.3.0-rc.2).
 The [standalone quickstart](docs/CLI_DISTRIBUTION.md) covers integrity checking,
 extraction, offline installation, and a reproducible passing/failing review.

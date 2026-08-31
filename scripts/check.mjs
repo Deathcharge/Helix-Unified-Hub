@@ -140,7 +140,10 @@ async function htmlFiles(directory) {
 async function repositoryFiles(directory) {
   const found = [];
   for (const entry of await readdir(directory, { withFileTypes: true })) {
-    if (entry.isDirectory() && ['.git', 'dist', 'release', 'node_modules'].includes(entry.name)) continue;
+    if (entry.isDirectory() && (
+      ['.git', 'dist', 'node_modules'].includes(entry.name)
+      || (directory === root && entry.name === 'release')
+    )) continue;
     const absolute = path.join(directory, entry.name);
     if (entry.isDirectory()) found.push(...(await repositoryFiles(absolute)));
     else found.push(absolute);
@@ -350,6 +353,19 @@ if (packageMetadata.scripts?.registry !== "node bin/samsarix-registry.mjs")
   fail("package.json: registry script is inconsistent.");
 if (packageMetadata.scripts?.['pack:cli'] !== "node scripts/package-cli.mjs")
   fail("package.json: CLI distribution builder is not declared.");
+if (!/^permissions: \{\}\s*$/m.test(pagesWorkflow))
+  fail("Pages workflow permissions must default to none; jobs grant only what they need.");
+const packagePermissions = yamlDirectEntries(
+  yamlBlock(yamlBlock(workflowJobs, "cli-package", 2), "permissions", 4), 6,
+);
+if (!exactYamlMap(packagePermissions, { contents: "read" }))
+  fail("CLI package job permissions must be exactly contents: read.");
+for (const [name, workflow] of [["Pages", pagesWorkflow], ["External-link", linkWorkflow]]) {
+  const checkoutSteps = workflow.split(/(?=^\s*- (?:name:|uses:))/m)
+    .filter((step) => /uses: actions\/checkout@/.test(step));
+  if (!checkoutSteps.length || checkoutSteps.some((step) => !/^\s+persist-credentials: false\s*$/m.test(step)))
+    fail(`${name} checkout steps must not persist credentials.`);
+}
 if (!pagesWorkflow.includes("needs: cli-package")
   || !pagesWorkflow.includes("if: always()")
   || !pagesWorkflow.includes('run: test "$PACKAGE_RESULT" = success')

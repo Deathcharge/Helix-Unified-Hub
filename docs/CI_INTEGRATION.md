@@ -66,6 +66,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: Deathcharge/Helix-Unified-Hub@b81dbd18d86fc0cb23c16d0c260a35c3b092affb
         with:
           registry: path/to/agents.json

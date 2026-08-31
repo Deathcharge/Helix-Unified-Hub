@@ -92,6 +92,10 @@ This increment provides a minimal distribution of the existing offline workflow:
 - A four-job Windows/Linux, Node 22/24 matrix must succeed before the required
   `validate` check can pass and Pages can deploy.
 - The Action example now pins the hardened `b81dbd1` prerelease.
+- PR review prompted explicit non-persistent checkout credentials in both workflows
+  and the adoption example, enforced by local checks. The Pages workflow defaults
+  to no permissions and grants only each job's required scopes. The quick-download
+  list names all three assets required for checksum verification.
 
 Bounded research: [npm pack](https://docs.npmjs.com/cli/pack/) supports local tarballs
 with scripts disabled, and [GitHub release integrity guidance](https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain/secure-your-dependencies/verify-release-integrity)
