@@ -35,6 +35,9 @@ test('registry page exposes the complete local-first workflow and fallback conte
   assert.match(html, /id="lifecycle-filter"/);
   assert.match(html, /id="risk-filter"/);
   assert.match(html, /id="readiness-filter"/);
+  assert.match(html, /<article[^>]+id="agent-detail"[^>]+aria-labelledby="selected-agent-title"/);
+  assert.match(html, /<h2 id="selected-agent-title">Select an agent<\/h2>/);
+  assert.doesNotMatch(html, /<article[^>]+aria-live=/, 'selection focus must not also announce the entire evidence article');
   assert.match(html, /aria-live="polite"/);
   assert.match(html, /<noscript>/);
   assert.match(html, /Your files stay in this browser/);

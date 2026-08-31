@@ -69,6 +69,11 @@ running `npm run serve`.
 6. Use **Reset sample** twice to explicitly clear the browser-saved inventory and
    restore the bundled concepts.
 
+Selecting an agent brings its detail heading into view. **Back to agent list**
+returns focus to that agent, including in filtered results. Keyboard users can
+Tab from the heading to the return button and then to the evidence table; use
+Left and Right arrow keys to read columns that extend beyond a narrow screen.
+
 Files are limited to 1 MiB and 500 agents. Duplicate identifiers, malformed JSON,
 non-HTTPS interface URLs, embedded URL credentials, unsupported schema values,
 credential-bearing fields, and secret MCP values/defaults are rejected before the
