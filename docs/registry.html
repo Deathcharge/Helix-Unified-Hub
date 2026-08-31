@@ -54,7 +54,17 @@
         <p id="workspace-description" class="workspace-description"></p>
       </div>
       <div class="workspace-actions" aria-label="Registry actions">
-        <input id="registry-file" class="file-input" type="file" accept=".json,application/json" aria-label="Import Samsarix registry, A2A Agent Card, or MCP server JSON" disabled>
+        <div class="import-controls">
+          <div class="field">
+            <label for="import-mode">Import mode</label>
+            <select id="import-mode" aria-describedby="import-help" disabled>
+              <option value="replace">Replace inventory</option>
+              <option value="add">Add agents</option>
+            </select>
+          </div>
+          <input id="registry-file" class="file-input" type="file" accept=".json,application/json" aria-label="Import Samsarix registry, A2A Agent Card, or MCP server JSON" aria-describedby="import-help" disabled>
+          <p id="import-help">Replace asks before discarding your inventory. Add keeps workspace details and rejects duplicate IDs. Replace the sample first to start your own inventory. Limit: 500 agents / 1 MiB saved JSON. Export a backup before replacing.</p>
+        </div>
         <a class="button" href="agent-registry-template.json" download>Starter template</a>
         <a class="button" href="a2a-agent-card-example.json" download>A2A example</a>
         <a class="button" href="mcp-server-example.json" download>MCP example</a>

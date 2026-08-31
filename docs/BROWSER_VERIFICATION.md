@@ -38,6 +38,7 @@ Then run these commands one at a time, inspecting the result before continuing:
 ```sh
 npx --yes --package=@playwright/cli@0.1.18 playwright-cli -s=samsarix-smoke open https://deathcharge.github.io/Helix-Unified-Hub/registry.html --browser=firefox
 npx --yes --package=@playwright/cli@0.1.18 playwright-cli -s=samsarix-smoke run-code --filename=../../../scripts/browser-smoke.mjs
+npx --yes --package=@playwright/cli@0.1.18 playwright-cli -s=samsarix-smoke run-code --filename=../../../scripts/browser-smoke-result.mjs
 npx --yes --package=@playwright/cli@0.1.18 playwright-cli -s=samsarix-smoke console error
 npx --yes --package=@playwright/cli@0.1.18 playwright-cli -s=samsarix-smoke close
 ```
@@ -48,9 +49,16 @@ test. Install only the selected test engine using the tool's instructions; do no
 replace someone's normal Chrome/Edge installation just to run this check.
 
 Success requires a successful command and a returned object containing
-`"passed": true`, the actual browser version, and all six completed check groups.
+`"passed": true`, the actual browser version, and all seven completed check groups.
 Any error, missing group, or cleanup failure is a failed/unverified run. Keep the
 console check separate: the script does not currently assert console contents.
+The CLI may yield while a native replacement dialog is handled and the check is
+still running. Exit 0 from the first `run-code` is **not** completion. Always run
+the companion result command in the same session; it waits up to 30 seconds for
+the final seven-group result. If another dialog causes an early yield there too,
+repeat the result command once the dialog is handled; no explicit result means
+unverified, never pass. Do not reload between these two commands: the test-only
+result marker is held in page memory, not browser storage or production code.
 Always close the isolated session, even after failure: its date remains fixed for
 the test. Do not run the function directly with `node`; it is an input to the CLI's
 `run-code --filename` command.
@@ -65,7 +73,10 @@ No source overrides are needed. Stop that server when verification is finished.
   arrow-key horizontal scrolling; return focus to the selected row.
 - Document width at 320, 390, 768, and 1280px; empty results and search-focus retention.
 - Samsarix, A2A, and MCP imports; nine evidence rows; conservative classifications.
-- Reload persistence and malformed-file rejection without replacing the ready fixture.
+- Add A2A/MCP records to the ready fixture; duplicate addition rejects atomically;
+  three-agent reload persistence; cancelling a native replacement confirmation.
+- Malformed-file rejection without changing the three-agent inventory; confirmed
+  replacement restores the single ready fixture after the export checks.
 - Actual JSON and Markdown downloads compared byte-for-byte with the shared policy.
 - Confirmed reset followed by reload, including cleanup on intermediate failure.
 
@@ -76,6 +87,15 @@ policy. The separate Node policy tests check scoring and validation rules.
 
 ## Recorded compatibility evidence
 
+The safe multi-agent import continuation extended the smoke to seven groups. Before
+publication, the final changed web files were exercised through isolated source
+overrides in Chrome 151.0.7922.175, Firefox 153.0, and WebKit 26.5: all seven groups
+passed, including real native confirmation acceptance/cancellation and three-agent
+export parity. Firefox's form-value restoration on reload was reproduced and fixed
+by explicit mode initialization. The companion result command is required because
+the CLI can yield early at a native dialog. Public deployment evidence is recorded
+on the corresponding PR; these source-override checks alone do not prove deployment.
+
 On 2026-08-31, the public application at `169e181a4d7d174f3fdf8c8b4afd511373b342e2`
 was exercised with isolated Windows test sessions:
 
@@ -85,7 +105,7 @@ was exercised with isolated Windows test sessions:
 | Firefox test build | 153.0 | Imports, persistence, invalid/oversized/duplicate/credential-field rejection, stale filtering, exports, reset, keyboard navigation, and responsive checks. |
 | WebKit test build | 26.5 | Imports, persistence, invalid/oversized/duplicate/credential-field rejection, stale filtering, exports, reset, and keyboard navigation; reusable smoke includes responsive checks. |
 
-The repeatable smoke function returned all six passing groups in each engine. The
+The original six-group smoke function returned all passing groups in each engine. The
 documented pinned `npx` command sequence was additionally exercised in Firefox.
 Final consoles had zero errors/warnings, and all isolated sessions were closed.
 

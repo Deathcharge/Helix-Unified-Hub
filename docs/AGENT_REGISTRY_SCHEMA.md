@@ -29,6 +29,15 @@ JSON Schema alone cannot fully express.
 - `agents` must contain 1–500 unique agent records.
 - The complete UTF-8 file must not exceed 1 MiB.
 
+In the browser, **Add agents** appends distinct IDs to the current inventory and
+keeps its workspace fields unchanged, including the declared `updatedAt` date.
+Conflicting IDs reject the whole addition rather than overwrite existing evidence.
+The combined inventory must still contain at most 500 agents. Both Add and Replace
+also bound the normalized saved/exported JSON to 1 MiB so it can be restored or
+reimported; even a smaller compact source can exceed that limit after normalization.
+**Replace inventory** requires confirmation before discarding imported/restored
+records. Export a backup first; Cancel leaves current and saved records untouched.
+
 ## Agent record
 
 | Field            | Constraint                                                                                                                                                     |

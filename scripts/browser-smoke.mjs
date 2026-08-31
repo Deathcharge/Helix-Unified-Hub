@@ -9,15 +9,32 @@ async (page) => {
   page.setDefaultNavigationTimeout(15000);
   const message = page.locator('#workspace-message');
   await page.waitForFunction(() => document.querySelector('#reset-registry')?.disabled === false);
+  // Invalidate any previous test result, even if this run refuses the workspace.
+  await page.evaluate(() => { window.__samsarixSmokeResult = null; });
   if (!(await message.innerText()).startsWith('Loaded the bundled concept inventory.')) {
     throw new Error('Refusing to replace an existing workspace. Use a fresh nonpersistent browser session.');
   }
+  // Some CLI versions yield on native dialogs while this function keeps running.
+  // The companion result check waits for the explicit final outcome, not exit 0.
 
   const base = target.split(/[?#]/)[0].replace(/registry\.html$/, '');
   const input = page.getByLabel('Import Samsarix registry, A2A Agent Card, or MCP server JSON', { exact: true });
   const checks = [];
   const require = (condition, reason) => { if (!condition) throw new Error(reason); };
   const click = (name) => page.getByRole('button', { name, exact: true }).click();
+  const importFixture = async (fixture, confirmation) => {
+    const upload = () => input.setInputFiles({ name: fixture.name, mimeType: 'application/json', buffer: fixture.bytes });
+    if (confirmation === undefined) return upload();
+    await Promise.all([
+      page.waitForEvent('dialog').then(async (dialog) => {
+        const expected = dialog.type() === 'confirm' && dialog.message().startsWith('Replace your current inventory with ');
+        if (expected && confirmation) await dialog.accept();
+        else await dialog.dismiss();
+        require(expected, 'Unexpected replacement dialog');
+      }),
+      upload()
+    ]);
+  };
   const waitForSample = () => page.waitForFunction(() => document.querySelector('#workspace-message')?.textContent.startsWith('Loaded the bundled concept inventory.'));
   let phase = 'setup';
   let failure;
@@ -78,9 +95,9 @@ async (page) => {
     await search.fill('');
     checks.push('320/390/768/1280px widths and empty-filter recovery');
 
-    for (const fixture of fixtures) {
+    for (const [index, fixture] of fixtures.entries()) {
       phase = `import ${fixture.name}`;
-      await input.setInputFiles({ name: fixture.name, mimeType: 'application/json', buffer: fixture.bytes });
+      await importFixture(fixture, index ? true : undefined);
       await page.waitForFunction((name) => document.querySelector('#workspace-message').textContent.includes(`Imported 1 agent from ${name}`), fixture.name);
       require(await page.locator('#metric-total').innerText() === '1', 'Wrong imported count');
       require(await page.locator('#metric-ready').innerText() === fixture.ready, 'Wrong readiness classification');
@@ -88,22 +105,37 @@ async (page) => {
     }
     checks.push('A2A, MCP, and Samsarix imports with nine gates');
 
+    phase = 'additive imports and duplicate rejection';
+    await page.getByRole('combobox', { name: 'Import mode', exact: true }).selectOption('add');
+    for (const fixture of fixtures.slice(0, 2)) {
+      await importFixture(fixture);
+      await page.waitForFunction((name) => document.querySelector('#workspace-message').textContent.includes(`Added 1 agent from ${name}`), fixture.name);
+    }
+    require(await page.locator('#metric-total').innerText() === '3', 'Add did not retain all three agents');
+    await importFixture(fixtures[1]);
+    await page.waitForFunction(() => document.querySelector('#workspace-error').textContent.includes('Duplicate agent id'));
+    require(await page.locator('#metric-total').innerText() === '3', 'Duplicate addition changed the count');
+
     phase = 'persistence and malformed-file recovery';
     await page.reload();
-    await page.waitForFunction(() => document.querySelector('#workspace-message').textContent.startsWith('Restored 1 locally saved agent'));
+    await page.waitForFunction(() => document.querySelector('#workspace-message').textContent.startsWith('Restored 3 locally saved agents'));
+    await importFixture(fixtures[2], false);
+    await page.waitForFunction(() => document.querySelector('#workspace-message').textContent.startsWith('Import cancelled.'));
+    require(await page.locator('#metric-total').innerText() === '3', 'Cancelled replacement changed the count');
     await input.setInputFiles({ name: 'malformed.json', mimeType: 'application/json', buffer: fixtures[2].bytes.subarray(0, 1) });
     await page.waitForFunction(() => !document.querySelector('#workspace-error').hidden);
     require((await message.innerText()).includes('current registry was not changed'), 'Rejected import lacks recovery status');
     require(await page.locator('#metric-ready').innerText() === '1', 'Rejected input changed the current registry');
-    checks.push('reload persistence and malformed-file rejection');
+    checks.push('three-agent reload persistence, cancelled replacement, and malformed-file rejection');
 
     phase = 'download parity';
-    const expected = await page.evaluate(async (text) => {
+    const expected = await page.evaluate(async (texts) => {
       const policy = await import(new URL('./assets/readiness.mjs', location.href).href);
-      const registry = policy.parseRegistryText(text);
+      const [a2a, mcp, registry] = texts.map((text) => policy.parseRegistryText(text));
+      registry.agents.push(...a2a.agents, ...mcp.agents);
       const encode = (value) => Array.from(new TextEncoder().encode(value));
       return { json: encode(policy.serializeRegistry(registry)), markdown: encode(policy.renderMarkdownPacket(registry)) };
-    }, fixtures[2].text);
+    }, fixtures.map((fixture) => fixture.text));
     for (const [button, format] of [['Export JSON', 'json'], ['Export Markdown', 'markdown']]) {
       const [download] = await Promise.all([page.waitForEvent('download'), click(button)]);
       const stream = await download.createReadStream();
@@ -116,6 +148,12 @@ async (page) => {
       require(JSON.stringify(bytes) === JSON.stringify(expected[format]), `${button} bytes differ from the shared readiness policy`);
     }
     checks.push('real JSON/Markdown downloads match the shared policy bytes');
+    phase = 'confirmed replacement';
+    await importFixture(fixtures[2], true);
+    await page.waitForFunction(() => document.querySelector('#workspace-message').textContent.startsWith('Imported 1 agent'));
+    require(await page.locator('#metric-total').innerText() === '1', 'Confirmed replacement did not replace');
+    require(await page.locator('#metric-ready').innerText() === '1', 'Replacement lost readiness evidence');
+    checks.push('add accumulates formats; duplicates reject atomically; confirmed replacement succeeds');
   } catch (error) {
     failure = new Error(`${phase}: ${error.message}`);
   } finally {
@@ -133,6 +171,10 @@ async (page) => {
       failure = new Error(`${failure ? `${failure.message}; ` : ''}cleanup: ${error.message}. Close this isolated session.`);
     }
   }
+  const result = { passed: !failure, browser, reviewDate: '2026-08-31', checks, error: failure?.message,
+    note: 'Close this isolated session; it still has a fixed test clock.' };
+  // This test-only, in-memory marker survives only until the next navigation.
+  await page.evaluate((value) => { window.__samsarixSmokeResult = value; }, result);
   if (failure) throw failure;
-  return { passed: true, browser, reviewDate: '2026-08-31', checks, note: 'Close this isolated session; it still has a fixed test clock.' };
+  return result;
 }

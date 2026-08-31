@@ -10,6 +10,7 @@ import {
   renderMarkdownPacket,
   serializeRegistry
 } from './readiness.mjs';
+import { prepareRegistryImport } from './registry-import.mjs';
 
 const STORAGE_KEY = 'samsarix.agent-readiness-registry.v1';
 const elements = {
@@ -20,6 +21,7 @@ const elements = {
   exportJson: document.querySelector('#export-json'),
   exportMarkdown: document.querySelector('#export-markdown'),
   file: document.querySelector('#registry-file'),
+  importMode: document.querySelector('#import-mode'),
   lifecycle: document.querySelector('#lifecycle-filter'),
   layout: document.querySelector('.registry-layout'),
   list: document.querySelector('#agent-list'),
@@ -40,6 +42,7 @@ const state = {
   bundled: null,
   filters: { query: '', lifecycle: 'all', risk: 'all', readiness: 'all' },
   importVersion: 0,
+  hasUserRegistry: true,
   registry: null,
   resetTimer: null,
   selectedId: ''
@@ -70,7 +73,7 @@ function clearError() {
 }
 
 function setControlsEnabled(enabled) {
-  for (const element of [elements.exportJson, elements.exportMarkdown, elements.file, elements.lifecycle, elements.readiness, elements.risk, elements.search]) {
+  for (const element of [elements.exportJson, elements.exportMarkdown, elements.file, elements.importMode, elements.lifecycle, elements.readiness, elements.risk, elements.search]) {
     element.disabled = !enabled;
   }
   elements.reset.disabled = !enabled || !state.bundled;
@@ -281,6 +284,7 @@ function downloadText(filename, type, content) {
 async function importFile(file) {
   if (!file) return;
   const version = ++state.importVersion;
+  const mode = elements.importMode.value;
   disarmReset();
   clearError();
   // Capture the File above, then allow even the same rejected file to be retried.
@@ -296,14 +300,22 @@ async function importFile(file) {
     // A newer selection or confirmed reset owns the workspace now.
     if (version !== state.importVersion) return;
     const imported = parseRegistryText(text);
+    const next = prepareRegistryImport(state.registry, imported, mode);
     disarmReset();
-    state.registry = imported;
+    if (mode === 'replace' && state.hasUserRegistry && !window.confirm(
+      `Replace your current inventory with ${imported.agents.length} imported ${imported.agents.length === 1 ? 'agent' : 'agents'}? This also replaces its browser-saved copy. Cancel and export JSON first to keep a backup, or choose Add agents to combine distinct IDs.`
+    )) {
+      showMessage('Import cancelled. The current registry was not changed.');
+      return;
+    }
+    state.registry = next;
+    state.hasUserRegistry = true;
     state.selectedId = imported.agents[0].id;
     setControlsEnabled(true);
     const persisted = persistRegistry();
     render();
     showMessage(
-      `Imported ${imported.agents.length} ${imported.agents.length === 1 ? 'agent' : 'agents'} from ${file.name}. Nothing was uploaded.${persisted ? '' : ' Browser persistence is unavailable; export before leaving.'}`,
+      `${mode === 'add' ? 'Added' : 'Imported'} ${imported.agents.length} ${imported.agents.length === 1 ? 'agent' : 'agents'} from ${file.name}.${mode === 'add' ? ` Inventory now contains ${next.agents.length} agents; workspace details were kept.` : ''} Nothing was uploaded.${persisted ? '' : ' Browser persistence is unavailable; export before leaving.'}`,
       persisted ? 'success' : ''
     );
   } catch (error) {
@@ -346,6 +358,8 @@ function resetRegistry() {
   disarmReset();
   const removed = removeSavedRegistry();
   state.registry = state.bundled;
+  state.hasUserRegistry = !removed;
+  elements.importMode.value = 'replace';
   state.selectedId = state.registry.agents[0].id;
   state.filters = { query: '', lifecycle: 'all', risk: 'all', readiness: 'all' };
   elements.search.value = '';
@@ -384,6 +398,11 @@ async function loadBundledRegistry() {
       }
     }
     state.registry = restored || state.bundled;
+    // If storage was unreadable or could not be cleared, require confirmation
+    // before an import can replace an unseen saved copy.
+    state.hasUserRegistry = Boolean(restored || storageNotice);
+    // Browsers may restore select values across reloads; mode is per-session UI.
+    elements.importMode.value = 'replace';
     state.selectedId = state.registry.agents[0].id;
     setControlsEnabled(true);
     render();
@@ -395,7 +414,9 @@ async function loadBundledRegistry() {
       ? new Error('The bundled inventory took too long to load. Reload the page to try again.')
       : new Error('The bundled inventory could not be loaded. Reload the page or inspect agents.json directly.'));
     showMessage('Registry unavailable. No browser data was changed.');
+    elements.importMode.value = 'replace';
     elements.file.disabled = false;
+    elements.importMode.disabled = false;
   } finally {
     window.clearTimeout(timer);
   }
