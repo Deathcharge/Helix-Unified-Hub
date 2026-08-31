@@ -162,7 +162,9 @@ its exact contents and hashes, exercise the installed executable and all command
 and retain security/error-code coverage. The matrix also runs controller state and
 recovery tests with a minimal DOM/storage adapter and a fixed review clock. These
 execute the actual browser module but do not replace rendered browser, accessibility,
-or device testing. Browser QA notes are in the productization record.
+or device testing. The optional [browser verification guide](docs/BROWSER_VERIFICATION.md)
+provides a repeatable Playwright CLI smoke check, recorded engine versions, and
+explicit coverage limits. It does not add a package dependency to this repository.
 
 Build release assets from a clean checkout with `npm run pack:cli`. Outputs include
 the source revision and dirty-state marker; do not publish a dirty build. Rebuilding
