@@ -61,7 +61,8 @@ running `npm run serve`.
 
 1. Start with the honest bundled inventory or download the starter manifest.
 2. Import one Samsarix registry, one A2A Agent Card, or one MCP Registry
-   `server.json` document.
+   `server.json` document. Use **Replace inventory** for the first import, then
+   **Add agents** to collect more cards or definitions in the same workspace.
 3. Review purpose, ownership, interface, authentication, data, evaluation,
    security, oversight, and operations evidence.
 4. Search and filter by lifecycle, risk, readiness, or stale evidence.
@@ -80,7 +81,19 @@ credential-bearing fields, and secret MCP values/defaults are rejected before th
 current workspace changes. The browser renders imported values as text, never
 imported HTML.
 
+**Add agents** keeps existing records and workspace details (including its declared
+update date). Duplicate IDs reject the whole addition; they never overwrite
+evidence. Use an exported JSON file to reconcile conflicting records explicitly.
+**Replace inventory** asks for confirmation before discarding imported/restored
+data; Cancel leaves it untouched. Export a backup first. Adding to the bundled
+sample intentionally keeps its concepts, so replace it first for a clean inventory.
+Both the incoming file and the resulting saved/exported JSON must fit 1 MiB, with
+at most 500 agents. No separate CLI merge command is included; its existing commands
+accept the resulting multi-agent JSON.
+
 The newest selected file owns a pending import; an older read cannot overwrite it.
+The import mode is captured when the file is selected. Mode defaults to Replace
+on reload and after reset; choosing Add is explicit and never inferred from a file.
 Confirming **Reset sample** also invalidates unfinished reads before removing this
 application's saved inventory. If browser settings prevent removal, the workspace
 reports that only its in-memory view was reset and that saved data may return.

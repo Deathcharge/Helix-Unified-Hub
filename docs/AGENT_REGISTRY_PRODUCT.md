@@ -138,6 +138,9 @@ The release includes:
 - a bundled, honestly classified sample inventory based on the existing agent
   concepts;
 - import of Samsarix registry JSON and one A2A Agent Card JSON document;
+- explicit additive browser imports to accumulate distinct agent IDs while keeping
+  workspace metadata; atomic duplicate/aggregate-limit rejection and confirmation
+  before replacing imported/restored inventories;
 - bounded schema validation with duplicate, unsafe-URL, oversized-file, and
   credential-field rejection;
 - local browser persistence with an explicit reset control;

@@ -69,6 +69,55 @@ Registry-increment baseline recorded on 2026-08-08 at `00efe5a576d4874bd4b9d8c86
 
 ## Findings and implementation checklist
 
+### 2026-08-31 continuation: safe multi-agent inventory assembly
+
+Baseline: clean `main` at `c1e5300aee5457c07068616c40de5ec98bc7ca56` (PR #21).
+Every successful file import immediately replaced the current inventory and its
+saved copy. Combining individual A2A cards and MCP definitions required manual JSON
+editing, and replacement had no confirmation despite reset already being guarded.
+
+Added an explicit browser Import mode: Replace inventory or Add agents. The first
+replacement of the bundled sample is one-step; imported/restored or unreadable
+saved data is protected by a native confirmation. Cancel preserves current and
+saved records. Add preserves all existing records and workspace fields, including
+the declared update date. Conflicting IDs reject the entire batch without changing
+evidence. The pure preparation helper clones/normalizes inputs and checks combined
+500-agent and canonical UTF-8 1 MiB bounds before mutation. The saved-size check also
+covers replacement: compact source JSON can expand beyond the restore limit.
+No implicit updates, per-record editor, or CLI merge command is claimed.
+
+Regression coverage includes source immutability, mixed-format assembly, duplicate
+batches, the 500/501 boundary, UTF-8 aggregate limits, normalized size expansion,
+replacement cancellation/acceptance, restored-data protection, and import-mode
+capture before asynchronous reads. Existing latest-selection/reset-race, storage
+failure, and recovery checks remain in place. The Windows/Ubuntu Node 22/24 matrix
+also runs the new pure import-helper tests alongside browser-controller contracts.
+
+Rendered verification used isolated Chrome 151.0.7922.175, Firefox 153.0, and WebKit
+26.5 Windows test sessions with local source overrides for the four changed web
+files before publication. The final seven-group smoke passed in all three: native
+confirmations, additive A2A/MCP imports, atomic duplicate rejection, three-agent
+reload, malformed-file retention, byte-exact combined JSON/Markdown downloads,
+confirmed replacement, keyboard navigation, 320/390/768/1280px width checks, and
+reset cleanup. Firefox initially restored the Add select value across reload; a
+separate reproduction confirmed this, and explicit initialization now enforces
+the documented Replace default. The ordinary Node suite does not emulate browsers.
+
+The CLI sometimes yields at native dialogs while its function continues running.
+`scripts/browser-smoke-result.mjs` now requires an explicit final seven-group result;
+exit 0 from the initial invocation alone is never a pass. This test-only marker is
+page memory, not application code or persisted inventory. A failed or incomplete
+result fails closed. The maintainer guide documents both commands and the limits.
+
+Local `npm run check` passed 85/85 tests, lint, and build; focused import/controller
+and smoke-harness tests, syntax, and `git diff --check` passed. Deployment and final
+unmodified-public-site evidence will be attached to this increment's PR after CI.
+The published `v1.3.0-rc.2` tag/assets, readiness policy, CLI, runtime dependency
+count, license, host, and privacy boundary are unchanged. This remains a release
+candidate, not a production-readiness or accessibility-conformance claim. No new
+P1/P2 defect remains in the scoped change after verification; external credential,
+provenance, legal, real-user, and physical-device gates below remain open.
+
 ### 2026-08-31 continuation: repeatable browser compatibility evidence
 
 Baseline: clean `main` at `169e181a4d7d174f3fdf8c8b4afd511373b342e2`, with

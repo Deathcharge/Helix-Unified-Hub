@@ -39,7 +39,7 @@ jobs:
       - name: Exercise extracted and offline-installed CLI
         run: node --test tests/distribution.test.mjs
       - name: Exercise browser state and recovery contracts
-        run: node --test tests/browser-state.test.mjs
+        run: node --test tests/browser-state.test.mjs tests/registry-import.test.mjs
 
   validate:
     needs: cli-package

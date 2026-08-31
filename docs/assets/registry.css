@@ -51,6 +51,18 @@
   max-width: 610px;
 }
 
+.import-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 9px;
+  width: 100%;
+}
+
+.import-controls .field { flex: 1; min-width: 180px; }
+.import-controls .file-input { flex: 1; max-width: none; min-width: 190px; }
+.import-controls p { flex-basis: 100%; margin: 0 0 8px; color: var(--muted); font-size: 0.8rem; }
+
 .button {
   display: inline-flex;
   min-height: 44px;

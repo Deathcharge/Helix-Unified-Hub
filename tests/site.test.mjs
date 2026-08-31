@@ -28,6 +28,10 @@ test('primary page leads with the readiness product and retains directory contro
 test('registry page exposes the complete local-first workflow and fallback content', async () => {
   const html = await readFile(path.join(docs, 'registry.html'), 'utf8');
   assert.match(html, /id="registry-file"/);
+  assert.match(html, /<label for="import-mode">Import mode<\/label>/);
+  assert.match(html, /id="import-mode" aria-describedby="import-help"/);
+  assert.match(html, /value="add">Add agents/);
+  assert.match(html, /rejects duplicate IDs/);
   assert.match(html, /id="export-json"/);
   assert.match(html, /id="export-markdown"/);
   assert.match(html, /id="reset-registry"/);

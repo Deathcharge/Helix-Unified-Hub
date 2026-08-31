@@ -61,7 +61,7 @@ async function browser(t, options = {}) {
   t.mock.timers.enable({ apis: ['Date'], now: Date.UTC(2026, 7, 31, 12) });
   const elements = Object.fromEntries([
     'metric-blocked', 'agent-detail', 'agent-empty', 'workspace-error', 'export-json',
-    'export-markdown', 'registry-file', 'lifecycle-filter', 'agent-list', 'workspace-message',
+    'export-markdown', 'registry-file', 'import-mode', 'lifecycle-filter', 'agent-list', 'workspace-message',
     'metric-ready', 'readiness-filter', 'reset-registry', 'agent-result-count', 'risk-filter',
     'agent-search', 'metric-stale', 'metric-total', 'workspace-description', 'workspace-title'
   ].map((id) => [`#${id}`, new Element()]));
@@ -69,6 +69,8 @@ async function browser(t, options = {}) {
   for (const id of ['registry-file', 'export-json', 'export-markdown', 'reset-registry']) elements[`#${id}`].disabled = true;
   elements['#workspace-error'].hidden = true;
   elements['#reset-registry'].textContent = 'Reset sample';
+  elements['#import-mode'].value = options.initialMode || 'replace';
+  const confirmations = [];
   const body = new Element('body');
   const saved = new Map([['other-application', 'keep me']]);
   if (options.saved !== undefined) saved.set(STORAGE_KEY, options.saved);
@@ -87,6 +89,7 @@ async function browser(t, options = {}) {
       createElement: (tag) => new Element(tag)
     },
     window: {
+      confirm(message) { confirmations.push(message); return options.confirm !== false; },
       setTimeout(fn) { timers.set(++timerId, fn); return timerId; },
       clearTimeout(id) { timers.delete(id); }
     },
@@ -114,7 +117,7 @@ async function browser(t, options = {}) {
   await import(`../docs/assets/registry-app.mjs?browser-state-test=${++instance}`);
   await nextTurn();
   return {
-    elements, saved, timers, body, blobs, revoked,
+    elements, saved, timers, body, blobs, revoked, confirmations,
     el: (id) => elements[id.startsWith('.') ? id : `#${id}`],
     async import(text, name = 'registry.json', extra = {}) {
       const input = elements['#registry-file'];
@@ -348,6 +351,87 @@ test('saved inventory restores through validation without a remote lookup', asyn
   const ui = await browser(t, { saved: fixtures.ready });
   assert.equal(ui.el('metric-total').textContent, '1');
   assert.match(ui.el('workspace-message').textContent, /Restored 1 locally saved agent/);
+});
+
+test('replacement requires confirmation after import or restore, and cancel preserves saved data', async (t) => {
+  const options = { confirm: false };
+  const ui = await browser(t, options);
+  await ui.import(fixtures.ready);
+  assert.equal(ui.confirmations.length, 0, 'first replacement of the bundled sample needs no dialog');
+  const before = ui.saved.get(STORAGE_KEY);
+  await ui.import(fixtures.a2a);
+  assert.equal(ui.confirmations.length, 1);
+  assert.match(ui.confirmations[0], /browser-saved copy/);
+  assert.equal(ui.saved.get(STORAGE_KEY), before);
+  assert.equal(ui.el('metric-ready').textContent, '1');
+  assert.match(ui.el('workspace-message').textContent, /Import cancelled/);
+  assert.equal(ui.el('registry-file').value, '');
+  options.confirm = true;
+  await ui.import(fixtures.a2a);
+  assert.equal(ui.confirmations.length, 2);
+  assert.equal(ui.saved.get(STORAGE_KEY), serializeRegistry(parseRegistryText(fixtures.a2a)));
+});
+
+test('restored records are protected before the first replacement in a session', async (t) => {
+  const ui = await browser(t, { saved: fixtures.ready, confirm: false, initialMode: 'add' });
+  assert.equal(ui.el('import-mode').value, 'replace', 'initialization overrides browser-restored form values');
+  await ui.import(fixtures.mcp);
+  assert.equal(ui.confirmations.length, 1);
+  assert.equal(ui.saved.get(STORAGE_KEY), fixtures.ready);
+  assert.equal(ui.el('metric-ready').textContent, '1');
+});
+
+test('add accumulates formats, preserves workspace and rejects a conflicting batch atomically', async (t) => {
+  const ui = await browser(t);
+  await ui.import(fixtures.a2a);
+  const current = parseRegistryText(ui.saved.get(STORAGE_KEY));
+  ui.el('import-mode').value = 'add';
+  await ui.import(fixtures.mcp);
+  const added = parseRegistryText(ui.saved.get(STORAGE_KEY));
+  assert.equal(ui.confirmations.length, 0);
+  assert.equal(ui.el('metric-total').textContent, '2');
+  assert.deepEqual(added.workspace, current.workspace);
+  assert.match(ui.el('workspace-message').textContent, /Added 1 agent.*Inventory now contains 2 agents/);
+  const previous = ui.saved.get(STORAGE_KEY);
+  const batch = parseRegistryText(fixtures.ready);
+  batch.agents.push(current.agents[0]);
+  await ui.import(JSON.stringify(batch));
+  assert.match(ui.el('workspace-error').textContent, /Duplicate agent id/);
+  assert.equal(ui.saved.get(STORAGE_KEY), previous);
+  assert.equal(ui.el('metric-total').textContent, '2');
+  await ui.reset();
+  assert.equal(ui.el('import-mode').value, 'replace');
+  await ui.import(fixtures.ready);
+  assert.equal(ui.confirmations.length, 0, 'successful reset removes replacement protection with the data');
+});
+
+test('import mode is captured when selection starts, not after the file read completes', async (t) => {
+  const ui = await browser(t);
+  await ui.import(fixtures.a2a);
+  ui.el('import-mode').value = 'add';
+  const slow = deferred();
+  const pending = ui.import('', 'slow.json', { text: () => slow.promise });
+  ui.el('import-mode').value = 'replace';
+  slow.resolve(fixtures.mcp);
+  await pending;
+  assert.equal(ui.el('metric-total').textContent, '2');
+  assert.equal(ui.confirmations.length, 0);
+});
+
+test('an oversized combined inventory leaves the previous saved state intact', async (t) => {
+  const ui = await browser(t);
+  const make = (prefix) => JSON.stringify({
+    schemaVersion: 1, workspace: { name: 'Fictional inventory' },
+    agents: Array.from({ length: 250 }, (_, i) => ({ id: `${prefix}-${i}`, name: 'Example', summary: '界'.repeat(600) }))
+  });
+  await ui.import(make('first'));
+  const previous = ui.saved.get(STORAGE_KEY);
+  assert.ok(previous);
+  ui.el('import-mode').value = 'add';
+  await ui.import(make('second'));
+  assert.equal(ui.saved.get(STORAGE_KEY), previous);
+  assert.match(ui.el('workspace-error').textContent, /saved\/exported size limit/);
+  assert.equal(ui.el('metric-total').textContent, '250');
 });
 
 test('browser filters re-evaluate saved evidence as the review clock advances', async (t) => {
