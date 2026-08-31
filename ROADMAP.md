@@ -27,7 +27,10 @@ Release sequence:
 4. **Implemented for v1.3 RC hardening:** formal security review, current-tree
    personal-export removal, semantic readiness fixes, inert Markdown export,
    hardened legacy network/DOM paths, and scheduled external-link review.
-5. Validate demand before any multi-user service, live discovery, or runtime
+5. **Implemented for v1.3 RC2 distribution:** CLI-only release archive, explicit
+   source-file allowlist, per-file manifest/checksums, extracted/offline-installed
+   command tests, and Windows/Linux Node 22/24 CI coverage.
+6. Validate demand before any multi-user service, live discovery, or runtime
    observability integration.
 
 The next evidence gate is external use: collect real registry fixtures, policy-gap

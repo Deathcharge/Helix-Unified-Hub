@@ -10,6 +10,10 @@ compliance.
 
 Use a supported Node.js release (22 LTS or newer) from a checkout of this repository:
 
+Alternatively, use the [CLI-only release archive](CLI_DISTRIBUTION.md); the same
+commands and fictional fixtures work after extraction without cloning the repository
+or installing dependencies. Its packaged README contains the complete quickstart.
+
 ```bash
 node bin/samsarix-registry.mjs validate path/to/agents.json
 node bin/samsarix-registry.mjs check path/to/agents.json --require-candidates
@@ -62,14 +66,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: Deathcharge/Helix-Unified-Hub@be41c3b86b3e573e089c6d43c70a24806001460a
+        with:
+          persist-credentials: false
+      - uses: Deathcharge/Helix-Unified-Hub@b81dbd18d86fc0cb23c16d0c260a35c3b092affb
         with:
           registry: path/to/agents.json
           lifecycle: review,production
           require-candidates: "true"
 ```
 
-The example pins the reviewed v1.3 MCP-import implementation and review-fix commit.
+The example pins the v1.3 prerelease after the security fixes, including future-date
+blocking, versioned active interfaces, and credential-URL/export handling.
 The repository has not published a stable action tag; production workflows should
 use an exact commit they have reviewed so a later branch update cannot silently
 change policy. Do not pass credentials in the registry file or action inputs.

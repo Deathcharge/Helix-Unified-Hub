@@ -24,10 +24,20 @@ and [`CONSOLIDATION.md`](CONSOLIDATION.md).
 
 ## Fastest successful path
 
+For browser review, open the [hosted workspace](https://deathcharge.github.io/Helix-Unified-Hub/registry.html).
+For command-line use without cloning the historical repository, download the
+CLI-only `*-cli.tgz`, `*-cli.manifest.json`, and `*-cli.sha256` assets from
+[v1.3.0-rc.2](https://github.com/Deathcharge/Helix-Unified-Hub/releases/tag/v1.3.0-rc.2).
+The [standalone quickstart](docs/CLI_DISTRIBUTION.md) covers integrity checking,
+extraction, offline installation, and a reproducible passing/failing review.
+
+For development from source:
+
 Prerequisites:
 
 - Node.js 22 LTS or newer
 - npm 10 or newer
+- Git and `tar` (used by the packaged-distribution tests)
 
 ```bash
 git clone https://github.com/Deathcharge/Helix-Unified-Hub.git
@@ -116,8 +126,8 @@ Concepts therefore remain honest inventory without breaking deployment CI, while
 
 See [`docs/CI_INTEGRATION.md`](docs/CI_INTEGRATION.md) for exact exit codes, stdin
 usage, lifecycle controls, the fictional passing fixture, and a least-privilege
-GitHub Actions workflow. This repository is the current distribution path; no npm
-package or stable action tag is claimed.
+GitHub Actions workflow. GitHub release assets provide an npm-installable CLI
+tarball; nothing is published to the npm registry and no stable Action tag is claimed.
 
 ## Development commands
 
@@ -130,9 +140,22 @@ package or stable action tag is claimed.
 | `npm run build`              | Recreate the complete static release in `dist/`.                                                                                       |
 | `npm run check`              | Run lint, tests, and build in the same order as CI.                                                                                    |
 | `npm run check:links`        | Probe the owner-maintained external-link inventory with bounded HTTPS requests.                                                        |
+| `npm run pack:cli`           | Build the CLI-only archive, file manifest, and checksums in `release/` (requires Git and npm).                                         |
 
 There are no npm runtime or development dependencies. `package-lock.json` records
 the package identity and Node compatibility for deterministic installation.
+
+The protected `validate` check also requires packaged CLI tests on Windows and
+Linux with Node 22 and 24. Tests unpack and offline-install the real archive, check
+its exact contents and hashes, exercise the installed executable and all commands,
+and retain security/error-code coverage. Browser/site tests still run separately.
+
+Build release assets from a clean checkout with `npm run pack:cli`. Outputs include
+the source revision and dirty-state marker; do not publish a dirty build. Rebuilding
+identical content reuses the output, but different existing files are never replaced.
+Use `npm run pack:cli -- --out <new-directory>` when testing another build. The
+archive is repeatable with the same source and npm toolchain; byte identity across
+different npm versions is not promised. A checksum is not a signed attestation.
 
 ## Architecture
 
@@ -152,6 +175,8 @@ the package identity and Node compatibility for deterministic installation.
 - `docs/assets/catalog.mjs`, `docs/assets/app.mjs`, and `docs/portals.json` — retained
   secondary directory journey
 - `scripts/` — dependency-free validation, build, local serving, and external-link review
+- `scripts/package-cli.mjs` — explicit CLI-only staging and release integrity metadata;
+  `docs/CLI_DISTRIBUTION.md` becomes the archive's self-contained README
 - `tests/` — unit and integration contracts for the product and release artifact
 - `docs/PRODUCTIZATION.md` — living assessment, priorities, evidence, and release gates
 - `docs/THREAT_MODEL.md` — maintained and legacy trust boundaries
